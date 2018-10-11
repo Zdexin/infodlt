@@ -186,10 +186,10 @@ df_titanic_data['Names'] = df_titanic_data['Name'].map(lambda y: len(re.split(' 
 ```
 &emsp;&emsp;第二个有趣的属性是名称标题，它也可以用来表示身份和/或性别：<br>
 
-# Getting titles for each person
+```# Getting titles for each person
 df_titanic_data['Title'] = df_titanic_data['Name'].map(lambda y: re.compile(", (.*?)\.").findall(y)[O])
 
-```# handling the low occurring titles 
+# handling the low occurring titles 
 df_titanic_data['Title'][df_titanic_data.Title == 'Jonkheer'] = 'Master' df_titanic_data['Title'][df_titanic_data.Title.isin(['Ms', 'Mlle'])] = 'Miss'
 df_titanic_data['Title'][df_titanic_data.Title == 'Mme'] = 'Mrs' df_titanic_data['Title'][df_titanic_data.Title.isin(['Capt', 'Don', 'Major', 'Col', '3ir'])] = '3ir' df_titanic_data['Title'][df_titanic_data.Title.isin(['Dona', 'Lady', 'the Countess'])] = 'Lady'
 # binarizing all the features
