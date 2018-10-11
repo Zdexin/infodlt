@@ -326,8 +326,8 @@ print("\nWe are going to drop", features_to_drop.shape[O], " which are highly co
 &emsp;&emsp;这些描述性的特性不足以获得一个良好的分类，所以我们可以决定增加更多的功能，以提高模型的预测能力，以区分猫和狗。 例如，我们可以考虑通过计算图像的平均边缘或梯度强度来增加一些特征，例如图像的纹理。<br>
 
 &emsp;&emsp;图像的维数，X和Y。在添加这两个特征后，模型的精度将提高。我们甚至可以通过增加更多的分类器来使模型/分类器获得更精确的分类能力。 基于颜色、纹理直方图、统计矩等的特征。我们可以很容易地添加几百个这样的特性来增强模型的预测性。但是违反直觉的 超过一定限度增加功能后，效果会更差。通过查看图1，您将更好地理解这一点：<br>
-![图片1]（）
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1“模型性能与特性数量之比
+![图片1]（https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/%E5%9B%BE%E7%89%871.png）
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1 模型性能与特性数量之比<br>
 &emsp;&emsp;图1显示，随着特征数的增加，分类器的性能也会提高，直到我们达到最优的特征数为止。在相同训练集的基础上添加更多的特征将降低分类器的性能。<br>
 
 #### 避免维数灾难
@@ -363,8 +363,8 @@ print(pca_df.shape[l], " reduced components which describe ", str(variance_perce
 
 &emsp;&emsp;输出图将包含表示训练和测试错误的两条曲线，它将是图2所示的四种可能的形状之一。 <br>
 &emsp;&emsp;课程内容(https：/www.Coursera.org/Learning/Machine-Learning)。<br>
-![图片2]（）
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2“绘制不同训练集大小上的训练和测试错误的可能形状<br>
+![图片2]（https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/%E5%9B%BE%E7%89%872.png）
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2 绘制不同训练集大小上的训练和测试错误的可能形状<br>
 &emsp;&emsp;那么，我们什么时候应该接受我们的模式并投入生产呢？我们什么时候知道我们的模型在test集上表现不佳，因此不会有一个糟糕的泛化误差？对于这些问题，取决于从绘制train误差到不同训练集大小上的测试错误所得到的形状：<br>
 
 &emsp;&emsp;如果您的形状看起来像左上角的形状，则表示一个较低的训练误差，并且在测试集上具有很好的泛化性。这个形状是一个赢家，你应该继续使用这种型号的生产。<br>
@@ -385,7 +385,7 @@ print(pca_df.shape[l], " reduced components which describe ", str(variance_perce
 ### 打破经验法则
 &emsp;&emsp;在实践中，您可以通过使用数据中的特性数不到10倍来学习这个规则；如果您的模型很简单，并且您使用的是名为 正规化(在下一章中讨论)。<br>
 
-&emsp;&emsp;JakeVanderplas写了一篇文章，(https：//jakevdp.github.io/blog/2Ol5/O7/O6/model–复杂性-神话/)，以表明一个人可以学习，即使数据有更多的参数，而不是例子。为了证明这一点， 他用的是正规化。<br>
+&emsp;&emsp;JakeVanderplas写了一篇文章，(https：//jakevdp.github.io/blog/2Ol5/O7/O6/model–复杂性-神话/)，以表明一个人可以学习，即使数据有更多的参数，而不是例子。为了证明这一点，他用的是正规化。<br>
 
 ### 总结
 &emsp;&emsp;在这一章中，我们介绍了机器学习实践者为了理解他们的数据和从他们的数据中获取最大限度的学习算法而使用的最重要的工具。<br>
