@@ -25,7 +25,7 @@
 `lspci | grep –i nvidia`
 
 &emsp;&emsp;您应该在终端中获得以下输出：<br>
-![image1]()
+![image1](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image1.jpg)
 
 &emsp;&emsp;接下来，我们需要添加一个NVIDIA驱动程序的专有存储库，以便能够使用APT-GET安装驱动程序：<br>
 
@@ -39,10 +39,10 @@ sudo apt–get install nvidia–375
 
 
 &emsp;&emsp;您应该在终端中获得以下输出:<br>
-![image1]()
+![image2](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image2.jpg)
 
 &emsp;&emsp;接下来，我们需要安装CUDA 8。打开以下CUDA下载链接：https：/developer.nvidia.com/Cuda-下载。选择您的操作系统、体系结构、发行版、版本，最后，在 Staller类型如下所示：<br>
-![image1]()
+![image3](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image3.jpg)
 
 &emsp;&emsp;安装程序文件大约是2GB。您需要发出以下安装说明：<br>
 ```sudo dpkg –i cuda–repo–ubuntul6O4–8–O–local–ga2_8.O.6l–l_amd64.deb sudo apt–get update
@@ -58,7 +58,7 @@ Next, you need to verify the installation of CUDA 8 by issuing the following com
 nvcc –V
 ```
 &emsp;&emsp;您应该在终端中获得以下输出：<br>
-![image1]()
+![image4](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image4.jpg)
 
 &emsp;&emsp;最后，在本节中，我们需要安装cuDNN 6.0。NVIDIA CUDA深层神经网络库(CuDNN)是一个用于深层神经网络的GPU加速基元库.你可以从 mNVIDIA的网页。发出以下命令以提取和安装cuDNN：<br>
 
@@ -101,7 +101,7 @@ pip3 install –U matplotlib ipython[all] jupyter pandas scikit–image
 ```
 
 &emsp;&emsp;您应该在终端中获得以下输出：<br>
-![image1]()
+![image5](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image5.jpg)
 
 #### 用于Ubuntu 16.04的TensorFlow CPU安装
 &emsp;&emsp;在本节中，我们将安装CPU版本，它在安装之前不需要任何驱动程序。因此，让我们从安装一些有用的数据操作包和visu开始 dualization对偶（化），二元化，复线化：<br>
@@ -136,7 +136,7 @@ python3
 >> sess.close()
 ```
 &emsp;&emsp;您应该在终端中获得以下输出：<br>
-![image1]()
+![image6](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image6.jpg)
 
 #### 用于MacOS X的TensorFlow CPU安装
 &emsp;&emsp;在本节中，我们将使用Virtualenv为MacOSX安装TensorFlow。因此，让我们首先通过发出以下命令来安装pip工具：<br>
@@ -171,10 +171,10 @@ virtualenv ––system–site–packages –p python3 targetDirectory # for Pyt
 
 #### 用于Windows的TensorFlow GPU/CPU安装
 &emsp;&emsp;我们假设您的系统上已经安装了Python 3。要安装TensorFlow，请以管理员身份启动终端，如下所示。打开“开始”菜单，搜索cmd，然后右键并单击“以管理员身份运行”：<br>
-![image1]()
+![image7](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image7.jpg)
 
 &emsp;&emsp;打开命令窗口后，可以发出以下命令，以在GPU模式下安装TensorFlow：<br>
-![image1]() 在发出下一个命令之前，需要安装pip或PIP 3(取决于您的Python版本)。<br>
+![image8](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image8.jpg) 在发出下一个命令之前，需要安装pip或PIP 3(取决于您的Python版本)。<br>
 ```C:\> pip3 install ––upgrade tensorflow–gpu
 
 Issue the following command to install TensorFlow in CPU mode:
@@ -202,21 +202,21 @@ C:\> pip3 install ––upgrade tensorflow
 &emsp;&emsp;--节点之间的图边将是在这些操作之间流动的张量，而在实践中实现Tensor(张量)的最佳方法是n维矩阵。<br>
 
 &emsp;&emsp;使用这种流图作为深度学习框架的主干的优点是，它允许您以小而简单的操作来构建复杂的模型。还有，这将使梯度计算非常简单，当我们在后面的一节中讨论这个问题时：<br>
-![image1]()
+![image9](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image9.jpg)
 &emsp;&emsp;另一种思考TensorFlow图的方法是，每个操作都是一个可以在此时计算的函数。<br>
 
 ### TensorFlow 数据类型, 变量, 和占位符
 &emsp;&emsp;对计算图的理解将帮助我们从小的子图和运算的角度来考虑复杂的模型。<br>
 &emsp;&emsp;让我们看一个只有一个隐藏层的神经网络的例子，以及它的计算图在TensorFlow中的样子：<br>
-![image1]()
+![image10](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image10.jpg)
 &emsp;&emsp;因此，我们有一些试图去计算的隐藏层，用RELU函数激活参数矩阵W乘以输入x再加上一个偏置项b。relu函数获取输出的最大值和0。<br>
 &emsp;&emsp;下图显示了该图形在TensorFlow中的样子：<br>
-![image1]()
+![image11](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image11.jpg)
 &emsp;&emsp;在这个图中，我们有b和W的变量，我们有一个叫做占位符的x；我们在图中的每个操作都有节点。所以，让我们更详细地了解一下这些节点类型。<br>
 
 #### 变量
 &emsp;&emsp;变量是输出其当前值的有状态节点。在这个例子中，我们所说的变量是有状态的，这仅仅是b和W的意思，就是它们保留了它们当前的值。 通过多次执行，很容易将保存的值恢复到变量：<br>
-![image1]()
+![image12](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image12.jpg)
 &emsp;&emsp;此外，变量还有其他有用的特性；例如，可以在培训期间和之后将它们保存到您的磁盘上，这样可以实现我们前面提到的允许来自不同公司和组的人员保存、存储和将模型参数发送给其他人此外，变量是您想要优化的东西，以便将损失降到最低，我们将很快了解如何做到这一点。<br>
 
 &emsp;&emsp;重要的是要知道图中的变量(如b和W)仍然是操作，因为根据定义，图中的所有节点都是操作。因此，当您评估这些在运行时保存b和W值的操作时，您将得到这些变量的值。<br>
@@ -229,7 +229,7 @@ C:\> pip3 install ––upgrade tensorflow
 
 #### 占位符
 &emsp;&emsp;下一种类型的节点是占位符。占位符是在执行时输入值的节点:<br>
-![image1]()
+![image13](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image13.jpg)
 &emsp;&emsp;如果您的计算图表中有依赖于某些外部数据的输入，这些是值的占位符，我们将在培训期间将这些值添加到计算中。所以，对于占位符，我们不提供任何初始值。我们只分配张量的数据类型和形状，这样图表仍然知道要计算什么，即使它还没有任何存储的值。<br>
 
 &emsp;&emsp;我们可以使用TensorFlow的占位符函数（ placeholder function）来创建一个占位符：<br>
@@ -239,7 +239,7 @@ C:\> pip3 install ––upgrade tensorflow
 
 #### 数学运算
 &emsp;&emsp;第三种类型的节点是数学运算，它们将是我们的矩阵乘法(MatMul)、加法(Add)和relu激活函数。所有这些都是TensorFlow图中的节点，它类似于NumPy操作：<br>
-![image1]()
+![image14](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image14.jpg)
 &emsp;&emsp;让我们看看这个图在代码中的样子。<br>
 
 &emsp;&emsp;我们执行以下步骤来生成前面的图表：<br>
@@ -266,7 +266,7 @@ x = tf.placeholder(tf.float32, (lOO, 784))
 #Multiplication of x and W and we add b h = tf.nn.relu(tf.matmul(x,W) + b )
 ```
 &emsp;&emsp;正如您从前面的代码中看到的那样，我们实际上并不使用此代码片段操作任何数据。我们只是在我们的图形中构建符号，而您不能打印h并看到它的值，直到我们运行这个图表。因此，这个代码片段只是用来为我们的模型构建一个主干。如果您试图在前面的代码中打印W或b的值，您应该在Python中获得以下输出 :<br>
-![image1]()
+![image15](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image15.jpg)
 &emsp;&emsp;到目前为止，我们已经定义了我们的图形，现在，我们需要实际运行它。<br>
 
 
@@ -293,7 +293,7 @@ sess.run(fetches, feeds)
 # for our placeholder x with the values that we are interested in. sess.run(h, (x: np.random.random((lOO,784))})
 ```
 &emsp;&emsp;在通过Sess对象运行我们的图形之后，我们应该得到一个类似于下面的输出：<br>
-![image1]()
+![image16](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/imaeg16.jpg)
 &emsp;&emsp;如您所见，在上面代码片段的第二行中，我们初始化了变量，这是TensorFlow中的一个概念，称为懒惰计算。这意味着图形的计算只能在运行时进行，而TensorFlow中的运行时表示会话。因此，调用此函数，global_variables_initializer()，实际上将初始化你的图片中任何称为变量的内容，例如我们的例子中的W和b。<br>
 
 &emsp;&emsp;我们还可以在WITH块中使用Session变量，以确保它在执行图形后将被关闭：<br>
@@ -310,7 +310,7 @@ Output: [array([[lO.4, 22. ],
 &emsp;&emsp;使用TensorFlow进行的计算-比如训练一个庞大的深层神经网络-可能是复杂和混乱的，其相应的计算图也将是复杂的。为了方便理解、调试和优化TensorFlow程序，可以使用一套名为TensorBoard的可视化工具，它是一套可以在你的浏览器上运行的Web应用程序。 <br>
 
 &emsp;&emsp;TensorBoard可以用于可视化您的TensorFlow图形，绘制有关图形执行的量化度量，并显示其他数据，如通过它的图像。当TensorBoard 完全配置，如下所示：<br>
-![image1]()
+![image17](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image17%20.jpg)
 &emsp;&emsp;为了了解TensorBoard是如何工作的，我们将构建一个计算图，它将充当MNIST数据集的分类器，MNIST数据集是手写图像的数据集。<br>
 
 &emsp;&emsp;您不必了解这个模型的所有部分，但它将向您展示在TensorFlow中实现的机器学习模型的一般流程。<br>
@@ -421,11 +421,11 @@ To view summaries in the Tensorboard, run the command line:
 
 &emsp;&emsp;然后, 在你的浏览器上打开 http://O.O.O.O:6OO6/ 。<br>
 &emsp;&emsp;当您打开TensorBoard时，您应该得到类似于以下屏幕截图的内容：<br>
-![image1]()
+![image18](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image18.jpg)
 &emsp;&emsp;这显示了我们正在监控的变量，比如模型的准确性和它是如何变得更高的，模型的丢失以及在整个训练过程中它是如何降低的。所以，你观察 我们在这里有一个正常的学习过程。但有时你会发现精度和模型损失是随机变化的，或者你想跟踪一些变量以及它们是如何变化的。 在整个过程中，TensorBoard将非常有用，帮助您发现任何随机性或错误。<br>
 
 &emsp;&emsp;另外，如果切换到TensorBoard中的图形选项卡，您将看到我们在前面的代码中构建的计算图：<br>
-![image1]()
+![image19](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image19.jpg)
 
 ### 总结
 &emsp;&emsp;在本章中，我们介绍了Ubuntu和mac的安装过程，概述了TensorFlow编程模型，并解释了可以使用的不同类型的简单节点。 构建复杂的操作以及如何使用会话对象从TensorFlow获得输出。此外，我们还讨论了Tensorboard以及为什么它将有助于调试和分析复杂的深度学习应用程序。<br>
