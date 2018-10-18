@@ -19,5 +19,5 @@
 图1.1显示了一个由保护配置相机拍摄的图像样本,这些图像将用于构建系统。<br>
 
 &emsp;&emsp;因此，我们在这个例子中的目的是分离不同的物种，如金枪鱼，月鱼，和更多的渔船捕获的鱼。作为一个说明性的例子，我们可以将问题限制为两类，即金枪鱼和月鱼。<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%871.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%872.png) <br>
 图1.2 金枪鱼(左)和月鱼(右)<br>
