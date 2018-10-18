@@ -8,7 +8,7 @@
 <br>
 &emsp;&emsp;&emsp;&emsp;1.	通过一个例子了解数据科学<br>
 &emsp;&emsp;&emsp;&emsp;2.	设计数据科学算法的过程<br>
-&emsp;&emsp;&emsp;&emsp;3.	学习<br>
+&emsp;&emsp;&emsp;&emsp;3.	开始学习<br>
 &emsp;&emsp;&emsp;&emsp;4.	鱼类识别/检测模型的实现<br>
 &emsp;&emsp;&emsp;&emsp;5.	不同学习类型<br>
 &emsp;&emsp;&emsp;&emsp;6.	数据大小和行业需求<br>
