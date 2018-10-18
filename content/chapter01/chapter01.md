@@ -15,5 +15,5 @@
 <br><br>
 ## 通过一个例子了解数据科学
 &emsp;&emsp;为了说明为特定数据构建学习算法的生命周期和挑战，让我们考虑一个实际的例子。自然保护协会正在与其他渔业公司和部门合作渔农处负责监察渔业活动，并为日后的渔业作出保存。因此，他们希望在未来使用相机来扩大这一监测过程。这些摄像机的部署将产生大量的数据，手工处理将十分繁琐和昂贵。因此，该部门希望开发一种自动测试的学习算法。对不同种类的鱼类进行总体检测和分类，加快视频审查过程。<br>
-`![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%871.png)` <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%871.png) <br>
 图1.1显示了一个由保护配置相机拍摄的图像样本,这些图像将用于构建系统。<br>
