@@ -29,7 +29,7 @@
 &emsp;&emsp;对象的解释特征是我们在日常生活中用来区分周围事物的东西。甚至婴儿也会利用这些解释功能来了解周围的环境。数据科学也是如此，以便建立一个能够区分不同对象(例如，鱼类类型)的学习模型，我们需要给它一些可供学习的解释特性(例如，鱼的长度)。为了使模型更加确定，减少混淆误差，可以在一定程度上增加对象的解释特征。<br>
 &emsp;&emsp;鉴于这两种鱼类之间的物理差异，这两种不同的鱼类种群有不同的模型或描述。因此，我们分类任务的最终目标是让分类器学习这些不同的模型，然后给出这两种类型之一的图像作为输入。分类器将通过选择与此图像最匹配的模型(金枪鱼模型或月鱼模型)对其进行分类。<br>
 &emsp;&emsp;在这种情况下，金枪鱼和月鱼的收集将作为我们分类器的知识库。最初，知识库(训练样本)将被标记/标记，对于每个图像，您将事先知道它是金枪鱼还是月鱼。因此，分类器将使用这些训练样本来建模不同类型的鱼，然后我们可以使用训练阶段的输出来自动标记未标记/未标记的鱼，即分类在训练阶段没有看到。这种未标记的数据通常称为看不见的数据。生命周期的培训阶段如下图所示：监督数据科学是从已知目标或输出的历史数据(如鱼类类型)中学习，然后使用这个学习模型来预测我们不知道目标/输出案例或数据样本。<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%872.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/1图片.png) <br>
 图1.3 训练阶段运行周期<br>
 &emsp;&emsp;让我们看看分类器的培训阶段将如何工作：<br>
 &emsp;&emsp;&emsp;&emsp;预处理：在这一步中，我们将尝试利用相关的分割技术从图像中分割出鱼。<br>
@@ -42,7 +42,7 @@ If length(fish)> length* then label(fish) =Tuna
 Otherwise label(fish) = Opah
 ```  
 &emsp;&emsp;为了找到这个长度，我们可以根据训练样本进行长度测量。因此，假设我们得到这些长度测量，并得到如下直方图：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%872.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/2图片.png) <br>
 图1.4 两种鱼类长度测量的直方图<br>
 &emsp;&emsp;在这种情况下，我们可以根据长度特征导出一个规则，并区分金枪鱼和月鱼。在这个特殊的例子中，我们可以知道长度是7。这样我们就可以更新前面的规则：<br>
 ```python
@@ -50,20 +50,20 @@ If length(fish)> 7 then label(fish) =Tuna
 Otherwise label(fish) = Opah
 ```  
 &emsp;&emsp;正如您可能注意到的，这不是一个有希望的结果，因为这两个直方图之间的重叠，因为长度特征不是一个完美的特点，仅用于区分这两种类型。因此，我们可以尝试合并更多的功能，如宽度，然后结合他们。因此，如果我们设法测量训练样本的宽度，我们可能会得到类似于跟随，接着:<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%872.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片3.png) <br>
 图1.5 两种鱼类宽度测量的直方图<br>
 &emsp;&emsp;正如您所看到的，依赖于一个特性不会给出准确的结果，输出模型会造成许多错误分类。所以，我们可以用某种方式将这两个特性结合起来，使其看上去很合理。<br>
 &emsp;&emsp;因此，如果我们将这两个特性结合起来，我们可能会得到类似于下面的图形的东西：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%872.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片4.png) <br>
 图1.6 两种鱼类的长度和宽度测量子集之间的组合<br>
 &emsp;&emsp;结合长度和宽度特征的读数，我们将得到像前面的图表中的散点图。我们有红色的点代表金枪鱼，绿色的点代表opah鱼，我们可以建议这条黑线作为区分这两种鱼的规则或决策边界。例如，如果一条鱼的读数高于这个决定边界，那么它就是一条金枪鱼；否则，它将被预测为一条月鱼。<br>
 &emsp;&emsp;我们可以设法增加规则的复杂性，以避免任何错误，并获得如下图形中的决策边界：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%872.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片5.png) <br>
 图1.7 增加决策边界的复杂性以避免对培训数据的错误分类<br>
 &emsp;&emsp;该模型的优点是我们在训练样本上得到了几乎0种错误分类。但实际上，这并不是使用数据科学的目的。数据科学的目标是建立一个模型，该模型能够对未见的数据进行良好的概括和执行。为了了解我们是否建立了一个推广的模型，我们将引入一个新的阶段，称为测试阶段，在这个阶段中，我们给训练的模型一个未标记的图像并希望模型可以指定正确的标签(Tuna和opah)。<br>
 &emsp;&emsp;数据科学的最终目标是建立一个在生产中运行良好的模型，而不是训练集。所以，当你看到你的模型在训练中表现良好时，不要高兴，就像图1.7中的模型一样。大多数情况下，这种模型在识别图像中的鱼类类型时效果不佳。你的模型只有在训练集上才能正常工作，这一事件被称为“过度拟合”，而且大多数从业者都落入了这个陷阱。<br>
 &emsp;&emsp;代替提出这样一个复杂的模型，您可以使用一个不那么复杂的模型，它将在测试阶段泛化。下图显示了如何使用不太复杂的模型来获得较少的错误分类错误，并对未见数据进行概括：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%872.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片6.png) <br>
 图 1.8 使用不太复杂的模型，以便能够对测试样本(未见数据)进行归纳。<br>
 ## 数据科学算法的设计过程
 &emsp;&emsp;不同的学习系统通常遵循相同的设计过程。它们从获取知识库开始，从数据中选择相关的解释性特征，通过一系列候选学习算法，同时关注每一个算法，最后是评估过程，衡量培训过程的成功程度。<br>
