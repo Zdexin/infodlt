@@ -151,7 +151,251 @@ Otherwise label(fish) = Opah
 &emsp;&emsp;&emsp;&emsp;1.训练集：这将作为我们的模型的知识库。通常，会是70%的原始数据样本。<br>
 &emsp;&emsp;&emsp;&emsp;2.验证集：这将用于在一组模型中选择性能最好的模型。通常这将是10%的原始数据样本。<br>
 &emsp;&emsp;&emsp;&emsp;3.测试集：这将用于测量和报告所选模型的准确性。通常，它与验证集一样大。<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片8.png) <br>
-图 1.9 将数据拆分为训练、验证和测试集。<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片8.png) <br><br>
+图 1.9 将数据拆分为训练、验证和测试集。<br><br>
 &emsp;&emsp;如果您只使用一种学习方法，则可以取消验证集，并将数据重新拆分为仅训练和测试集。通常，数据科学家使用75/25或者70/30作为百分比。<br>
 ### 数据分析预处理
+&emsp;&emsp;在这一部分中，我们将对输入图像进行分析和预处理，并将其以可接受的格式用于我们的学习算法，即这里的卷积神经网络。<br>
+&emsp;&emsp;因此，让我们从导入此实现所需的包开始：<br>
+```python
+import numpy as np 
+np.random.seed(2018)
+import os 
+import glob 
+import cv2 
+import datetime
+import pandas as pd 
+import time
+import warnings
+warnings.filterwarnings("ignore")
+from sklearn.cross_validation import KFold 
+from keras.models import Sequential
+from keras.layers.core import Dense, Dropout, Flatten
+from keras.layers.convolutional import Convolution2D,MaxPooling2D,ZeroPadding2D
+from keras.optimizers import SGD
+from keras.callbacks import EarlyStopping 
+from keras.utils import np_utils
+from sklearn.metrics import log_loss
+from keras import  __version__  as keras_version
+```  
+&emsp;&emsp;为了使用数据集中提供的图像，我们需要使它们具有相同的大小。OpenCV是一个很好的选择，从OpenCV网站：<br>
+&emsp;&emsp;&emsp;&emsp;OpenCV(开放源码计算机视觉库)是在BSD许可下发布的，因此它对学术和商业都是免费的。它有C，Python和Java接口，支持Windows，Linux，MacOS，IOS和Android。OpenCV是为了提高计算效率而设计的，并且非常注重实时应用程序。该库采用优化的C/C语言编写，充分利用了多种c+的优点。矿石加工通过OpenCL启用，它可以利用底层异构计算平台的硬件加速。<br>
+&emsp;&emsp;您可以通过使用python包管理器安装OpenCV，pip install OpenCV-python<br>
+```python
+# Parameters
+# ––––––––––
+# x : type
+#	Description of parameter `x`. 
+def rezize_image(img_path):
+    img = cv2.imread(img_path)
+    img_resized = cv2.resize(img, (32, 32), cv2.INTER_LINEAR) 
+    return img_resized
+```  
+&emsp;&emsp;现在我们需要加载数据集的所有训练样本，并根据前面的函数调整每幅图像的大小。因此，我们将实现一个函数，它将从针对每种鱼类类型的不同文件夹：<br>
+```python
+def load_training_samples():
+#用于保存培训输入和输出变量的变量
+    train_input_variables = []
+    train_input_variables_id = []
+    train_label = []
+    # 扫描鱼类型的每个文件夹中的所有图像
+    print('Start Reading Train Images')
+    folders = ['ALB', 'BET', 'DOL', 'LAG', 'NoF', 'OTHER', 'SHARK', 'YFT']
+    for fld in folders:
+        folder_index = folders.index(fld)
+        print('Load folder (} (Index: (})'.format(fld, folder_index)) 
+        imgs_path = os.path.join('..', 'input', 'train', fld, '*.jpg') 
+        files = glob.glob(imgs_path)
+        for file in files:
+            file_base = os.path.basename(file)
+            # 调整图像大小
+            resized_img = rezize_image(file)
+            # 将处理后的图像附加到分类器的输入/输出变量中
+            train_input_variables.append(resized_img) 
+            train_input_variables_id.append(file_base) 
+            train_label.append(folder_index)
+        return train_input_variables, train_input_variables_id, train_label
+```  
+&emsp;&emsp;正如我们所讨论的，我们有一个测试集，它将作为不可见的数据来测试我们的模型的泛化能力。因此，我们需要对图像进行同样的测试；加载它们并执行调整大小的处理：<br>
+```python
+#加载测试样本，用于测试模型的训练效果。
+def load_testing_samples():
+# 从测试文件夹中扫描图像
+    imgs_path = os.path.join('..', 'input', 'test_stgl', '*.jpg')
+    files = sorted(glob.glob(imgs_path))
+    # 保存测试样本的变量 
+    testing_samples = []
+    testing_samples_id = []
+    #处理图像并将它们附加到我们拥有的数组中。 
+    for file in files:
+        file_base = os.path.basename(file)
+        # Image resizing
+        resized_img = rezize_image(file) 
+        testing_samples.append(resized_img) 
+        testing_samples_id.append(file_base)
+    return testing_samples, testing_samples_id
+```  
+&emsp;&emsp;现在，我们需要将前面的函数调用到另一个函数中，该函数将使用LOAD_TRANING_SAMPLES()函数，以便加载和调整训练样本的大小。此外，它还将添加几行代码，将培训数据转换为NumPy格式，重新构造该数据以适应我们的分类器，最后将其转换为浮动：<br>
+```python
+def load_normalize_training_samples():
+    # 调用Load函数以加载和调整训练样本的大小
+    training_samples, training_label, training_samples_id = load_training_samples()
+    # 将加载和调整大小的数据转换为Numpy格式 
+    training_samples = np.array(training_samples, dtype=np.uint8) 
+    training_label = np.array(training_label, dtype=np.uint8)
+    # 重塑训练样本
+    training_samples = training_samples.transpose((0,3,1,2))
+    # 将培训样本和培训标签转换为浮动格式
+    training_samples = training_samples.astype('float32')
+    training_samples = training_samples/255
+    training_label = np_utils.to_categorical(training_label, 8) 
+    return training_samples, training_label, training_samples_id
+```  
+&emsp;&emsp;我们还需要对测试做同样的工作：<br>
+```python
+def load_normalize_testing_samples():
+    # 调用LOAD函数以加载和调整测试样本的大小
+    testing_samples, testing_samples_id = load_testing_samples()
+    # 将加载和调整大小的数据转换为Numpy格式
+    testing_samples = np.array(testing_samples, dtype=np.uint8)
+    # 重塑测试样本
+    testing_samples = testing_samples.transpose((0,3,1,2))
+    # 将测试样本转换为浮动格式
+    testing_samples = testing_samples.astype('float32') 
+    testing_samples = testing_samples / 255
+    return testing_samples, testing_samples_id
+```  
+### 建立模型
+&emsp;&emsp;现在是建立模型的时候了。正如我们所提到的，我们将使用一种称为CNN的深度学习架构作为这项鱼类识别任务的学习算法。同样，您不需要理解本章中的任何前面或即将出现的代码，因为我们只是在演示如何通过只使用几行代码，并借助Keras和TensorFlow作为一个深度学习平台来解决复杂的数据科学任务。<br>
+&emsp;&emsp;还请注意，CNN和其他深度学习架构将在后面的章节中进行更详细的解释：<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片9.png) <br>
+图 1.10 CNN结构<br><br>
+&emsp;&emsp;因此，让我们继续创建一个函数，它将负责创建CNN的体系结构，用于我们的鱼类识别任务：<br>
+```python
+# 创建CNN模型体系结构
+def create_cnn_model_arch():
+    pool_size = 2 # 我们将在整个过程中使用2x2池化层
+    conv_depth_l = 32 
+    conv_depth_2 = 64
+    drop_prob = 0.5  
+    hidden_size = 32 
+    num_classes = 8 
+    # Conv [32] –> Conv [32] –> Pool 
+    cnn_model = Sequential()
+    cnn_model.add(ZeroPadding2D((l, l), input_shape=(3, 32, 32), dim_ordering='th'))
+    cnn_model.add(Convolution2D(conv_depth_l, kernel_size, kernel_size, activation='relu',
+    dim_ordering='th'))
+    cnn_model.add(ZeroPadding2D((l, l), dim_ordering='th')) 
+    cnn_model.add(Convolution2D(conv_depth_l, kernel_size, kernel_size,activation='relu', dim_ordering='th'))
+    cnn_model.add(MaxPooling2D(pool_size=(pool_size, pool_size), strides=(2, 2),dim_ordering='th'))
+    # Conv [64] –> Conv [64] –> Pool 
+    cnn_model.add(ZeroPadding2D((l, l), dim_ordering='th'))
+    cnn_model.add(Convolution2D(conv_depth_2, kernel_size, kernel_size, activation='relu',dim_ordering='th'))
+    cnn_model.add(ZeroPadding2D((l, l), dim_ordering='th')) 
+    cnn_model.add(Convolution2D(conv_depth_2, kernel_size, kernel_size,activation='relu',dim_ordering='th')) 
+    cnn_model.add(MaxPooling2D(pool_size=(pool_size, pool_size),strides=(2, 2),dim_ordering='th'))
+    # Now flatten to lD, apply FC then ReLU (with dropout) and finally softmax(output layer)
+    cnn_model.add(Flatten()) 
+    cnn_model.add(Dense(hidden_size, activation='relu')) 
+    cnn_model.add(Dropout(drop_prob)) 
+    cnn_model.add(Dense(hidden_size, activation='relu')) 
+    cnn_model.add(Dropout(drop_prob)) 
+    cnn_model.add(Dense(num_classes, activation='softmax'))
+    # 启动随机梯度下降优化器
+    stochastic_gradient_descent = SGD(lr=le-2, decay=le-6, momentum=0.9,nesterov=True)
+    cnn_model.compile(optimizer=stochastic_gradient_descent,
+    # 使用随机梯度下降优化器
+    loss='categorical_crossentropy')# 使用交叉熵损失函数
+    return cnn_model
+```  
+&emsp;&emsp;在开始对模型进行训练之前，我们需要使用一种模型评估和验证方法来帮助我们评估我们的模型并查看它的泛化能力。为此，我们将使用一种叫做k折叠交叉验证的方法。同样，您不需要理解此方法或它是如何工作的，因为我们稍后将详细解释此方法。<br>
+&emsp;&emsp;因此，让我们开始并创建一个函数，它将帮助我们评估和验证模型：<br>
+```python
+#以折叠交叉验证为验证方法的模型 
+def create_model_with_kfold_cross_validation(nfolds=10):
+    batch_size = 16 # 在每次迭代中，我们同时考虑32个训练示例。
+    num_epochs = 30 # 我们在整个训练集上迭代2OO次。
+    random_state =51 # 在同一平台上控制结果重复性的随机性
+    # 在将训练样本输入到创建的CNN模型之前加载和规范化
+    training_samples, training_samples_target, training_samples_id =load_normalize_training_samples() 
+    yfull_train = dict()
+    # 提供培训/测试指标，以分割培训样本中的数据
+    # which is splitting data into lO consecutive folds with shuffling 
+    kf = KFold(len(train_id), n_folds=nfolds, shuffle=True,random_state=random_state)
+    fold_number = 0 # 折数初值
+    sum_score = 0 #总分(每次迭代时将增加)
+    trained_models = [] # 存储每个迭代的模型
+    # 获取培训/测试样本
+    #t培训/测试指数
+    for train_index,test_index in kf: 
+        cnn_model = create_cnn_model_arch()
+        training_samples_X = training_samples[train_index] # 获取训练输入变量
+        training_samples_Y = training_samples_target[train_index] # 获取培训输出/标签变量
+        validation_samples_X = training_samples[test_index] # 获取验证输入变量
+        validation_samples_Y = training_samples_target[test_index] # 获取验证输出/标签变量
+        fold_number += 1
+        print('Fold number {} from {}'.format(fold_number, nfolds)) 
+        callbacks = [
+                EarlyStopping(monitor='val_loss', patience=3, verbose=0),
+        ]
+        # 拟合CNN模型，给出定义的设置
+        cnn_model.fit(training_samples_X, training_samples_Y,batch_size=batch_size,
+        nb_epoch=num_epochs, shuffle=True, verbose=2,
+        validation_data=(validation_samples_X,
+        validation_samples_Y), callbacks=callbacks)
+        # 基于验证集的训练模型泛化能力度量
+        predictions_of_validation_samples = cnn_model.predict(validation_samples_X.astype('float32'), batch_size=batch_size, verbose=2)
+        current_model_score = log_loss(Y_valid, predictions_of_validation_samples)
+        print('Current model score log_loss: ', current_model_score) 
+        sum_score += current_model_score*len(test_index)
+        # 存储有效预测
+        for i in range(len(test_index)):
+            yfull_train[test_index[i]] = predictions_of_validation_samples[i]
+            # 存储经过训练的模型
+            trained_models.append(cnn_model)
+            # 用当前模型计算的分数增量和得分值
+        overall_score = sum_score/len(training_samples) 
+        print("Log_loss train independent avg: ", overall_score)
+        #在此阶段报告模型损失
+        overall_settings_output_string = 'loss_' + str(overall_score) +'_folds_' + str(nfolds) + '_ep_' + str(num_epochs)
+        return overall_settings_output_string, trained_models
+```  
+&emsp;&emsp;现在，在建立模型并使用k-折叠交叉验证方法对模型进行评估和验证后，我们需要在测试集上报告经过训练的模型的结果。为了做到这一点，我们也将使用k倍交叉验证，但这一次的测试，看看我们的训练模型有多好。<br>
+&emsp;&emsp;因此，让我们定义一个函数，它将把经过训练的CNN模型作为输入，然后使用我们拥有的测试集来测试它们：<br>
+```python
+#测试模型的训练效果
+def test_generality_crossValidation_over_test_set( overall_settings_output_string, cnn_models):
+    batch_size = 16 # 在每次迭代中，我们同时考虑32个训练示例。
+    fold_number = 0 # 折叠迭代器
+    number_of_folds = len(cnn_models) # 根据训练步骤中使用的值创建折叠数
+    yfull_test = [] # 变量来保存测试集的总体预测。
+    #在测试集上执行实际的交叉验证测试过程 
+    for j in range(number_of_folds):
+        model = cnn_models[j] 
+        fold_number += 1
+        print('Fold number {} out of {}'.format(fold_number, number_of_folds))
+        #加载和正规化测试样本
+        testing_samples, testing_samples_id =load_normalize_testing_samples()
+        #在当前测试折叠上调用当前模型
+        test_prediction = model.predict(testing_samples,batch_size=batch_size, verbose=2) 
+        yfull_test.append(test_prediction)
+    test_result = merge_several_folds_mean(yfull_test, number_of_folds)
+    overall_settings_output_string = 'loss_' +overall_settings_output_string \
+    + '_folds_' + str(number_of_folds)
+    format_results_for_types(test_result, testing_samples_id, overall_settings_output_string)
+```  
+#### 模型训练与测试
+&emsp;&emsp;现在，我们准备开始模型训练阶段，调用创建_MODEL_WITY_KFLODE_交叉验证()的主要函数，使用10倍交叉验证来建立和训练CNN模型；然后，我们可以调用测试函数来度量模型泛化到测试集的能力：<br>
+```python
+#开始模型培训和测试
+if __name__== '_main_':
+    info_string, models = create_model_with_kfold_cross_validation() 
+    test_generality_crossValidation_over_test_set(info_string, models)
+```  
+#### 鱼类识别
+&emsp;&emsp;在解释了鱼类识别示例的主要构建块之后，我们已经准备好看到所有代码片段连接在一起，并看到我们如何成功地构建了一个如此复杂的系统。完整的代码放在书的附录部分。<br>
+## 不同学习类型
+&emsp;&emsp;根据亚瑟·塞缪尔(https://en.wikipara.org/wiki/arthur_Samuel)的说法，数据科学赋予了计算机学习的能力，而无需显式编程。因此，任何在没有显式编程的情况下使用培训示例以便对未见数据做出决策的软件都被认为是学习的。数据科学或学习有三种不同的形式。<br>
+图1.12显示了常用的数据科学/机器学习类型：<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片10.png) <br>
+### 有监督的学习
