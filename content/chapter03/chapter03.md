@@ -330,6 +330,19 @@ print("\nWe are going to drop", features_to_drop.shape[O], " which are highly co
 &emsp;&emsp;图1 模型性能与特性数量之比<br>
 &emsp;&emsp;图1显示，随着特征数的增加，分类器的性能也会提高，直到我们达到最优的特征数为止。在相同训练集的基础上添加更多的特征将降低分类器的性能。<br>
 
+&emsp;&emsp;继续之前的例子。假设地球上猫和狗的数量是无限的。由于有限的时间和计算能力，我们仅仅选取了10张照片作为训练样本。我们的目的是基于这10张照片来训练一个线性分类器，使得这个线性分类器可以对剩余的猫或狗的照片进行正确分类。我们从只用一个特征来辨别猫和狗开始：<br>
+![图片3](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/image3.jpg)<br>
+&emsp;&emsp;从上图可以看到，如果仅仅只有一个特征的话，猫和狗几乎是均匀分布在这条线段上，很难将10张照片线性分类。那么，增加一个特征后的情况会怎么样：<br>
+![图片4](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/image4.jpg)<br>
+&emsp;&emsp;增加一个特征后，我们发现仍然无法找到一条直线将猫和狗分开。所以，考虑需要再增加一个特征：<br>
+![图片5](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/image5.jpg)<br>
+![图片6](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/image6.jpg)<br>
+&emsp;&emsp;此时，我们终于找到了一个平面将猫和狗分开。需要注意的是，只有一个特征时，假设特征空间是长度为5的线段，则样本密度是10/5=2。有两个特征时，特征空间大小是5*5*5=125，样本密度是10/125=0.08。如果继续增加特征数量，样本密度会更加稀疏，也就更容易找到一个超平面将训练样本分开。因为随着特征数量趋向于无限大，样本密度非常稀疏，训练样本被分错的可能性趋向于零。当我们将高维空间的分类结果映射到低维空间时，一个严重的问题出现了：<br>
+![图片7](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/image7.jpg)<br>
+&emsp;&emsp;从上图可以看到将三维特征空间映射到二维特征空间后的结果。尽管在高维特征空间时训练样本线性可分，但是映射到低维空间后，结果正好相反。事实上，增加特征数量使得高维空间线性可分，相当于在低维空间内训练一个复杂的非线性分类器。不过，这个非线性分类器太过“聪明”，仅仅学到了一些特例。如果将其用来辨别那些未曾出现在训练样本中的测试样本时，通常结果不太理想。这其实就是我们在机器学习中学过的过拟合问题。<br>
+![图片8](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/image8.jpg)<br>
+&emsp;&emsp;尽管上图所示的只采用2个特征的线性分类器分错了一些训练样本，准确率似乎没有图4的高，但是，采用2个特征的线性分类器的泛化能力比采用3个特征的线性分类器要强。因为，采用2个特征的线性分类器学习到的不只是特例，而是一个整体趋势，对于那些未曾出现过的样本也可以比较好地辨别开来。换句话说，通过减少特征数量，可以避免出现过拟合问题，从而避免“维数灾难”。<br>
+
 #### 避免维数灾难
 &emsp;&emsp;在前面的例子中，我们发现当特征数超过某一最优点时，分类器的性能会下降。理论上，如果你有无限多的训练样本，那么维数灾难就不会存在。最优的功能数量完全取决于数据的大小。<br>
 &emsp;&emsp;避免维数灾难的一种方法是从大量的特征N中提取M特征，其中M<N，M的每个特征可以是N中某些特征的组合。 还有一种常用的技术是主成分分析(PCA)，PCA试图找到较小数量的特征，捕捉原始数据的最大方差。<br>
