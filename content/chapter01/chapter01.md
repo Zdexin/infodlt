@@ -395,7 +395,7 @@ if __name__== '_main_':
 #### 鱼类识别
 &emsp;&emsp;在解释了鱼类识别示例的主要构建块之后，我们已经准备好看到所有代码片段连接在一起，并看到我们如何成功地构建了一个如此复杂的系统。完整的代码放在书的附录部分。<br>
 ## 不同学习类型
-&emsp;&emsp;根据亚瑟·塞缪尔(https://en.wikipara.org/wiki/arthur_Samuel )的说法，数据科学赋予了计算机学习的能力，而无需显式编程。因此，任何在没有显式编程的情况下使用培训示例以便对未见数据做出决策的软件都被认为是学习的。数据科学或学习有三种不同的形式。<br>
+&emsp;&emsp;根据Arthur_Samuel(https://en.wikipedia.org/wiki/Arthur_Samuel )的说法，数据科学赋予了计算机学习的能力，而无需显式编程。因此，任何在没有显式编程的情况下使用培训示例以便对未见数据做出决策的软件都被认为是学习的。数据科学或学习有三种不同的形式。<br>
 图1.12显示了常用的数据科学/机器学习类型：<br>
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片10.png) <br>
 ### 有监督的学习
