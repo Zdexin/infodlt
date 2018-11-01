@@ -4,7 +4,7 @@
 
 &emsp;&emsp;在本章中，我们将概述最广泛使用的深度学习框架之一。TensorFlow拥有越来越多的社区支持，这使得它成为一个很好的选择。 用于构建复杂的深度学习应用程序。来自TensorFlow网站：<br>
 
-&emsp;&emsp;“TensorFlow是一个使用数据流图进行数值计算的开源软件库，图中的节点表示数学操作，而图的边缘表示多维的操作。 Nal数据数组(张量)在它们之间通信。灵活的体系结构允许您使用单个API将计算部署到桌面、服务器或移动设备中的一个或多个CPU或GPU。TensorFlow最初是由谷歌机器智能研究组织内的谷歌大脑团队的研究人员和工程师开发的，目的是进行机器学习和深层神经网络的研究，但该系统的通用性足以适用于广泛的其他领域。”<br>
+&emsp;&emsp;“TensorFlow是一个使用数据流图进行数值计算的开源软件库，图中的节点表示数学操作，而图的边缘表示多维的操作。 数据数组(张量)在它们之间通信。灵活的体系结构允许您使用单个API将计算部署到桌面、服务器或移动设备中的一个或多个CPU或GPU。TensorFlow最初是由谷歌机器智能研究组织内的谷歌大脑团队的研究人员和工程师开发的，目的是进行机器学习和深层神经网络的研究，但该系统的通用性足以适用于广泛的其他领域。”<br>
 &emsp;&emsp;以下主题将在本章中讨论:<br>
 &emsp;&emsp;&emsp;&emsp;---TensorFlow 安装<br>
 &emsp;&emsp;&emsp;&emsp;---The TensorFlow环境 <br>
@@ -41,7 +41,7 @@ sudo apt–get install nvidia–375
 &emsp;&emsp;您应该在终端中获得以下输出:<br>
 ![image2](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image2.jpg)<br>
 
-&emsp;&emsp;接下来，我们需要安装CUDA 8。打开以下CUDA下载链接：https：/developer.nvidia.com/Cuda-下载。选择您的操作系统、体系结构、发行版、版本，最后，在 Staller类型如下所示：<br>
+&emsp;&emsp;接下来，我们需要安装CUDA 8。打开以下CUDA下载链接：https://developer.nvidia.com/Cuda-download 选择您的操作系统、体系结构、发行版、版本，最后，在 Staller类型如下所示：<br>
 ![image3](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter04/image3.jpg)<br>
 
 &emsp;&emsp;安装程序文件大约是2GB。您需要发出以下安装说明：<br>
