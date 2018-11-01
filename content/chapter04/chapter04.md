@@ -20,7 +20,7 @@
 &emsp;&emsp;GPU模式安装TensorFlow需要最新的安装NVIDIA驱动程序，因为GPU版本的TensorFlow目前只支持CUDA。下一节将 通过一个逐步安装NVIDIA驱动程序和CUDA8的过程。<br>
 
 #### 安装NVIDIA驱动程序和CUDA8
-&emsp;&emsp;首先，您需要根据您的GPU安装正确的NVIDIA驱动程序。我有一个GeForce GTX 960m GPU，所以我会继续安装NVIDIA-375(如果你有不同的GPU，你可以使用NVIDI。) 一个搜索工具http：/www.nvidia.com/下载/index.aspx 帮助您找到正确的驱动程序版本。如果您想知道机器的GPU，可以在终端中发出以下命令：<br>
+&emsp;&emsp;首先，您需要根据您的GPU安装正确的NVIDIA驱动程序。我有一个GeForce GTX 960m GPU，所以我会继续安装NVIDIA-375(如果你有不同的GPU，你可以使用NVIDI。) 一个搜索工具http://www.nvidia.com/download/index.aspx 帮助您找到正确的驱动程序版本。如果您想知道机器的GPU，可以在终端中发出以下命令：<br>
 
 `lspci | grep –i nvidia`
 
