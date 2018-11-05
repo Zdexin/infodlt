@@ -19,3 +19,11 @@
 &emsp;&emsp;&emsp;&emsp;许多其他方法的基础：线性回归被认为是许多学习方法的基础，例如神经网络及其成长部分，深度学习。<br>
 ### 广告-一个金融例子
 &emsp;&emsp;为了更好地理解线性回归模型，我们将通过一个实例广告。我们将尝试预测一些公司的销售额，考虑到一些与销售数量有关的因素。这些公司花在电视、广播和报纸上的广告。<br>
+#### 依赖
+&emsp;&emsp;为了用线性回归来建模我们的广告数据样本，我们将使用Stats模型库来获得线性模型的良好特性，但随后，我们将使用Scikit-Learning，它对于数据科学具有非常有用的功能。<br>
+#### 向pandas输入数据
+&emsp;&emsp;Python中有很多库可以用来读取、转换或写入数据。其中一个库是pandas(http://pandas.pydata.org/)。pandas是一个开放源码库，具有很好的数据分析功能和工具以及非常容易使用的数据结构。<br>
+&emsp;&emsp;你可以通过很多不同的方式很容易地得到pandas。要想得到pandas，最好的办法就是安装它。via conda(http://pandas.pydata.org/pandas–docs/stable/install.html#installing–pandas–with–anaconda)。<br>
+&emsp;&emsp;&emsp;&emsp;“Conda是一个开放源码的软件包管理系统和环境管理系统，用于安装多个版本的软件包及其依赖项，并容易在它们之间切换。它在Linux、OSX和Windows上工作，是为Python程序创建的，但可以打包和分发任何软件。”-Conda网站。<br>
+&emsp;&emsp;&emsp;&emsp;您可以通过安装Anaconda轻松获得Conda，这是一个开放的数据科学平台。<br>
+&emsp;&emsp;那么，让我们来看看如何使用pandas来阅读广告数据样本。首先，我们需要导入pandas：<br>
