@@ -32,9 +32,8 @@ import pandas as pd
 ```  
 &emsp;&emsp;接下来，我们可以使用panas.read_csv方法将我们的数据加载到一个名为DataFrame的易于使用的pandas数据结构中。要获得有关panas.read_csv及其参数的更多信息，请执行以下操作可参阅此方法的熊猫文档(https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html ):<br>
 ```python
-# read advertising data samples into a DataFrame 
-advertising_data =
-pd.read_csv('http://www–bcf.usc.edu/~gareth/ISL/Advertising.csv',
+# 将广告数据示例读入DataFrame
+advertising_data = pd.read_csv('http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv',
 index_col=0)
 ```  
 &emsp;&emsp;传递给panas.read_csv方法的第一个参数是一个字符串值，表示文件路径。字符串可以是包含http、ftp、s3和文件的URL。传递的第二个参数是将用作数据行的标签/名称的列的索引。<br>
@@ -55,6 +54,7 @@ TV|radio|newspaper|sales
 4|151.5|41.3|58.5|18.5
 5|180.8|10.8|58.4|12.9
 <br>
+
 #### 了解广告数据
 &emsp;&emsp;这个问题属于监督学习类型，其中我们有解释特征(输入变量)和响应(输出变量)。<br>
 &emsp;&emsp;&emsp;&emsp;特性/输入变量是什么？<br>
