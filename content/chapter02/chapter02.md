@@ -127,7 +127,7 @@ lm.params
 Output：<br>
 &emsp;&emsp;Intercept 7.O32594   TV O.O47537 <br>
 &emsp;&emsp;dtype: float64 <br>
-&emsp;&emsp;正如我们所提到的，线性回归模型的优点之一是它们易于解释，所以让我们继续解释这个模型。<br>
+正如我们所提到的，线性回归模型的优点之一是它们易于解释，所以让我们继续解释这个模型。<br>
 
 
 
