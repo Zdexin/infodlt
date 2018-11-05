@@ -41,6 +41,9 @@ index_col=0)
 &emsp;&emsp;现在，我们有了DataDataFrame，它包含URL中提供的广告数据，每一行都被第一列标记。如前所述，熊猫提供了易于使用的数据结构，可以用作数据的容器。这些数据结构有一些与它们相关联的方法，您将使用这些方法来转换或操作您的数据。<br>
 &emsp;&emsp;现在，让我们看一下广告数据的前五行：<br>
 ```python
-import pandas as pd
-```  
+# DataFrame.head 方法显示数据的前n行，n默认值为5     
+advertising_data.head()
+```
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/1图片.png) <br>
+
 
