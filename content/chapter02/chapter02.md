@@ -45,7 +45,6 @@ advertising_data.head()
 ```
 Output:
 
-
 TV|radio|newspaper|sales
 -|-|-
 1|230.1|37.8|69.2|22.1
