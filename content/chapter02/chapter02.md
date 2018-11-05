@@ -91,9 +91,44 @@ advertising_data.plot(kind='scatter', x='radio', y='sales', ax=axs[1])
 advertising_data.plot(kind='scatter', x='newspaper', y='sales', ax=axs[2])
 ```
 Output:<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片2.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片1.png) <br>
 图1. 了解广告数据特征与响应变量之间关系的散点图<br><br>
 &emsp;&emsp;现在，我们需要看看广告将如何帮助提高销售。所以，我们需要问自己几个问题。值得问的问题就像广告和销售，哪种广告对销售贡献更大，以及每种类型的广告对销售的大致影响。我们将尝试用一个简单的线性模型来回答这样的问题。<br>
+#### 简单回归模型
+&emsp;&emsp;线性回归模型是一种学习算法，它使用解释性特征(或输入或predic)的组合来预测定量(也称为数值)响应
+&emsp;&emsp;只有一个特征的简单线性回归模型采用以下形式：&emsp;&emsp;y = beta0 + beta1*x<br>
+&emsp;&emsp;在这里:<br>
+&emsp;&emsp;&emsp;&emsp;1.	y是预测的数值(响应)<sales<br>
+&emsp;&emsp;&emsp;&emsp;2.	X是特征值<br>
+&emsp;&emsp;&emsp;&emsp;3.	β0被称为拦截<br>
+&emsp;&emsp;&emsp;&emsp;4.	β1是特征x<tv广告的系数。<br>
+&emsp;&emsp;Beta 0和Beta 1都被认为是模型系数。为了在广告示例中建立一个能够预测销售价值的模型，我们需要学习这些系数，因为beta 1。将是特征x对响应y的学习效果。例如，如果beta 1=0.04，这意味着在电视广告上额外花费100美元与四个小部件的销售增长有关。因此，我们需要继续研究，看看我们如何才能了解这些系数。<br>
+##### 模型学习
+&emsp;&emsp;&emsp;&emsp;为了估计模型的系数，我们需要用一条与实际销售相似的回归线来拟合数据。为了得到一条最适合数据的回归线，我们将使用一个叫做最小二乘的标准。因此，我们需要找到一条将预测值和观察值(实际值)之间的差异最小化的线。换句话说，我们需要找到一条使平方和最小化的回归线。图2说明了这一点：
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片2.png) <br>
+图2 “用一条回归线拟合数据点(电视广告样本)，使残差的平方最小(预测值和观测值之间的差值)” <br> <br>
+&emsp;&emsp;以下是图2中存在的元素：<br>
+&emsp;&emsp;&emsp;&emsp;黑点表示x(电视广告)和y(销售)的实际值或观察值。<br>
+&emsp;&emsp;&emsp;&emsp;蓝线表示最小二乘线(回归线)。<br>
+&emsp;&emsp;&emsp;&emsp;红线表示残差，这是预测值和观察值(实际值)之间的差异。<br>
+&emsp;&emsp;因此，这就是我们的系数与最小二乘线(回归线)的关系：<br>
+&emsp;&emsp;&emsp;&emsp;Beta 0是截距，它是x=0时y的值。<br>
+&emsp;&emsp;&emsp;&emsp;β1是斜率，它表示y的变化除以x的变化。<br>
+图3给出了这方面的图形解释：<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片3.png) <br>
+图3 “最小二乘线与模型系数的关系” <br> <br>
+现在，让我们开始使用StatsModel学习这些系数：
+```python
+#在一行代码中创建一个合适的模型(表示最小二乘线)
+lm = smf.ols(formula='sales ~ TV', data=advertising_data).fit()
+# 显示训练后的模型系数
+lm.params
+```
+Output：
+&emsp;&emsp;Intercept 7.O32594   TV O.O47537 <br>
+&emsp;&emsp;dtype: float64 <br>
+&emsp;&emsp;正如我们所提到的，线性回归模型的优点之一是它们易于解释，所以让我们继续解释这个模型。<br>
+
 
 
 
