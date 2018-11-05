@@ -27,3 +27,20 @@
 &emsp;&emsp;&emsp;&emsp;“Conda是一个开放源码的软件包管理系统和环境管理系统，用于安装多个版本的软件包及其依赖项，并容易在它们之间切换。它在Linux、OSX和Windows上工作，是为Python程序创建的，但可以打包和分发任何软件。”-Conda网站。<br>
 &emsp;&emsp;&emsp;&emsp;您可以通过安装Anaconda轻松获得Conda，这是一个开放的数据科学平台。<br>
 &emsp;&emsp;那么，让我们来看看如何使用pandas来阅读广告数据样本。首先，我们需要导入pandas：<br>
+```python
+import pandas as pd
+```  
+接下来，我们可以使用panas.read_csv方法将我们的数据加载到一个名为DataFrame的易于使用的pandas数据结构中。要获得有关panas.read_csv及其参数的更多信息，请执行以下操作可参阅此方法的熊猫文档(https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html ):
+```python
+# read advertising data samples into a DataFrame 
+advertising_data =
+pd.read_csv('http://www–bcf.usc.edu/~gareth/ISL/Advertising.csv',
+index_col=0)
+```  
+传递给panas.read_csv方法的第一个参数是一个字符串值，表示文件路径。字符串可以是包含http、ftp、s3和文件的URL。传递的第二个参数是将用作数据行的标签/名称的列的索引。
+现在，我们有了DataDataFrame，它包含URL中提供的广告数据，每一行都被第一列标记。如前所述，熊猫提供了易于使用的数据结构，可以用作数据的容器。这些数据结构有一些与它们相关联的方法，您将使用这些方法来转换或操作您的数据。
+现在，让我们看一下广告数据的前五行：
+```python
+import pandas as pd
+```  
+
