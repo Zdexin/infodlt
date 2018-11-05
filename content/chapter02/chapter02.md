@@ -44,6 +44,6 @@ index_col=0)
 # DataFrame.head 方法显示数据的前n行，n默认值为5     
 advertising_data.head()
 ```
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/1图片.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片1.png) <br>
 
 
