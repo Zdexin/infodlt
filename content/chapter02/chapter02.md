@@ -45,6 +45,8 @@ index_col=0)
 advertising_data.head()
 ```
 Output:
+
+
 TV|radio|newspaper|sales
 -|-|-
 1|230.1|37.8|69.2|22.1
@@ -53,5 +55,44 @@ TV|radio|newspaper|sales
 4|151.5|41.3|58.5|18.5
 5|180.8|10.8|58.4|12.9
 <br>
+#### 了解广告数据
+&emsp;&emsp;这个问题属于监督学习类型，其中我们有解释特征(输入变量)和响应(输出变量)。<br>
+&emsp;&emsp;&emsp;&emsp;特性/输入变量是什么？<br>
+&emsp;&emsp;&emsp;&emsp;电视：在给定的市场上为单一产品在电视上花费的广告费用(以千美元计)<br>
+&emsp;&emsp;&emsp;&emsp;收音机：用在收音机上的广告钱<br>
+&emsp;&emsp;&emsp;&emsp;报纸：花在报纸上的广告钱<br>
+&emsp;&emsp;响应/结果/输出变量是什么？<br>
+&emsp;&emsp;&emsp;&emsp;销售：单个产品在给定市场上的销售(以千件为单位)<br>
+&emsp;&emsp;我们还可以使用DataFrame方法形状来了解数据中的样本/观测数：<br>
+```python
+#sales 以千为单位
+advertising_data.shape
+```
+Output: <br>
+&emsp;&emsp;(20O, 4)<br>
+&emsp;&emsp;因此，在广告数据中有200个观察结果。<br>
+#### 数据分析和可视化
+&emsp;&emsp;为了了解数据的底层形式，特征和响应之间的关系，以及更多的洞察力，我们可以使用不同类型的可视化。理解这种关系IP之间的广告数据特征和响应，我们将使用分散图。<br>
+&emsp;&emsp;为了对数据进行不同类型的可视化，可以使用Matplotlib(https://matplotlib.org/ )，这是一个用于可视化的Python2D库。要获得Matplotlib，您可以将他们的安装说明放在：https://matplotlib.org/User/installing.html 上。<br>
+&emsp;&emsp;让我们导入可视化库Matplotlib：<br>
+```python
+#为了对数据进行不同类型的可视化，使用Matplotlib
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+&emsp;&emsp;现在，让我们使用一个散点图来可视化广告数据特性与响应变量之间的关系：<br>
+```python
+#使用一个散点图来可视化广告数据特性与响应变量之间的关系
+fig, axs = plt.subplots(1, 3, sharey=True)
+#将散点图添加到网格中
+advertising_data.plot(kind='scatter', x='TV', y='sales', ax=axs[0], figsize=(16, 8))
+advertising_data.plot(kind='scatter', x='radio', y='sales', ax=axs[1]) 
+advertising_data.plot(kind='scatter', x='newspaper', y='sales', ax=axs[2])
+```
+Output:<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片2.png) <br>
+图1. 了解广告数据特征与响应变量之间关系的散点图<br><br>
+&emsp;&emsp;现在，我们需要看看广告将如何帮助提高销售。所以，我们需要问自己几个问题。值得问的问题就像广告和销售，哪种广告对销售贡献更大，以及每种类型的广告对销售的大致影响。我们将尝试用一个简单的线性模型来回答这样的问题。<br>
+
 
 
