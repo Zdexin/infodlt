@@ -125,10 +125,60 @@ lm = smf.ols(formula='sales ~ TV', data=advertising_data).fit()
 lm.params
 ```
 Output：<br>
-&emsp;&emsp;Intercept 7.O32594   TV O.O47537 <br>
+&emsp;&emsp;Intercept 7.O32594 &emsp;&emsp;  TV O.O47537 <br>
 &emsp;&emsp;dtype: float64 <br>
 正如我们所提到的，线性回归模型的优点之一是它们易于解释，所以让我们继续解释这个模型。<br>
+#### 模型解释
+&emsp;&emsp;让我们看看如何解释模型的系数，例如TV广告系数(Beta 1)：<br>
+&emsp;&emsp;&emsp;&emsp;输入/功能(TV广告)支出的单位增加与销售(响应)中的O.O 47537单位增长相关联。换句话说，在电视广告上额外花费100美元增加销售4.7537件。<br>
+&emsp;&emsp;从电视广告数据中建立一个学习模型的目的是预测看不见的数据的销售情况。那么，让我们看看如何使用所学的模型来预测销售价值(但我们没有基于电视广告的给定价值。)<br>
+#### 使用预测模型
+&emsp;&emsp;假设我们有看不见的电视广告支出数据，我们想知道它们对公司销售的相应影响。因此，我们需要使用所学的模型来为我们做到这一点。假设我们想从50000美元的电视广告知道销售额。<br>
+&emsp;&emsp;让我们使用我们所学的模型系数来进行这样的计算：&emsp;&emsp;y = 7.032594 + 0.047537 x 50<br>
+```python
+7.032594 + 0.047537*50000
+```
+Output:<br>
+&emsp;&emsp;9,4O9.444<br>
+&emsp;&emsp;我们也可以使用Statsmodel为我们做预测。首先，我们需要在熊猫DataFrame中提供电视广告值，因为StatsModel界面期望它：<br>
+```python
+7.032594 + 0.047537*50000
+#创建Pandas DataFrame以匹配StatsModel接口期望
+new_TVAdSpending = pd.DataFrame({'TV':[50000]})
+new_TVAdSpending.head()
+```
+Output:<br>
 
+.|TV
+-|-
+0|50000
+<br>
+
+&emsp;&emsp;现在，我们可以继续使用预测函数来预测销售价值：<br>
+```python
+#使用模型对新值进行预测。
+preds = lm.predict(new_TVAdSpending)
+```
+Output:<br>
+array([ 9.4O942557])<br>
+&emsp;&emsp;让我们看看所学的最小二乘线是什么样子的。为了画出这条线，我们需要两个点，每个点用这对表示：(x，x预测值)。<br>
+&emsp;&emsp;&emsp;&emsp;那么，让我们取电视广告功能的最小值和最大值：<br>
+Output:
+
+.|TV
+-|-
+0|0.7
+1|296.4
+<br>
+
+&emsp;&emsp;让我们为这两个值得到相应的预测：<br>
+```python
+# x最小值和最大值的预测
+predictions = lm.predict(X_min_max) 
+predictions
+```
+Output:<br>
+&emsp;&emsp;array([7.O658692,2l.l2245377])<br>
 
 
 
