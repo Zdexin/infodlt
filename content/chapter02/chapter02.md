@@ -70,7 +70,7 @@ Output:
 advertising_data.shape
 ```
 Output: <br>
-&emsp;&emsp;(20O, 4)<br>
+&emsp;&emsp;(200, 4)<br>
 &emsp;&emsp;因此，在广告数据中有200个观察结果。<br>
 #### 数据分析和可视化
 &emsp;&emsp;为了了解数据的底层形式，特征和响应之间的关系，以及更多的洞察力，我们可以使用不同类型的可视化。理解这种关系IP之间的广告数据特征和响应，我们将使用分散图。<br>
@@ -182,7 +182,7 @@ predictions = lm.predict(X_min_max)
 predictions
 ```
 Output:<br>
-&emsp;&emsp;array([7.0658692,2l.l2245377])<br>
+&emsp;&emsp;array([7.0658692, 21.12245377])<br>
 
 
 
