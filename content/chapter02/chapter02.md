@@ -134,13 +134,13 @@ Output：<br>
 &emsp;&emsp;从电视广告数据中建立一个学习模型的目的是预测看不见的数据的销售情况。那么，让我们看看如何使用所学的模型来预测销售价值(但我们没有基于电视广告的给定价值。)<br>
 #### 使用预测模型
 &emsp;&emsp;假设我们有看不见的电视广告支出数据，我们想知道它们对公司销售的相应影响。因此，我们需要使用所学的模型来为我们做到这一点。假设我们想从50000美元的电视广告知道销售额。<br>
-&emsp;&emsp;让我们使用我们所学的模型系数来进行这样的计算：&emsp;&emsp;y = 7.032594 + 0.047537 x 50<br>
+让我们使用我们所学的模型系数来进行这样的计算：&emsp;&emsp;y = 7.032594 + 0.047537 x 50<br>
 ```python
 7.032594 + 0.047537*50000
 ```
 Output:<br>
 &emsp;&emsp;9,409.444<br>
-&emsp;&emsp;我们也可以使用Statsmodel为我们做预测。首先，我们需要在熊猫DataFrame中提供电视广告值，因为StatsModel界面期望它：<br>
+我们也可以使用Statsmodel为我们做预测。首先，我们需要在熊猫DataFrame中提供电视广告值，因为StatsModel界面期望它：<br>
 ```python
 #创建Pandas DataFrame以匹配StatsModel接口期望
 new_TVAdSpending = pd.DataFrame({'TV':[50000]})
@@ -153,15 +153,15 @@ Output:<br>
 0|50000
 <br>
 
-&emsp;&emsp;现在，我们可以继续使用预测函数来预测销售价值：<br>
+现在，我们可以继续使用预测函数来预测销售价值：<br>
 ```python
 #使用模型对新值进行预测。
 preds = lm.predict(new_TVAdSpending)
 ```
 Output:<br>
 array([ 9.40942557])<br><br>
-&emsp;&emsp;让我们看看所学的最小二乘线是什么样子的。为了画出这条线，我们需要两个点，每个点用这对表示：(x，x预测值)。<br>
-&emsp;&emsp;&emsp;&emsp;那么，让我们取电视广告功能的最小值和最大值：<br>
+让我们看看所学的最小二乘线是什么样子的。为了画出这条线，我们需要两个点，每个点用这对表示：(x，x预测值)。<br>
+&emsp;&emsp;那么，让我们取电视广告功能的最小值和最大值：<br>
 ```python
 # x最小值和最大值的预测
 predictions = lm.predict(X_min_max) 
@@ -183,6 +183,25 @@ predictions
 ```
 Output:<br>
 &emsp;&emsp;array([7.0658692, 21.12245377])<br>
-
-
+现在，让我们绘制实际数据，然后用最小二乘线拟合它：
+```python
+#绘制实际观测数据
+advertising_data.plot(kind='scatter', x='TV', y='sales')
+#绘制最小二乘线
+plt.plot(new_TVAdSpending, preds, c='red', linewidth=2)
+```
+Output:<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片4.png) <br>
+图4 “实际数据和最小二乘线的图”<br><br>
+本例的扩展和进一步的解释将在下一章中解释。<br>
+## 线性分类模型
+&emsp;&emsp;在这一部分中，我们将进行Logistic回归，这是广泛使用的分类算法之一。<br>
+&emsp;&emsp;什么是Logistic回归？Logistic回归的简单定义是，它是一种包含线性判别的分类算法。<br>
+&emsp;&emsp;我们将在两个方面澄清这一定义：<br>
+    &emsp;&emsp;&emsp;&emsp;1.与线性回归不同，Logistic回归不尝试估计/预测给定一组特征或输入变量的数值变量的值。相反，逻辑回归算法的输出是给定样本/观测属于特定类的概率。简单地说，让我们假设我们有一个二进制分类器阳离子问题。在这种类型的问题中，输出变量中只有两个类，例如，病或未病。因此，某个样本属于病类的概率是P0，而某个样本属于非病类的概率是P1=1-P0。因此，Logistic回归算法的输出总是在0到1之间。<br>
+    &emsp;&emsp;&emsp;&emsp; 2.您可能知道，有很多学习算法用于回归或分类，每个学习算法对数据样本都有自己的假设。选择适合您的数据的学习算法的能力将随着实践和对该主题的良好理解而逐渐出现。因此，逻辑回归算法的中心假设是，我们的输入/特征空间可以被线性曲面分割成两个区域(每类一个)，如果我们只有两个特征或一个平面，如果我们有三个，以此类推。这个边界的位置和方向将由你的数据决定。如果您的数据满足此约束，则将它们分割为与具有线性SUR的每个类相对应的区域。面对现实，你的数据被说成是线性可分的。下图说明了这一假设。在图5中，我们有三个维度、输入或特性以及两个可能的类：病(红色)和非病(蓝色)。区分这两个区域的地方称为线性判别，因为它是线性的，它有助于区分属于di的样本。不同分类：<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片5.png) <br>
+&emsp;&emsp;图5  “分离两类的线性决策曲面”<br><br>
+&emsp;&emsp;如果您的数据样本不是线性可分的，您可以通过将数据转换为高维空间，添加更多的特性来实现它们。<br>
+### 分类与Logistic回归
 
