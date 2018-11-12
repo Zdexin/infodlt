@@ -121,4 +121,4 @@
 &emsp;&emsp;在本节中，我们将概述TensorFlow库以及基本的TensorFlow应用程序的结构。TensorFlow是一个用于创建大型机器学习应用程序的开源库;它可以在各种各样的硬件上建模计算，从android设备到异构的多gpu系统。<br>
 &emsp;&emsp;TensorFlow使用一种特殊的结构，以便在不同的设备(如cpu和gpu)上执行代码。计算被定义为一个图，每个图都由operations组成，也被称为ops，所以每当我们使用TensorFlow时，我们都会在一个图中定义一系列的操作。<br>
 &emsp;&emsp;要运行这些操作，我们需要将计算图启动到会话控制中。会话控制将操作转换并将其传递给执行设备。<br>
-&emsp;&emsp;例如，下面的图像表示TensorFlow中的图。W ，x和 b是这个图边缘上的张量。矩阵是对张量W和x的运算;在此之后，调用Add，我们将前一个操作符的结果与b相加，每个操作的结果张量与下一个操作交叉，直到最后，在那里可以得到想要的结果。<br>
+&emsp;&emsp;例如，下面的图像表示TensorFlow中的图。![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(2).gif)，![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(18).gif)和![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(19).gif)是这个图边缘上的张量。矩阵是对张量W和x的运算;在此之后，调用Add，我们将前一个操作符的结果与b相加，每个操作的结果张量与下一个操作交叉，直到最后，在那里可以得到想要的结果。<br>
