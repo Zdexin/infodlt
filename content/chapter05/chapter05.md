@@ -95,5 +95,6 @@
 &emsp;&emsp;---hHemanth Kumar.<br> 
 &emsp;&emsp;现在我们已经了解了反向传播的工作原理，让我们回到我们的学生标记数据集。<br>
 &emsp;&emsp;图8中所示的MLP在输入层中有两个节点，它们占用所研究的输入小时和期中标记。它还有一个带有两个节点的隐藏层。输出层也有两个节点;上节点输出通过的概率，下节点输出失败的概率。<br>
-&emsp;&emsp;在分类应用中, 我们广泛使用 softmax 函数(http://cs23ln.github/linear–classify/#softmax)作为 MLP 输出层中的激活函数, 以确保输出为概率, 并且他们加起来等于1。softmax 函数接受一个任意实值的向量，并将其压缩为一个值介于0和1之间的向量，其总和为1因此, 在这个例子中:<br>
+&emsp;&emsp;在分类应用中, 我们广泛使用 softmax 函数(http://cs23ln.github/linear–classify/#softmax) 作为 MLP 输出层中的激活函数, 以确保输出为概率, 并且他们加起来等于1。softmax 函数接受一个任意实值的向量，并将其压缩为一个值介于0和1之间的向量，其总和为1因此, 在这个例子中:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/1.jpg)<br>
 
