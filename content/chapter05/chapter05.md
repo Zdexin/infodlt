@@ -106,4 +106,4 @@
 &emsp;&emsp;&emsp;&emsp;网络输入= [35, 67]<br>
 &emsp;&emsp;&emsp;&emsp;期望的网络输出(目标) = [1, 0]<br>
 &emsp;&emsp;然后考虑节点输出V，可计算如下(![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(5).gif)为sigmoid激活函数):<br>
-
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(14).gif)
