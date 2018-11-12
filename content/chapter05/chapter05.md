@@ -113,3 +113,7 @@
 &emsp;&emsp;我们计算输出节点的总误差，通过网络传播这些误差并使用反向传播计算梯度。然后，采用梯度下降法等优化方法对网络中的权值进行调整，以减少输出层的误差。<br>
 &emsp;&emsp;假设与所考虑的节点相关联的新权值是![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(16).gif)。)和![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(17).gif)(在反向传播和调整权值之后)。<br>
 &emsp;&emsp;如果我们现在将相同的示例作为输入，并输入到网络中，那么网络的性能应该会比初始运行时更好，因为现在已经对权重进行了优化，以最小化预测中的错误。与前面的[0.6，-0.4]相比，输出节点的错误现在减少到[0.2，-0.2]。这意味着我们的网络已经学会正确地分类我们的第一个训练样本。<br>
+&emsp;&emsp;我们对数据集中的所有其他训练样本重复这个过程。然后,我们的网络已经学会了这些例子。<br>
+&emsp;&emsp;如果我们现在想要预测一个学习了25小时，在期中有70分的学生是否能通过期末考试，我们要通过正向传播步骤，找到通过和失败的输出概率。<br>
+&emsp;&emsp;在这里，我避免使用数学方程和对梯度下降法等概念的解释，而是尝试为算法开发一种直觉。有关反向传播算法的更多数学讨论，请参阅以下链接: <br>
+&emsp;&emsp;(http://home.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html)br
