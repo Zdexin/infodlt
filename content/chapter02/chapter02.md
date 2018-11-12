@@ -212,6 +212,166 @@ Output:<br>
 &emsp;&emsp;我们的目标是搜索参数8的值，以便当输入样本x属于某一类时，概率P(y=1 x-x)=h8(X)很大，当x属于零类时，概率很小：<br>
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片7.png) <br>
 图6 sigmoid函数<br><br>
-&emsp;&emsp;因此，假设我们有一组训练样本，其中包含相应的二进制标签{(x(I)，y(I)：i=1，.，m}。我们需要最小化以下成本函数，该函数度量给定的h8的性能：
+&emsp;&emsp;因此，假设我们有一组训练样本，其中包含相应的二进制标签{(x(I)，y(I)：i=1，.，m}。我们需要最小化以下成本函数，该函数度量给定的h8的性能：<br>
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片8.png) <br>
+&emsp;&emsp;注意，对于每个训练样本，我们只有一个等式的求和为非零(取决于标签y(I)的值是0还是)。当y(I)=1时，最小化模型成本函数意味着我们需要使h8(X)变大，并且当y=0时，![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图1.jpg)我们想把1-H8做大一点。<br>
+&emsp;&emsp;现在，我们有一个成本函数来计算给定的假设H8是否适合我们的训练样本。我们可以学习使用优化技术对训练样本进行分类，使J(8)最小化，并找到参数8的最佳选择。一旦我们这样做了，我们就可以使用这些参数将一个新的测试样本分类为1或0，检查这两个类标签中哪一个是最有可能的。如果P(y=1|x)<P(y=0|x)，则输出0，否则输出1，这等于在类之间定义0.5的阈值，并检查h8(X)是否>0.5。<br>
+&emsp;&emsp;为了使成本函数J(8)最小化，我们可以使用一种优化技术，找到最优值为8，从而使成本函数最小化。因此，我们可以使用一个名为梯度的微积分工具，它试图找出成本函数的最大增长率。然后，我们可以向相反的方向求出这个函数的最小值；例如，梯度。用D8J(8)来表示J(8)，这意味着取成本函数的梯度关于模型参数。因此，我们需要提供一个计算J(8)和D8J(8)要求的任何选择8。如果我们导出了J(8)以上的成本函数对于8j，我们将得到以下结果：<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片9.png) <br>
+它可以用矢量形式写成：<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片10.png) <br>
+&emsp;&emsp;现在，我们已经对Logistic回归有了一个数学理解，所以让我们继续使用这种新的学习方法来解决分类任务。<br>
+## 泰坦尼克号模型的建立和训练
+&emsp;&emsp;泰坦尼克号的沉没是历史上最臭名昭著的事件之一。这一事件导致2224名乘客和机组人员中的1502人死亡。在这个问题上，我们将使用数据科学预测乘客是否会在这场悲剧中幸存下来，然后根据实际的悲剧统计数据检验我们的模型的性能。<br>
+&emsp;&emsp;为了跟进泰坦尼克号的例子，您需要执行以下操作：<br>
+&emsp;&emsp;&emsp;&emsp;1.	Download this repository in a ZIP file by clicking on https://github.com/ahmed–menshawy/ML_Titanic/archive/master.zip or execute from the termina<br>l:<br>
+&emsp;&emsp;&emsp;&emsp;2.	Git clone: https://github.com/ahmed–menshawy/MLTitanic.git<br>
+&emsp;&emsp;&emsp;&emsp;3.	Install [virtualenv]: (http://virtualenv.readthedocs.org/en/latest/installation.html)<br>
+&emsp;&emsp;&emsp;&emsp;4.	Navigate to the directory where you unzipped or cloned the repo and create a virtual environment with virtualenv ml_titanic<br>
+&emsp;&emsp;&emsp;&emsp;5.	Activate the environment with source ml_titanic/bin/activate<br>
+&emsp;&emsp;&emsp;&emsp;6.	Install the required dependencies with pip install –r requirements.txt<br>
+&emsp;&emsp;&emsp;&emsp;7.	Execute the ipython notebook from the command line or terminal<br>
+&emsp;&emsp;&emsp;&emsp;8.	Follow the example code in the chapter<br>
+&emsp;&emsp;&emsp;&emsp;9.	When you're done, deactivate the virtual environment with deactivate<br>
+### 数据处理和可视化
+&emsp;&emsp;在本节中，我们将做一些数据预处理和分析。数据的探索和分析被认为是应用机器学习的最重要的步骤之一，也可能是被认为是最重要的一步，因为在这一步中，你会认识到朋友，数据，在训练过程中它会和你在一起。此外，了解数据将使您能够向下移动一组候选算法，以检查哪一种算法最适合您的数据。<br>
+&emsp;&emsp;让我们从导入实现所需的包开始：<br>
+```python
+import matplotlib.pyplot as plt
+%matplotlib inline
+from statsmodels.nonparametric.kde import KDEUnivariate 
+from statsmodels.nonparametric import smoothers_lowess 
+from pandas import Series, DataFrame
+from patsy import dmatrices
+from sklearn import datasets, svm
 
+import numpy as np 
+import pandas as pd
+import statsmodels.api as sm
+
+from scipy import stats
+stats.chisqprob = lambda chisq, df: stats.chi2.sf(chisq, df)
+```
+让我们用Pandas来阅读泰坦尼克号乘客和船员的数据：<br>
+```python
+#读取数据
+titanic_data = pd.read_csv("data/train.csv")
+titanic_data.shape
+```
+Output: <br>
+&emsp;&emsp;&emsp;&emsp;(89l,l2)<br>
+因此，我们总共有891个观察、数据样本或乘客/机组人员记录，以及描述这一记录的12个解释性特征：<br>
+```python
+list(titanic_data)
+```
+Output: 
+['PassengerId',<br>
+ 'Survived',<br>
+ 'Pclass',<br>
+ 'Name',<br>
+ 'Sex',<br>
+ 'Age',<br>
+ 'SibSp',<br>
+ 'Parch',<br>
+ 'Ticket',<br>
+ 'Fare',<br>
+ 'Cabin',<br>
+ 'Embarked']<br>
+ 让我们看看一些样本/观测的数据：<br>
+ ```python
+ titanic_data[500:510]
+```
+Output: <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片11.png) <br>
+图7 “泰坦尼克号数据集的样本”<br><br>
+&emsp;&emsp;现在，我们有了一个Pandas DataFrame，它包含了我们需要分析的891名乘客的信息。DataFrame的列表示关于每个乘客/机组人员的解释性特性，如姓名、性别或年龄。<br>
+&emsp;&emsp;其中一些解释功能是完整的，没有任何缺失的值，例如存活的特性，它有891个条目。其他解释功能包含缺失的值，例如年龄特性，它只有714个条目。DataFrame中的任何缺失值都表示为NaN。<br>
+&emsp;&emsp;如果您研究了所有的数据集特性，您会发现票务和客舱功能有许多缺失的值(NAN)，因此它们不会为我们的分析增加太多的价值。为了处理这件事，我们会将它们从DataFrame中删除。<br>
+&emsp;&emsp;使用以下代码行可以完全从DataFrame中删除票证和机舱功能：<br>
+ ```python&emsp;&emsp;
+#完全从DataFrame中删除票证和机舱功能#完全从Dat 
+titanic_data = titanic_data.drop(['Ticket','Cabin'], axis=1)
+```
+&emsp;&emsp;在我们的数据集中存在这样的缺失值是有很多原因的。但是为了保持数据集的完整性，我们需要处理这些缺失的值。在这个具体的问题上，我们会选择放弃。<br>
+使用以下代码行可以从所有剩余功能中删除所有NaN值：<br>
+ ```python
+#从所有剩余功能中删除所有NaN值
+titanic_data = titanic_data.dropna()
+```
+&emsp;&emsp;现在，我们有了一种竞争数据集，我们可以用它来进行分析。如果你决定先删除所有的nans而不删除票证和客舱功能，你会发现DataSet被删除，因为.Drona()方法从DataFrame中删除了一个观察，即使它在其中一个特性中只有一个NaN。<br>
+&emsp;&emsp;让我们进行一些数据可视化，以查看某些特性的分布情况，并了解解释性特性之间的关系：<br>
+ ```python
+# 图参数声明
+fig = plt.figure(figsize=(18,6)) 
+alpha=alpha_scatterplot = 0.3 
+alpha_bar_chart = 0.55
+# Defining a grid of subplots to contain all the figures 
+axl = plt.subplot2grid((2,3),(0,0))
+# 添加第一个条形图，表示幸存的人和没有幸存的人的数量。
+titanic_data.Survived.value_counts().plot(kind='bar', alpha=alpha_bar_chart)
+# 添加边距
+axl.set_xlim(-1, 2)
+# 添加图标题
+plt.title("Distribution of Survival, (l = Survived)") 
+plt.subplot2grid((2,3),(0,1)) 
+plt.scatter(titanic_data.Survived, titanic_data.Age, alpha=alpha_scatterplot)
+# 设置y标签的值(年龄)
+plt.ylabel("Age")
+# 格式化
+plt.grid(b=True, which='major', axis='y') 
+plt.title("Survival by Age, (l = Survived)") 
+ax3 = plt.subplot2grid((2,3),(0,2))
+titanic_data.Pclass.value_counts().plot(kind="barh", alpha=alpha_bar_chart) 
+ax3.set_ylim(-1, len(titanic_data.Pclass.value_counts()))
+plt.title("Class Distribution") 
+plt.subplot2grid((2,3),(1,0), colspan=2)
+# plotting kernel density estimate of the subse of the lst class passenger’s age
+titanic_data.Age[titanic_data.Pclass == 1].plot(kind='kde') 
+titanic_data.Age[titanic_data.Pclass == 2].plot(kind='kde') 
+titanic_data.Age[titanic_data.Pclass == 3].plot(kind='kde')
+# 将x标记(年龄)添加到绘图中
+plt.xlabel("Age")
+plt.title("Age Distribution within classes")
+# Add legend to the plot.
+plt.legend(('lst Class', '2nd Class','3rd Class'),loc='best') 
+ax5 = plt.subplot2grid((2,3),(1,2)) 
+titanic_data.Embarked.value_counts().plot(kind='bar', alpha=alpha_bar_chart)
+ax5.set_xlim(-1, len(titanic_data.Embarked.value_counts())) 
+plt.title("Passengers per boarding location")
+```
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片12.png) <br>
+&emsp;&emsp;图 8 “泰坦尼克号数据样本的基本可视化”<br><br>
+&emsp;&emsp;正如我们所提到的，这个分析的目的是根据现有的特征来预测某个特定的乘客是否会在悲剧中幸存下来，例如旅行舱(在数据中称为pclass)，性别，A。通用电气，还有票价。那么，让我们看看我们是否能更好地了解那些幸存和死亡的乘客。 <br>
+&emsp;&emsp;首先，让我们绘制一个条形图来查看每个类中的观察数(存活/死亡)： <br>
+ ```python
+#绘制一个条形图来查看每个类中的观察数(存活/死亡)
+plt.figure(figsize=(6,4)) 
+fig, ax = plt.subplots()
+titanic_data.Survived.value_counts().plot(kind='barh', color="blue", alpha=.65)
+ax.set_ylim(-1, len(titanic_data.Survived.value_counts())) 
+plt.title("Breakdown of survivals(O = Died, l = Survived)")
+```
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片13.png) <br>
+&emsp;&emsp;图9：生存分类 <br> <br>
+&emsp;&emsp;让我们通过将先前的图表按性别细分，来更好地理解这些数据： <br>
+ ```python
+#将先前的图表按性别细分，来更好地理解这些数据
+fig = plt.figure(figsize=(18,6))
+#为幸存者绘制基于性别的分析。
+male = titanic_data.Survived[titanic_data.Sex == 'male'].value_counts().sort_index()
+female = titanic_data.Survived[titanic_data.Sex == 'female'].value_counts().sort_index()
+axl = fig.add_subplot(121) 
+male.plot(kind='barh',label='Male', alpha=0.55)
+female.plot(kind='barh', color='#FA2379',label='Female', alpha=0.55) 
+plt.title("Gender analysis of survivals (raw value counts) "); plt.legend(loc='best')
+axl.set_ylim(-1, 2)
+ax2 = fig.add_subplot(122) 
+(male/float(male.sum())).plot(kind='barh',label='Male', alpha=0.55) 
+(female/float(female.sum())).plot(kind='barh', color='#FA2379',label='Female', alpha=0.55)
+plt.title("Gender analysis of survivals"); plt.legend(loc='best') 
+ax2.set_ylim(-1, 2)
+```
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片14.png) <br>
+&emsp;&emsp;图 10：按性别分列的泰坦尼克号数据 <br> <br>
+&emsp;&emsp;现在，我们有更多关于这两个可能的类(存活和死亡)的信息。探索和可视化步骤是必要的，因为它可以让您更深入地了解数据的结构帮助您选择适合您的问题的学习算法。正如您所看到的，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现更多关于我们正在处理的数据的信息。 <br>
+ <br>
