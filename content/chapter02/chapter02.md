@@ -208,7 +208,7 @@ Output:<br>
 &emsp;&emsp;在线性回归中，我们尝试用线性模型函数y=h(X)=8Tx来预测该数据集中的ith样本x(I)的输出变量y(I)的值。这不是一个很好的解决方案n用于预测二进制标签(y(I)z{0，1})等分类任务。<br>
 &emsp;&emsp;Logistic回归是我们可以用于分类任务的许多学习算法之一，我们使用一个不同的假设类，同时试图预测一个特定的假设类的概率。样本属于一类，概率属于零类。因此，在Logistic回归中，我们将尝试学习以下功能：<br>
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片6.png) <br>
-&emsp;&emsp;该函数![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图.jpg) <br>通常称为Sigmoid或Logistic函数，它将8Tx的值压缩为固定范围[0，1]，如下图所示。因为这个值会在[0，1]，然后，我们可以将h8(X)解释为概率。<br>
+&emsp;&emsp;该函数![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图.jpg) 通常称为Sigmoid或Logistic函数，它将8Tx的值压缩为固定范围[0，1]，如下图所示。因为这个值会在[0，1]，然后，我们可以将h8(X)解释为概率。<br>
 &emsp;&emsp;我们的目标是搜索参数8的值，以便当输入样本x属于某一类时，概率P(y=1 x-x)=h8(X)很大，当x属于零类时，概率很小：<br>
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片7.png) <br>
 图6 sigmoid函数<br><br>
