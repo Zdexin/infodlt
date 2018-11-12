@@ -374,4 +374,5 @@ ax2.set_ylim(-1, 2)
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片14.png) <br>
 &emsp;&emsp;图 10：按性别分列的泰坦尼克号数据 <br> <br>
 &emsp;&emsp;现在，我们有更多关于这两个可能的类(存活和死亡)的信息。探索和可视化步骤是必要的，因为它可以让您更深入地了解数据的结构帮助您选择适合您的问题的学习算法。正如您所看到的，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现更多关于我们正在处理的数据的信息。 <br>
+### 数据分析-监督机器学习
 
