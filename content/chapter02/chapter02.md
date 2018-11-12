@@ -224,7 +224,7 @@ Output:<br>
 ## 泰坦尼克号模型的建立和训练
 &emsp;&emsp;泰坦尼克号的沉没是历史上最臭名昭著的事件之一。这一事件导致2224名乘客和机组人员中的1502人死亡。在这个问题上，我们将使用数据科学预测乘客是否会在这场悲剧中幸存下来，然后根据实际的悲剧统计数据检验我们的模型的性能。<br>
 &emsp;&emsp;为了跟进泰坦尼克号的例子，您需要执行以下操作：<br>
-&emsp;&emsp;&emsp;&emsp;1.	Download this repository in a ZIP file by clicking on https://github.com/ahmed–menshawy/ML_Titanic/archive/master.zip or execute from the termina<br>l:<br>
+&emsp;&emsp;&emsp;&emsp;1.	Download this repository in a ZIP file by clicking on https://github.com/ahmed–menshawy/ML_Titanic/archive/master.zip or execute from the terminal:<br>
 &emsp;&emsp;&emsp;&emsp;2.	Git clone: https://github.com/ahmed–menshawy/MLTitanic.git<br>
 &emsp;&emsp;&emsp;&emsp;3.	Install [virtualenv]: (http://virtualenv.readthedocs.org/en/latest/installation.html)<br>
 &emsp;&emsp;&emsp;&emsp;4.	Navigate to the directory where you unzipped or cloned the repo and create a virtual environment with virtualenv ml_titanic<br>
@@ -259,7 +259,7 @@ titanic_data = pd.read_csv("data/train.csv")
 titanic_data.shape
 ```
 Output: <br>
-&emsp;&emsp;&emsp;&emsp;(89l,l2)<br>
+&emsp;&emsp;&emsp;&emsp;(891,12)<br>
 因此，我们总共有891个观察、数据样本或乘客/机组人员记录，以及描述这一记录的12个解释性特征：<br>
 ```python
 list(titanic_data)
@@ -374,4 +374,4 @@ ax2.set_ylim(-1, 2)
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片14.png) <br>
 &emsp;&emsp;图 10：按性别分列的泰坦尼克号数据 <br> <br>
 &emsp;&emsp;现在，我们有更多关于这两个可能的类(存活和死亡)的信息。探索和可视化步骤是必要的，因为它可以让您更深入地了解数据的结构帮助您选择适合您的问题的学习算法。正如您所看到的，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现更多关于我们正在处理的数据的信息。 <br>
- <br>
+
