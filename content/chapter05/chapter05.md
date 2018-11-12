@@ -122,4 +122,113 @@
 &emsp;&emsp;TensorFlow使用一种特殊的结构，以便在不同的设备(如cpu和gpu)上执行代码。计算被定义为一个图，每个图都由operations组成，也被称为ops，所以每当我们使用TensorFlow时，我们都会在一个图中定义一系列的操作。<br>
 &emsp;&emsp;要运行这些操作，我们需要将计算图启动到会话控制中。会话控制将操作转换并将其传递给执行设备。<br>
 &emsp;&emsp;例如，下面的图像表示TensorFlow中的图。![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(2).gif)，![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(18).gif)和![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(19).gif)是这个图边缘上的张量。矩阵是对张量W和x的运算;在此之后，调用Add，我们将前一个操作符的结果与![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(19).gif)相加，每个操作的结果张量与下一个操作交叉，直到最后，在那里可以得到想要的结果。<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/10.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图"9"TensorFlow计算图<br>
+&emsp;&emsp;为了使用TensorFlow，我们需要导入库;我们给它命名为UG这样我们就可以通过写入UG点来访问一个模块然后是模块的名称:<br>
+```python
+    import tensorflow as tf
+```
+&emsp;&emsp;要创建第一个图，我们将首先使用不需要任何输入的源操作。这些源操作或源操作将把它们的信息传递给其他操作，这些操作将实际运行计算。<br>
+&emsp;&emsp;让我们创建两个将输出数字的源操作。我们将它们定义为 A 和 B, 您可以在下面的代码段中看到:<br>
+```python
+    A=tf.constant([2])
+    B=tf.constant([3])
+```
+&emsp;&emsp;然后, 我们将定义一个简单的计算操作tf.add(),用于求和两个元素。您也可以使用C=A+B,如下面的代码所示:<br>
+```python
+    C = tf.add(A,B)
+    #C = A + B is also a way to define the sum of the terms
+```
+&emsp;&emsp;由于需要在会话的上下文中执行图, 因此我们需要创建一个会话对象:<br>
+```python
+    session = tf.session()
+```
+&emsp;&emsp;为了查看图表， 让我们运行会话以从以前定义的 C 操作获取结果:<br>
+```python
+   result = session.run(C) print(result)
+   Output:
+   [5]
+```
+&emsp;&emsp;你可能认为仅仅把两个数字加在一起就需要做很多工作，但是理解TensorFlow的基本结构是非常重要的。一旦你这样做了，你可以定义任何你想要的计算;同样，TensorFlow的结构允许它在不同的设备(CPU或GPU)甚至集群中处理计算。如果您想了解更多这方面的信息，可以运行该方法 tf. device ().<br>
+&emsp;&emsp;同样，你也可以自由地对TensorFlow的结构进行实验，以便更好地了解它是如何工作的。如果您想要得到TensorFlow支持的所有数学操作的列表，您可以查看文档。<br>
+&emsp;&emsp;现在, 您应该了解 TensorFlow 的结构以及如何创建基本应用程序。<br>
+## 使用 TensorFlow 定义多维数组
+现在, 我们将尝试使用 TensorFlow 定义这样的一个数组:<br>
+```python
+    salar_var = tf.constant([4]) 
+    vector_var = tf.constant([5,4,2])
+    matrix_var = tf.constant([[l,2,3],[2,2,4],[3,5,5]])
+    tensor = tf.constant( [ [[l,2,3],[2,3,4],[3,4,5]] , [[4,5,6],[5,6,7],[6,7,8]] , [[7,8,9],[8,9,l0],[9,l0,ll]] ] )
+    with tf.session() as session: 
+        result = session.run(salar_var)
+        print "Scalar (l entry):\n %s \n" % result 
+        result = session.run(vector_var)
+        print "Vector (3 entries) :\n %s \n" % 
+        result result = session.run(matrix_var)
+        print "Matrix (3*3 entries):\n %s \n" % result
+        result = session.run(tensor)
+        print "Tensor (3*3*3 entries) :\n %s \n" % result
+    Output:
+    scalar (l entry): 
+    [2]
 
+    Vector (3 entries) : 
+    [5 6 2]
+
+    Matrix (3*3 entries): 
+    [[l 2 3]
+    [2 3 4]
+    [3 4 5]]
+
+    Tensor (3*3*3 entries) : 
+    [[[ l	2	3]
+    [	2	3	4]
+    [	3	4	5]]
+    [[	4	5	6]
+    [	5	6	7]
+    [	6	7	8]]
+    [[	7	8	9]
+    [	8	9	l0]
+    [	9	l0	ll]]]
+```
+现在您已经了解了这些数据结构，我鼓励您使用以前的一些函数来了解它们的行为，根据它们的结构类型:
+```python
+    Matrix_one = tf.constant([[l,2,3],[2,3,4],[3,4,5]])
+    Matrix_two = tf.constant([[2,2,2],[2,2,2],[2,2,2]
+    first_operation = tf.add(Matrix_one, Matrix_two) 
+    second_operation = Matrix_one + Matrix_two
+        with tf.session() as session:
+        result = session.run(first_operation)
+        print "Defined using tensorflow function :" 
+        print(result)
+        result = session.run(second_operation) 
+        print "Defined using normal expressions :" 
+        print(result)
+
+    Output:
+    Defined using tensorflow function : 
+    [[3 4 5]
+    [4 5 6]
+    [5 6 7]]
+ 
+
+    Defined using normal expressions : 
+    [[3 4 5]
+    [4 5 6]
+    [5 6 7]]
+
+```
+&emsp;&emsp;有了常规的符号定义和Tensorflow函数，我们可以得到一个元素的乘法，也称为**Hadamard乘积**。但如果我们想要正则矩阵乘积呢? 我们需要使用另一个名为tf.matmul()的TensorFlow函数<br>
+```python
+    Matrix_one = tf.constant([[2,3],[3,4]])
+    Matrix_two = tf.constant([[2,3],[3,4]]) first_operation = tf.matmul(Matrix_one, Matrix_two) with tf.3ession() as session:
+    result = session.run(first_operation)
+    print "Defined using tensorflow function :" 
+    print(result)
+
+    Output:
+    Defined using tensorflow function : 
+    [[l3 l8]
+    [l8 25]]
+```
+&emsp;&emsp;我们也可以自己定义这个乘法，但是有一个函数已经这样做了，所以没有必要重新定义这个过程!<br>
