@@ -101,8 +101,9 @@
 &emsp;&emsp;图8中所示的MLP在输入层中有两个节点，它们占用所研究的输入小时和期中标记。它还有一个带有两个节点的隐藏层。输出层也有两个节点;上节点输出通过的概率，下节点输出失败的概率。<br>
 &emsp;&emsp;在分类应用中, 我们广泛使用softmax函数(http://cs23ln.github/linear–classify/#softmax )<br>作为MLP输出层中的激活函数,以确保输出为概率,并且他们加起来等于1。softmax函数接受一个任意实值的向量，并将其压缩为一个值介于0和1之间的向量，其总和为1因此, 在这个例子中:Probability(Pass)+Probablility(Fail)=1。<br>
 ### 步骤1-向前传播
-&emsp;&emsp;网络中的所有权值都是随机初始化的。让我们考虑一个特定的隐藏层节点，并将其称为V。假设从输入到该节点的连接的权重是![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(12).gif)(如图所示)。<br>和![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(13).gif)(如图所示)。<br>
+&emsp;&emsp;网络中的所有权值都是随机初始化的。让我们考虑一个特定的隐藏层节点，并将其称为V。假设从输入到该节点的连接的权重是![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(12).gif)和![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(13).gif)(如图所示)。<br>
 &emsp;&emsp;然后网络将第一个训练样本作为输入(我们知道，对于输入35和67，通过的概率是1) <br>
 &emsp;&emsp;&emsp;&emsp;网络输入= [35, 67]<br>
 &emsp;&emsp;&emsp;&emsp;期望的网络输出(目标) = [1, 0]<br>
+&emsp;&emsp;然后考虑节点输出V，可计算如下(![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(5).gif)为sigmoid激活函数):<br>
 
