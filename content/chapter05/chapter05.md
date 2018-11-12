@@ -66,6 +66,7 @@
 &emsp;&emsp;让我们举一个例子来更好地理解多层感知器。假设我们有以下学生标记数据集：<br>
 **表1-学生标记数据集示例：**<br>
 
+
 学习时间|期中测试成绩|期末测试成绩
 -|-|-
 35|67|Pass
@@ -74,14 +75,17 @@
 45|56|Pass
 10|90|Fail
 <br>
+
 &emsp;&emsp;这两个输入列显示学生学习的小时数和学生获得的期中分数。最终结果列可以有两个值, 1 或 0, 表示学生是否在最后一学期通过。例如, 我们可以看到, 如果学生学习35小时, 并在期中获得了67分，他/她最终通过了最后一学期。<br>
 &emsp;&emsp;现在, 假设我们想预测一个学生学习25小时, 在期中考试中得到70分是否会通过最后一学期:<br>
-**表2-最后学期结果未知的样本学生:**
+**表2-最后学期结果未知的样本学生:
+
 
 学习时间|期中测试成绩|期末测试成绩
 -|-|-
 36|70|?
 <br>
+
 &emsp;&emsp;这是一个二元分类问题，MLP可以从给定的例子(训练数据)中学习，并在给定一个新的数据点时做出有根据的预测。我们将很快看到MLP如何学习这种关系。<br>
 ## 培训我们的 MLP-反向算法
 &emsp;&emsp多层感知器学习的过程称为反向算法。我建议阅读果壳网上Hemanth Kumar给出的答案和解释, (https://www.Quora.com/How–do–you–explain–back–propagation–algorithm–to–a–beginner–in–neural–network/answer/Hemanth–Kumar–Mantri) (稍后引述)。<br>
@@ -95,7 +99,10 @@
 &emsp;&emsp;hHemanth Kumar.<br> 
 &emsp;&emsp;现在我们已经了解了反向传播的工作原理，让我们回到我们的学生标记数据集。<br>
 &emsp;&emsp;图8中所示的MLP在输入层中有两个节点，它们占用所研究的输入小时和期中标记。它还有一个带有两个节点的隐藏层。输出层也有两个节点;上节点输出通过的概率，下节点输出失败的概率。<br>
-&emsp;&emsp;在分类应用中, 我们广泛使用softmax函数(http://cs23ln.github/linear–classify/#softmax )作为MLP输出层中的激活函数,以确保输出为概率,并且他们加起来等于1。softmax函数接受一个任意实值的向量，并将其压缩为一个值介于0和1之间的向量，其总和为1因此, 在这个例子中:Probability(Pass)+Probablility(Fail)=1。<br>
+&emsp;&emsp;在分类应用中, 我们广泛使用softmax函数(http://cs23ln.github/linear–classify/#softmax )<br>作为MLP输出层中的激活函数,以确保输出为概率,并且他们加起来等于1。softmax函数接受一个任意实值的向量，并将其压缩为一个值介于0和1之间的向量，其总和为1因此, 在这个例子中:Probability(Pass)+Probablility(Fail)=1。<br>
 ### 步骤1-向前传播
-&emsp;&emsp;网络中的所有权值都是随机初始化的。让我们考虑一个特定的隐藏层节点，并将其称为V。假设从输入到该节点的连接的权重是![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(12).gif)和![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(13).gif)(如图所示)。<br>
+&emsp;&emsp;网络中的所有权值都是随机初始化的。让我们考虑一个特定的隐藏层节点，并将其称为V。假设从输入到该节点的连接的权重是![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(12).gif)(如图所示)。<br>和![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/CodeCogsEqn%20(13).gif)(如图所示)。<br>
+&emsp;&emsp;然后网络将第一个训练样本作为输入(我们知道，对于输入35和67，通过的概率是1) <br>
+&emsp;&emsp;&emsp;&emsp;网络输入= [35, 67]<br>
+&emsp;&emsp;&emsp;&emsp;期望的网络输出(目标) = [1, 0]<br>
 
