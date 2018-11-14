@@ -157,11 +157,11 @@
 ```python
     salar_var = tf.constant([4]) 
     vector_var = tf.constant([5,4,2])
-    matrix_var = tf.constant([[l,2,3],[2,2,4],[3,5,5]])
-    tensor = tf.constant( [ [[l,2,3],[2,3,4],[3,4,5]] , [[4,5,6],[5,6,7],[6,7,8]] , [[7,8,9],[8,9,l0],[9,l0,ll]] ] )
+    matrix_var = tf.constant([[1,2,3],[2,2,4],[3,5,5]])
+    tensor = tf.constant( [ [[1,2,3],[2,3,4],[3,4,5]] , [[4,5,6],[5,6,7],[6,7,8]] , [[7,8,9],[8,9,10],[9,10,11]] ] )
     with tf.session() as session: 
         result = session.run(salar_var)
-        print "Scalar (l entry):\n %s \n" % result 
+        print "Scalar (1 entry):\n %s \n" % result 
         result = session.run(vector_var)
         print "Vector (3 entries) :\n %s \n" % 
         result result = session.run(matrix_var)
@@ -169,31 +169,31 @@
         result = session.run(tensor)
         print "Tensor (3*3*3 entries) :\n %s \n" % result
     Output:
-    scalar (l entry): 
+    scalar (1 entry): 
     [2]
 
     Vector (3 entries) : 
     [5 6 2]
 
     Matrix (3*3 entries): 
-    [[l 2 3]
+    [[1 2 3]
     [2 3 4]
     [3 4 5]]
 
     Tensor (3*3*3 entries) : 
-    [[[ l	2	3]
+    [[[ 1	2	3]
     [	2	3	4]
     [	3	4	5]]
     [[	4	5	6]
     [	5	6	7]
     [	6	7	8]]
     [[	7	8	9]
-    [	8	9	l0]
-    [	9	l0	ll]]]
+    [	8	9	10]
+    [	9	l0	11]]]
 ```
 现在您已经了解了这些数据结构，我鼓励您使用以前的一些函数来了解它们的行为，根据它们的结构类型:
 ```python
-    Matrix_one = tf.constant([[l,2,3],[2,3,4],[3,4,5]])
+    Matrix_one = tf.constant([[1,2,3],[2,3,4],[3,4,5]])
     Matrix_two = tf.constant([[2,2,2],[2,2,2],[2,2,2]
     first_operation = tf.add(Matrix_one, Matrix_two) 
     second_operation = Matrix_one + Matrix_two
@@ -221,15 +221,16 @@
 &emsp;&emsp;有了常规的符号定义和Tensorflow函数，我们可以得到一个元素的乘法，也称为**Hadamard乘积**。但如果我们想要正则矩阵乘积呢? 我们需要使用另一个名为tf.matmul()的TensorFlow函数<br>
 ```python
     Matrix_one = tf.constant([[2,3],[3,4]])
-    Matrix_two = tf.constant([[2,3],[3,4]]) first_operation = tf.matmul(Matrix_one, Matrix_two) with tf.3ession() as session:
+    Matrix_two = tf.constant([[2,3],[3,4]]) 
+    first_operation = tf.matmul(Matrix_one, Matrix_two) with tf.3ession() as session:
     result = session.run(first_operation)
     print "Defined using tensorflow function :" 
     print(result)
 
     Output:
     Defined using tensorflow function : 
-    [[l3 l8]
-    [l8 25]]
+    [[13 18]
+    [18 25]]
 ```
 &emsp;&emsp;我们也可以自己定义这个乘法，但是有一个函数已经这样做了，所以没有必要重新定义这个过程!<br>
 ## 什么是张量?
@@ -244,7 +245,7 @@
 &emsp;&emsp;要更新变量的值，我们只需运行赋值操作，该操作为变量赋值:state = tf.Variable(0)<br>
 &emsp;&emsp;让我们首先创建一个简单的计数器，一个每次增加一个单位的变量:<br>
 ```python
-    one = tf.constant(l)
+    one = tf.constant(1)
     new_value = tf.add(state, one) 
     update = tf.assign(state, new_value)
 ```
@@ -264,7 +265,7 @@
 
     Output:
     0
-    l
+    1
     2
     3
 ```
@@ -311,16 +312,16 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
 ```
 &emsp;&emsp;由于 TensorFlow 中的数据以多维数组的形式传递, 因此我们可以通过占位符传递任何类型的张量来获得简单乘法运算的答案: <br>
 ```python
-    dictionary=(a: [ [ [l,2,3],[4,5,6],[7,8,9],[l0,ll,l2] ] , [
-    [l3,l4,l5],[l6,l7,l8],[l9,20,2l],[22,23,24] ] ] }
+    dictionary=(a: [ [ [1,2,3],[4,5,6],[7,8,9],[10,11,12] ] , [
+    [13,14,15],[16,17,18],[19,20,21],[22,23,24] ] ] }
     with tf.session() as sess:
     result = sess.run(b,feed_dict=dictionary) 
     print result
 
     Output:
     [[[	2.	4.	6.]
-    [	8.	l0.	l2.]
-    [	l4.	l6.	l8.]
+    [	8.	10.	12.]
+    [	14.	16.	18.]
     [	20.	22.	24.]]
     [[	26.	28.	30.]
     [	32.	34.	36.]
@@ -355,18 +356,18 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
     import numpy as np 
     import tensorflow as tf
     import matplotlib.patches as mpatches 
-    import matplotlib.pyplot as plt plt.rcParams['figure.figsize'] = (l0, 6)
+    import matplotlib.pyplot as plt plt.rcParams['figure.figsize'] = (10, 6)
 ```
 &emsp;&emsp;让我们定义一个独立的变量: <br>
 ```python
-     input_values = np.arange(0.0, 5.0, 0.l) 
+     input_values = np.arange(0.0, 5.0, 0.1) 
      input_values
 
     Output:
-    array([ 0. ,	0.l,	0.2,	0.3,	0.4,	0.5,	0.6,	0.7,	0.8,	0.9,	l. ,
-    l.l,	l.2,	l.3,	l.4,	l.5,	l.6,	l.7,	l.8,	l.9,	2. ,	2.l,
-    2.2,	2.3,	2.4,	2.5,	2.6,	2.7,	2.8,	2.9,	3. ,	3.l,	3.2,
-    3.3,	3.4,	3.5,	3.6,	3.7,	3.8,	3.9,	4. ,	4.l,	4.2,	4.3,
+    array([ 0. ,	0.1,	0.2,	0.3,	0.4,	0.5,	0.6,	0.7,	0.8,	0.9,	1. ,
+    1.1,	1.2,	1.3,	1.4,	1.5,	1.6,	1.7,	1.8,	1.9,	2. ,	2.1,
+    2.2,	2.3,	2.4,	2.5,	2.6,	2.7,	2.8,	2.9,	3. ,	3.1,	3.2,
+    3.3,	3.4,	3.5,	3.6,	3.7,	3.8,	3.9,	4. ,	4.1,	4.2,	4.3,
     4.4,	4.5,	4.6,	4.7,	4.8,	4.9])					
 ```
 &emsp;&emsp;##您可以调整斜率和截距来验证图权值=l的变化<br>
@@ -385,24 +386,24 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
 ## TensorFlow中的线性回归
 &emsp;&emsp;对于第一部分，我们将生成随机数据点并定义一个线性关系;我们将使用TensorFlow来调整并获得正确的参数:<br>
 ```python
-    input_values = np.random.rand(l00).astype(np.float32)
+    input_values = np.random.rand(100).astype(np.float32)
 ```
 &emsp;&emsp;本示例中使用的模型方程式为: <br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/13.png)<br>
 &emsp;&emsp;这个方程没什么特别的，它只是我们用来生成数据点的模型。实际上，您可以将参数更改为任何您想要的参数，稍后您将这样做。我们在这些点上加一些高斯噪声使它更有趣：<br>
 ```python
     output_values = input_values * 2 + 3
-    output_values = np.vectorize(lambda y: y + np.random.normal(loc=0.0, scale=0.l))(output_values)
+    output_values = np.vectorize(lambda y: y + np.random.normal(loc=0.0, scale=0.1))(output_values)
 ```
 &emsp;&emsp;以下是数据示例:<br>
 ```python
-    list(zip(input_values,output_values))[5:l0] 
+    list(zip(input_values,output_values))[5:10] 
     Output: 
-    [(0.25240293, 3.47436l759429548),
-    (0.946697, 4.9806l7375l7506l), 
-    (0.37582l86, 3.650345806087635), 
-    (0.64025956, 4.27l037640404975), 
-    (0.62555283,     4.3700l850440l96)]
+    [(0.25240293, 3.474361759429548),
+    (0.946697, 4.980617375175061), 
+    (0.37582186, 3.650345806087635), 
+    (0.64025956, 4.271037640404975), 
+    (0.62555283, 4.37001850440196)]
 ```
 &emsp;&emsp;首先，我们用任意随机猜测初始化变量Weight和Bias，然后定义线性函数: <br>
 ```python
