@@ -273,11 +273,29 @@
 &emsp;&emsp;如果要将数据从模型外部传送到 TensorFlow 模型, 则需要使用占位符。<br>
 &emsp;&emsp;那么, 这些所谓的占位符到底是什么？占位符可以被视为模型中的孔，您可以将数据传递到该孔。您可以使用tf.placeholder(datatype), 其中, 数据类型指定 (整数、浮点、字符串和布尔值) 以及其精度 (8、16、32和 64) 位。每个具有各自 Python 语法的数据类型的定义定义为:<br>
 &emsp;&emsp;表 3 TensorFlow 数据类型的定义<br>
+ 
+ 
 **Data type**|**Python type**|**Description**
 -|-|-
 DT_FLOAT|tf.float32|32-bits floating point.
 DT_DOUBLE|tf.float64|64-bits floating point
 DT_INT8|tf.int8|8-bits signed integer.
 DT_INTl6|tf.intl6|16-bits signed integer.
+DT_INT32|tf.int32|32-bits signed integer.
+DT_INT64|tf.int64|64-bits signed integer.
+DT_UINT8|tf.uint8|8-bits unsigned integer.
+DT_3TRING|tf.string|Variable length byte arrays. Each element of a Tensor is a byte array.
+DT_BOOL|tf.bool|Boolean.
+DT_COMPLEX64|tf.complex64|Complex number made of two 32-bits floating points: real and imaginary parts.
+DT_COMPLEXl28|tf.complexl28|Complex number made of two 64-bits floating points: real and imaginary parts.
+DT_QINT8|tf.qint8|8-bits signed integer used in quantized ops.
+DT_QINT32|tf.qint32|32-bits signed integer used in quantized ops.
+DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
 <br>
 
+
+&emsp;&emsp;因此, 让我们创建一个占位符:<br>
+```python
+    a=tf.placeholder(tf.float32)
+```
+&emsp;&emsp;并定义简单乘法运算: b=a*2<br>
