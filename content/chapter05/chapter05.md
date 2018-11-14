@@ -311,19 +311,20 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
 ```
 &emsp;&emsp;由于 TensorFlow 中的数据以多维数组的形式传递, 因此我们可以通过占位符传递任何类型的张量来获得简单乘法运算的答案: <br>
 ```python
-    dictionary=(a: [ [ [l,2,3],[4,5,6],[7,8,9],[lO,ll,l2] ] , [
-    [l3,l4,l5],[l6,l7,l8],[l9,2O,2l],[22,23,24] ] ] }
+    dictionary=(a: [ [ [l,2,3],[4,5,6],[7,8,9],[l0,ll,l2] ] , [
+    [l3,l4,l5],[l6,l7,l8],[l9,20,2l],[22,23,24] ] ] }
     with tf.session() as sess:
-    result = sess.run(b,feed_dict=dictionary) print result
+    result = sess.run(b,feed_dict=dictionary) 
+    print result
 
     Output:
     [[[	2.	4.	6.]
-    [	8.	lO.	l2.]
+    [	8.	l0.	l2.]
     [	l4.	l6.	l8.]
-    [	2O.	22.	24.]]
-    [[	26.	28.	3O.]
+    [	20.	22.	24.]]
+    [[	26.	28.	30.]
     [	32.	34.	36.]
-    [	38.	4O.	42.]
+    [	38.	40.	42.]
     [	44.	46.	48.]]]
 ```
 ## 运行
@@ -362,14 +363,15 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
      input_values
 
     Output:
-    array([ O. ,	O.l,	O.2,	O.3,	O.4,	O.5,	O.6,	O.7,	O.8,	O.9,	l. ,
+    array([ 0. ,	0.l,	0.2,	0.3,	0.4,	0.5,	0.6,	0.7,	0.8,	0.9,	l. ,
     l.l,	l.2,	l.3,	l.4,	l.5,	l.6,	l.7,	l.8,	l.9,	2. ,	2.l,
     2.2,	2.3,	2.4,	2.5,	2.6,	2.7,	2.8,	2.9,	3. ,	3.l,	3.2,
     3.3,	3.4,	3.5,	3.6,	3.7,	3.8,	3.9,	4. ,	4.l,	4.2,	4.3,
     4.4,	4.5,	4.6,	4.7,	4.8,	4.9])					
-
-##您可以调整斜率和截距来验证图权值=l的变化
-    bias=O
+```
+&emsp;&emsp;##您可以调整斜率和截距来验证图权值=l的变化<br>
+```python
+    bias=0
     output = weight*input_values + bias 
     plt.plot(input_values,output) 
     plt.ylabel('Dependent Variable')          
