@@ -298,4 +298,83 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
 ```python
     a=tf.placeholder(tf.float32)
 ```
-&emsp;&emsp;并定义简单乘法运算: b=a*2<br>
+&emsp;&emsp;并定义简单乘法运算:b=a*2<br>
+&emsp;&emsp;现在，我们需要定义和运行该会话，但由于我们在初始化会话时在模型中创建了一个用于传递数据的孔。我们必须将数据进行传递;否则会出现错误。<br>
+&emsp;&emsp;要将数据传递给模型, 我们使用额外的参数feed_dict调用会话, 其中，我们应该传递的是一个字典，每个占位符的名称后面跟着它各自的数据，就像这样:<br>
+```python
+    with tf.session() as sess:
+    result = sess.run(b,feed_dict=(a:3.5}) 
+    print result
+
+    Output:
+    7.0
+```
+&emsp;&emsp;由于 TensorFlow 中的数据以多维数组的形式传递, 因此我们可以通过占位符传递任何类型的张量来获得简单乘法运算的答案: <br>
+```python
+    dictionary=(a: [ [ [l,2,3],[4,5,6],[7,8,9],[lO,ll,l2] ] , [
+    [l3,l4,l5],[l6,l7,l8],[l9,2O,2l],[22,23,24] ] ] }
+    with tf.session() as sess:
+    result = sess.run(b,feed_dict=dictionary) print result
+
+    Output:
+    [[[	2.	4.	6.]
+    [	8.	lO.	l2.]
+    [	l4.	l6.	l8.]
+    [	2O.	22.	24.]]
+    [[	26.	28.	3O.]
+    [	32.	34.	36.]
+    [	38.	4O.	42.]
+    [	44.	46.	48.]]]
+```
+## 运行
+&emsp;&emsp;运行表示的是在图上对张量进行数学运算的节点。这些操作可以是任意类型的函数，比如加和减张量，也可以是激活函数。<br>
+&emsp;&emsp;matmul, tf. add ，and tf.nn.sigmoid 是 TensorFlow 中的一些操作。这些类似于 Python 中的函数, 但可以直接在张量上运行, 每个操作都有特定的功能。<br>
+&emsp;&emsp;其他操作可在以下方面轻松找到:(https://www.tensorflow.org/api_guides/python/math_ops.) <br>
+&emsp;&emsp;让我们来运行一下这些操作:<br>
+```python
+    a = tf.constant([5]) 
+    b = tf.constant([2]) 
+    c = tf.add(a,b)
+    d = tf.subtract(a,b)
+    with tf.session() as session: 
+        result = session.run(c) 
+        print 'c =: %s' % result 
+        result = session.run(d) 
+        print 'd =: %s' % result
+
+    Output: 
+    c =: [7]
+    d =: [3]
+```
+&emsp;&emsp;tf.nn.sigmoid 是一个激活函数: 它有点复杂, 但是这个函数可以帮助学习模型评估什么样的信息是好的，什么样的信息是不好的。<br>
+## 线性回归模型–构建和训练
+&emsp;&emsp;根据我们在泰坦尼克号中对线性回归的解释，在数据建模的实际操作中我们将依靠这个定义来构建一个简单的线性回归模型。<br>
+&emsp;&emsp;让我们首先导入必要的包来实现此实施:<br>
+```python
+    import numpy as np 
+    import tensorflow as tf
+    import matplotlib.patches as mpatches 
+    import matplotlib.pyplot as plt plt.rcParams['figure.figsize'] = (l0, 6)
+```
+&emsp;&emsp;让我们定义一个独立的变量: <br>
+```python
+     input_values = np.arange(0.0, 5.0, 0.l) 
+     input_values
+
+    Output:
+    array([ O. ,	O.l,	O.2,	O.3,	O.4,	O.5,	O.6,	O.7,	O.8,	O.9,	l. ,
+    l.l,	l.2,	l.3,	l.4,	l.5,	l.6,	l.7,	l.8,	l.9,	2. ,	2.l,
+    2.2,	2.3,	2.4,	2.5,	2.6,	2.7,	2.8,	2.9,	3. ,	3.l,	3.2,
+    3.3,	3.4,	3.5,	3.6,	3.7,	3.8,	3.9,	4. ,	4.l,	4.2,	4.3,
+    4.4,	4.5,	4.6,	4.7,	4.8,	4.9])					
+
+##您可以调整斜率和截距来验证图权值=l的变化
+    bias=O
+    output = weight*input_values + bias 
+    plt.plot(input_values,output) 
+    plt.ylabel('Dependent Variable')          
+    plt.xlabel('Indepdendent Variable') 
+    plt.show()
+    Output:
+```
+![]()
