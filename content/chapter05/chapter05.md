@@ -380,3 +380,12 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
     Output:
 ```
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/12.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 11 "依赖变量与独立对象的可视化<br>
+&emsp;&emsp;现在, 让我们看看如何将其转化为 TensorFlow 代码。<br>
+## TensorFlow中的线性回归
+&emsp;&emsp;对于第一部分，我们将生成随机数据点并定义一个线性关系;我们将使用TensorFlow来调整并获得正确的参数:<br>
+```python
+    input_values = np.random.rand(l00).astype(np.float32)
+```
+&emsp;&emsp;本示例中使用的模型方程式为: <br>
+
