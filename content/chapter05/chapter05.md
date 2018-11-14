@@ -236,4 +236,48 @@
 &emsp;&emsp;张量结构帮助我们自由地按照我们想要的方式来塑造数据集。因为图像中的信息是编码的，所以这在处理图像时特别有用。<br>
 &emsp;&emsp;考虑到图像，很容易理解它有高度和宽度，所以用二维结构(矩阵)来表示包含在其中的信息是有意义的……但是我们需要记得图像是有颜色。为了增加关于颜色的信息，我们需要另一个维度，这时张量就变得特别有用了。
 图像被编码成彩色通道;图像数据以颜色通道中每个颜色在给定点上的强度表示，最常见的是RGB(表示红、蓝、绿)。图像中包含的信息是图像宽度和高度中各通道颜色的强度，如下图所示:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/11.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/11.png)<br>
+&emsp;&emsp;因此，红通道在每个点上的宽度和高度可以用矩阵表示;蓝色和绿色的通道也是如此。所以，我们最终得到了三个矩阵，当它们结合时，它们形成了一个张量。
+## 变量
+&emsp&emsp;现在我们对数据结构更熟悉了，接下来我们来看看TensorFlow如何处理变量。<br>
+&emsp;&emsp;为了定义变量, 我们使用命令 tf.varibal()。若要能够在计算图中使用变量, 必须在会话中运行关系图之前对其进行初始化。这是通过运行tf.global_variables_initializer () 来完成的。<br>
+&emsp;&emsp;要更新变量的值，我们只需运行赋值操作，该操作为变量赋值:state = tf.Variable(0)<br>
+&emsp;&emsp;让我们首先创建一个简单的计数器，一个每次增加一个单位的变量:<br>
+```python
+    one = tf.constant(l)
+    new_value = tf.add(state, one) 
+    update = tf.assign(state, new_value)
+```
+&emsp;&emsp;在启动图之后，必须通过运行初始化操作来初始化变量。我们首先要向图中添加初始化操作:<br>
+```python
+    init_op = tf.global_variables_initializer()
+```
+&emsp;&emsp;然后, 我们启动一个会话来运行该关系图。<br>
+&emsp；&emsp;我们首先初始化变量, 然后打印状态变量的初始值, 最后运行更新状态变量并在每次更新后打印结果的操作:<br>
+```python
+    with tf.session() as session: 
+     session.run(init_op) 
+     print(session.run(state)) 
+     for _ in range(3):
+         session.run(update) 
+         print(session.run(state))
+
+    Output:
+    0
+    l
+    2
+    3
+```
+## 占位符
+&emsp;&emsp;现在, 我们知道如何在 TensorFlow 中操作变量, 但在 TensorFlow 模型外提供数据又如何呢？<br>
+&emsp;&emsp;如果要将数据从模型外部传送到 TensorFlow 模型, 则需要使用占位符。<br>
+&emsp;&emsp;那么, 这些所谓的占位符到底是什么？占位符可以被视为模型中的孔，您可以将数据传递到该孔。您可以使用tf.placeholder(datatype), 其中, 数据类型指定 (整数、浮点、字符串和布尔值) 以及其精度 (8、16、32和 64) 位。每个具有各自 Python 语法的数据类型的定义定义为:<br>
+&emsp;&emsp;表 3 TensorFlow 数据类型的定义<br>
+**Data type**|**Python type**|**Description**
+-|-|-
+DT_FLOAT|tf.float32|32-bits floating point.
+DT_DOUBLE|tf.float64|64-bits floating point
+DT_INT8|tf.int8|8-bits signed integer.
+DT_INTl6|tf.intl6|16-bits signed integer.
+<br>
+
