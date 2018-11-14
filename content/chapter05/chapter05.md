@@ -377,4 +377,4 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
     plt.show()
     Output:
 ```
-![]()
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/12.png)<br>
