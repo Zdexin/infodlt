@@ -388,4 +388,72 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
     input_values = np.random.rand(l00).astype(np.float32)
 ```
 &emsp;&emsp;本示例中使用的模型方程式为: <br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/13.png)<br>
+&emsp;&emsp;这个方程没什么特别的，它只是我们用来生成数据点的模型。实际上，您可以将参数更改为任何您想要的参数，稍后您将这样做。我们在这些点上加一些高斯噪声使它更有趣：<br>
+```python
+    output_values = input_values * 2 + 3
+    output_values = np.vectorize(lambda y: y + np.random.normal(loc=0.0, scale=0.l))(output_values)
+```
+&emsp;&emsp;以下是数据示例:<br>
+```python
+    list(zip(input_values,output_values))[5:l0] 
+    Output: 
+    [(0.25240293, 3.47436l759429548),
+    (0.946697, 4.9806l7375l7506l), 
+    (0.37582l86, 3.650345806087635), 
+    (0.64025956, 4.27l037640404975), 
+    (0.62555283,     4.3700l850440l96)]
+```
+&emsp;&emsp;首先，我们用任意随机猜测初始化变量Weight和Bias，然后定义线性函数: <br>
+```python
+    weight = tf.Variable(l.0) 
+    bias = tf.Variable(0.2)
+    predicted_vals = weight * input_values + bias
+```
+&emsp;&emsp;在一个典型的线性回归模型中，我们将我们想要调整的等式的平方差减到目标值(我们拥有的数据)，因此我们将这个等式定义为损失最小化。为了找到损失的价值, 我们使用 tf. reduce_mean ()。此函数查找多维张量的平均值, 结果可以具有不同的维度:<br>
+```python
+    model_loss = tf.reduce_mean(tf.square(predicted_vals – output_values))
+```
+&emsp;&emsp;然后，我们定义优化方法。在这里，我们将使用一个学习率为0.5的简单梯度下降法。<br>
+&emsp;&emsp;现在，我们将定义我们的图的训练方法，但是我们将使用什么方法来最小化损失？我们用tf.train.GradientDescentOptimizer来实现。 minimize() 函数将最小化优化的错误函数, 从而生成更好的模型: <br>
+```python
+    model_optimizer = tf.train.GradientDescentOptimizer(0.5) 
+    train = model_optimizer.minimize(model_loss)
+```
+&emsp;&emsp;在执行图之前, 不要忘记初始化变量:<br>
+```python
+    init = tf.global_variables_initializer() 
+    sess = tf.session()
+    sess.run(init)
+```
+&emsp;&emsp;现在, 我们准备开始优化并运行图:<br>
+```python
+    train_data = []
+    for step in range(l00):
+        evals = sess.run([train,weight,bias])[1:] 
+        if step % 5 == 0:
+            print(step, evals) 
+            train_data.append(evals)
 
+    Output:
+    (0, [2.5176678, 2.9857566])
+    (5, [2.4192538, 2.3015416])
+    (10, [2.5731843, 2.221911])
+    (15, [2.6890132, 2.1613526])
+    (20, [2.7763696, 2.1156814])
+    (25, [2.8422525, 2.0812368])
+    (30, [2.8919399, 2.0552595])
+    (35, [2.9294133, 2.0356679])
+    (40, [2.957675, 2.0208921])
+    (45, [2.9789894, 2.0097487])
+    (50, [2.9950645, 2.0013444])
+    (55, [3.0071881, 1.995006])
+    (60, [3.0163314, 1.9902257])
+    (65, [3.0232272, 1.9866205])
+    (70, [3.0284278, 1.9839015])
+    (75, [3.0323503, 1.9818509])
+    (80, [3.0353084, 1.9803041])
+    (85, [3.0375392, 1.9791379])
+    (90, [3.039222, 1.9782581])
+    (95, [3.0404909, 1.9775947])
+```
