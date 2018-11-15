@@ -485,5 +485,52 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/14.png)<br>
 ## 逻辑回归模型–构建和训练
 &emsp;&emsp;基于我们在第2章中对逻辑回归的解释, 以及数据建模的实际应用--泰坦尼克号示例, 我们将在 TensorFlow 中实现逻辑回归算法。简单地说， 逻辑回归通过logistic或sigmoid传递输入, 然后将结果视为概率: <br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/15.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 13 "区分0和1的两个线行可分离类<br>
+## TensorFlow 中的逻辑回归
+&emsp;&emsp;为了在TensorFlow中使用逻辑回归，我们首先需要导入将要使用的库。为此，您可以运行以下代码: <br>
+```python
+    import tensorflow as tf
+    import pandas as pd
+    import numpy as np 
+    import time
+    from sklearn.datasets import load_iris
+    from sklearn.cross_validation import train_test_split 
+    import matplotlib.pyplot as plt
+```
+&emsp;&emsp;接下来, 我们将加载要使用的数据集。在本例中, 我们使用的是内置的iris数据集。因此, 没有必要进行任何预处理, 我们可以直接跳转到操作它。我们将数据集分成 x 和 y, 然后将数据集分为训练x和y，并测试x和y，(伪)随机:<br>
+```python
+iris_dataset = load_iris()
+iris_input_values, iris_output_values = iris_dataset.data[:–1,:], 
+iris_dataset.target[:–1]
+iris_output_values= pd.get_dummies(iris_output_values).values 
+train_input_values, test_input_values, train_target_values, 
+test_target_values = train_test_split(iris_input_values, 
+iris_output_values, test_size=0.33, random_state=42)
+```
+&emsp;&emsp;现在，我们定义x和y，这些占位符将保存我们的iris数据(包括特性和标签矩阵)，并帮助将它们传递到算法的不同部分。您可以将占位符看作是插入数据的空位。稍后，我们将通过feed_dict (提要字典)向占位符提供数据，从而将数据插入到这些占位符中: <br>
+## 为什么用占位符?
+&emsp;&emsp;TensorFlow的这个特性允许我们创建一个算法，它可以接受数据并知道数据的形态，而不需要知道输入的数据量。当我们在训练中插入一批数据时，我们可以很容易地调整在一个步骤中我们训练了多少个例子，而不改变整个算法:<br>
+```python
+    # numFeatures is the number of features in our input data.
+    # In the iris dataset, this number is '4'. 
+    num_explanatory_features = train_input_values.shape[1]
 
-
+    # numLabels is the number of classes our data points can be in.
+    # In the iris dataset, this number is '3'. num_target_values = train_target_values.shape[1]
+    # Placeholders
+    # 'None' means TensorFlow shouldn't expect a fixed number in that dimension 
+    input_values = tf.placeholder(tf.float32, [None, num_explanatory_features])
+    # Iris has 4 features, so X is a tensor to hold our data.
+    output_values = tf.placeholder(tf.float32, [None, num_target_values]) # This will be our correct answers matrix for 3     classes.
+```
+## 设置模型权重和偏差
+&emsp;&emsp;就像线性回归一样，我们需要一个共享的变量权矩阵来进行逻辑回归。我们将W和b初始化为满是0的张量。因为我们要学习W和b，它们的初始值并不重要。这些变量是定义回归模型结构的对象，我们可以在它们经过训练之后保存它们，以便以后可以重用它们。<br>
+&emsp;&emsp;我们将两个TensorFlow变量定义为参数。这些变量将会控制我们的逻辑回归的权重和偏差它们会在训练过程中不断更新。<br>
+```python
+#Randomly sample from a normal distribution with standard deviation .01
+weights = tf.Variable(tf.random_normal([num_explanatory_features,num_target_values],mean=0, stddev=0.01, name="weights"))
+biases = tf.Variable(tf.random_normal([1,num_target_values],mean=0, stddev=0.01, name="biases"))
+```
+## 逻辑回归模型
+&emsp;&emsp;我们现在定义我们的operation, 以便正确运行逻辑回归。逻辑回归通常被认为是一个等式:<br>
