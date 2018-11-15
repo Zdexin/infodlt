@@ -482,7 +482,7 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
     plt.show()
 ```
 &emsp;&emsp;Output:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/14.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/14.png)<br>
 ## 逻辑回归模型–构建和训练
 &emsp;&emsp;基于我们在第2章中对逻辑回归的解释, 以及数据建模的实际应用--泰坦尼克号示例, 我们将在 TensorFlow 中实现逻辑回归算法。简单地说， 逻辑回归通过logistic或sigmoid传递输入, 然后将结果视为概率: <br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/15.png)<br>
@@ -565,4 +565,70 @@ biases = tf.Variable(tf.random_normal([1,num_target_values],mean=0, stddev=0.01,
     # Defining our Gradient Descent model_train =
     tf.train.GradientDescentOptimizer(learning_rate).minimize(model_cost)
 ```
+&emsp;&emsp;现在, 是时候通过会话变量执行我们的计算图了。首先, 我们需要使用零或随机值初始化我们的权重和偏差, tf.initialize_all_variables ()这个初始化步骤将成为我们计算图中的一个节点, 当我们将图中放入一个会话中时, 该操作将运行并创建变量:  <br>
+```python
+# tensorflow session sess = tf.session()
 
+# Initialize our variables.
+init = tf.global_variables_initializer() sess.run(init)
+
+#We also want some additional operations to keep track of our model's efficiency over time. We can do this like so:
+# argmax(activation_output, 1) returns the label with the most probability
+# argmax(output_values, 1) is the correct label correct_predictions =
+tf.equal(tf.argmax(activation_output,1),tf.argmax(output_values,1))
+
+# If every false prediction is 0 and every true prediction is 1, the average returns us the accuracy
+model_accuracy = tf.reduce_mean(tf.cast(correct_predictions, "float"))
+
+# summary op for regression output
+activation_summary = tf.summary.histogram("output", activation_output)
+
+# summary op for accuracy
+accuracy_summary = tf.summary.scalar("accuracy", model_accuracy)
+
+# summary op for cost
+cost_summary = tf.summary.scalar("cost", model_cost)
+
+# summary ops to check how variables weights and biases are updating after each iteration to be visualized in TensorBoard
+weight_summary = tf.summary.histogram("weights", weights.eval(session=sess))
+ 
+
+bias_summary = tf.summary.histogram("biases", biases.eval(session=sess))
+
+merged = tf.summary.merge([activation_summary, accuracy_summary, cost_summary, weight_summary, bias_summary])
+writer = tf.summary.FileWriter("summary_logs", sess.graph)
+
+#Now we can define and run the actual training loop, like this:
+# Initialize reporting variables
+
+inital_cost = 0 diff = 1 epoch_vals = [] accuracy_vals = [] costs = []
+
+# Training epochs
+for i in range(num_epochs):
+if i > 1 and diff < .0001:
+print("change in cost %g; convergence."%diff) break
+
+else:
+# Run training step
+step = sess.run(model_train, feed_dict=(input_values: train_input_values, output_values: train_target_values})
+
+# Report some stats evert 10 epochs if i % 10 == 0:
+
+# Add epoch to epoch_values epoch_vals.append(i)
+
+# Generate the accuracy stats of the model train_accuracy, new_cost = sess.run([model_accuracy,
+model_cost], feed_dict=(input_values: train_input_values, output_values: train_target_values})
+# Add accuracy to live graphing variable accuracy_vals.append(train_accuracy)
+
+# Add cost to live graphing variable costs.append(new_cost)
+>
+# Re–assign values for variables diff = abs(new_cost – inital_cost) cost = new_cost
+print("Training step %d, accuracy %g, cost %g, cost change %g"%(i, train_accuracy, new_cost, diff))
+
+```
+&emsp;&emsp;Output:<br>
+&emsp;&emsp;&emsp;&emsp;Training step O, accuracy O.343434, cost 34.6O22, cost change 34.6O22 Training step lO, accuracy O.434343, cost 3O.3272, cost change 3O.3272 Training step 2O, accuracy O.646465, cost 28.3478, cost change 28.3478 Training step 3O, accuracy O.646465, cost 26.6752, cost change 26.6752 Training step 4O, accuracy O.646465, cost 25.2844, cost change 25.2844 Training step 5O, accuracy O.646465, cost 24.l349, cost change 24.l349 Training step 6O, accuracy O.646465, cost 23.l835, cost change 23.l835 Training step 7O, accuracy O.646465, cost 22.39ll, cost change 22.39ll Training step 8O, accuracy O.646465, cost 2l.7254, cost change 2l.7254 Training step 9O, accuracy O.646465, cost 2l.l6O7, cost change 2l.l6O7 Training step lOO, accuracy O.666667, cost 2O.677, cost change 2O.677 Training step llO, accuracy O.666667, cost 2O.2583, cost change 2O.2583 Training step l2O, accuracy O.666667, cost l9.8927, cost change l9.8927 Training step l3O, accuracy O.666667, cost l9.57O5, cost change l9.57O5 Training step l4O, accuracy O.666667, cost l9.2842, cost change l9.2842 Training step l5O, accuracy O.666667, cost l9.O278, cost change l9.O278 Training step l6O, accuracy O.676768, cost l8.7966, cost change l8.7966 Training step l7O, accuracy O.69697, cost l8.5867, cost change l8.5867 Training step l8O, accuracy O.69697, cost l8.395l, cost change l8.395l Training step l9O, accuracy O.7l7l72, cost l8.2l9l, cost change l8.2l9l Training step 2OO, accuracy O.7l7l72, cost l8.O567, cost change l8.O567 Training step 2lO, accuracy O.737374, cost l7.9O6, cost change l7.9O6 Training step 22O, accuracy O.747475, cost l7.7657, cost change l7.7657 Training step 23O, accuracy O.747475, cost l7.6345, cost change l7.6345 Training step 24O, accuracy O.757576, cost l7.5ll3, cost change l7.5ll3 Training step 25O, accuracy O.787879, cost l7.3954, cost change l7.3954 Training step 26O, accuracy O.787879, cost l7.2858, cost change l7.2858 Training step 27O, accuracy O.787879, cost l7.l82, cost change l7.l82 Training step 28O, accuracy O.787879, cost l7.O834, cost change l7.O834 Training step 29O, accuracy O.787879, cost l6.9895, cost change l6.9895 Training step 3OO, accuracy O.79798, cost l6.8999, cost change l6.8999 Training step 3lO, accuracy O.79798, cost l6.8l4l, cost change l6.8l4l Training step 32O, accuracy O.79798, cost l6.732, cost change l6.732 Training step 33O, accuracy O.79798, cost l6.653l, cost change l6.653l Training step 34O, accuracy O.8O8O8l, cost l6.5772, cost change l6.5772 Training step 35O, accuracy O.8l8l82, cost l6.5O4l, cost change l6.5O4l Training step 36O, accuracy O.838384, cost l6.4336, cost change l6.4336 Training step 37O, accuracy O.838384, cost l6.3655, cost change l6.3655 Training step 38O, accuracy O.838384, cost l6.2997, cost change l6.2997 Training step 39O, accuracy O.838384, cost l6.2359, cost change l6.2359 Training step 4OO, accuracy O.848485, cost l6.l74l, cost change l6.l74l Training step 4lO, accuracy O.848485, cost l6.ll4l, cost change l6.ll4l Training step 42O, accuracy O.848485, cost l6.O558, cost change l6.O558 Training step 43O, accuracy O.858586, cost l5.999l, cost change l5.999l Training step 44O, accuracy O.858586, cost l5.944, cost change l5.944
+ 
+
+Training step 45O, accuracy O.858586, cost l5.89O3, cost change l5.89O3 Training step 46O, accuracy O.868687, cost l5.8379, cost change l5.8379 Training step 47O, accuracy O.878788, cost l5.7869, cost change l5.7869 Training step 48O, accuracy O.878788, cost l5.737l, cost change l5.737l Training step 49O, accuracy O.878788, cost l5.6884, cost change l5.6884 Training step 5OO, accuracy O.878788, cost l5.64O9, cost change l5.64O9 Training step 5lO, accuracy O.878788, cost l5.5944, cost change l5.5944 Training step 52O, accuracy O.878788, cost l5.549, cost change l5.549 Training step 53O, accuracy O.888889, cost l5.5O45, cost change l5.5O45 Training step 54O, accuracy O.888889, cost l5.46O9, cost change l5.46O9 Training step 55O, accuracy O.89899, cost l5.4l82, cost change l5.4l82 Training step 56O, accuracy O.89899, cost l5.3764, cost change l5.3764 Training step 57O, accuracy O.89899, cost l5.3354, cost change l5.3354 Training step 58O, accuracy O.89899, cost l5.2952, cost change l5.2952 Training step 59O, accuracy O.9O9O9l, cost l5.2558, cost change l5.2558 Training step 6OO, accuracy O.9O9O9l, cost l5.2l7, cost change l5.2l7 Training step 6lO, accuracy O.9O9O9l, cost l5.l79, cost change l5.l79 Training step 62O, accuracy O.9O9O9l, cost l5.l4l7, cost change l5.l4l7 Training step 63O, accuracy O.9O9O9l, cost l5.lO5, cost change l5.lO5 Training step 64O, accuracy O.9O9O9l, cost l5.O689, cost change l5.O689 Training step 65O, accuracy O.9O9O9l, cost l5.O335, cost change l5.O335 Training step 66O, accuracy O.9O9O9l, cost l4.9987, cost change l4.9987 Training step 67O, accuracy O.9O9O9l, cost l4.9644, cost change l4.9644 Training step 68O, accuracy O.9O9O9l, cost l4.93O7, cost change l4.93O7 Training step 69O, accuracy O.9O9O9l, cost l4.8975, cost change l4.8975<br>
+&emsp;&emsp;现在，我们来看看经过训练的模型在JSJT数据集上的表现如何，因此让我们根据测试集测试经过训练的模型:<br>
