@@ -482,3 +482,8 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
     plt.show()
 ```
 &emsp;&emsp;Output:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/14.png)<br>
+## 逻辑回归模型–构建和训练
+&emsp;&emsp;基于我们在第2章中对逻辑回归的解释, 以及数据建模的实际应用--泰坦尼克号示例, 我们将在 TensorFlow 中实现逻辑回归算法。简单地说， 逻辑回归通过logistic或sigmoid传递输入, 然后将结果视为概率: <br>
+
+
