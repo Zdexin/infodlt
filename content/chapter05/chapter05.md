@@ -534,3 +534,35 @@ biases = tf.Variable(tf.random_normal([1,num_target_values],mean=0, stddev=0.01,
 ```
 ## 逻辑回归模型
 &emsp;&emsp;我们现在定义我们的operation, 以便正确运行逻辑回归。逻辑回归通常被认为是一个等式:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/2.jpg)<br>
+&emsp;&emsp;然而，为了清晰起见，我们可以将其分为三个主要部分:<br>
+&emsp;&emsp;&emsp;&emsp;权重乘以特征矩阵乘法运算<br>
+&emsp;&emsp;&emsp;&emsp;加权特征和偏置项的总<br>
+&emsp;&emsp;&emsp;&emsp;sigmoid函数的应用。<br>
+&emsp;&emsp;因此，您将会发现这些组件被定义为三个单独的操作:<br>
+```python
+    # Three–component breakdown of the Logistic Regression equation.
+    # Note that these feed into each other.
+    apply_weights = tf.matmul(input_values, weights, name="apply_weights") 
+    add_bias = tf.add(apply_weights, biases, name="add_bias") 
+    activation_output = tf.nn.sigmoid(add_bias, name="activation")
+```
+&emsp;&emsp;正如我们之前看到的，我们将要使用的函数是logistic函数，它是在应用权值和偏差后输入的数据。在TensorFlow，该功能被实现为nn.sigmoid功能。实际上，它将带有偏差的加权输入放入0- 100%的曲线中，这就是我们想要的概率函数。<br>
+## 训练
+&emsp;&emsp;学习算法是我们如何搜索最优权向量(w)。这个搜索是一个优化问题，寻找优化误差/成本度量的假设。<br>
+&emsp;&emsp;因此, 模型的成本或损失函数将告诉我们模型是坏的, 我们需要最小化这个函数。您可以遵循不同的损失或成本标准。在此实现中, 我们将使用均方误差 (MSE) 作为损耗函数。<br>
+&emsp;&emsp;为了完成最小化损失函数的任务, 我们将使用梯度下降算法。<br>
+## 成本函数
+&emsp;&emsp;在定义我们的成本函数之前，我们需要定义我们要训练多久以及我们应该如何定义学习率: <br>
+```python
+    #Number of training epochs 
+    num_epochs = 700
+    # Defining our learning rate iterations (decay)
+    learning_rate = tf.train.exponential_decay(learning_rate=0.0008,global_step=1,decay_steps=train_input_values.shape[0],
+    decay_rate=0.95,staircase=True)
+    # Defining our cost function – 3quared Mean Error
+    model_cost = tf.nn.12_loss(activation_output – output_values, name="squared_error_cost")
+    # Defining our Gradient Descent model_train =
+    tf.train.GradientDescentOptimizer(learning_rate).minimize(model_cost)
+```
+
