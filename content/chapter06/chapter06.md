@@ -25,3 +25,11 @@
 &emsp;&emsp;因此, 数据集还包括手写图像及其相应的标签。<br>
 &emsp;&emsp;在这一节中，我们将对这些图像进行基本模型的训练，我们的目标是在输入图像中分辨出哪个数字是手写的。<br>
 &emsp;&emsp;另外，您会发现我们可以使用很少几行代码来完成这个分类任务，但是这个实现背后的思想是理解构建神经网络解决方案的基本细节。此外，我们将在此实现中介绍神经网络的主要概念。<br>
+## MNIST数据集
+&emsp;&emsp;MNIST 数据由Yann LeCun 的网站 (http://yann.lecun.com/exdb/mnist/) 上。幸运的是, 幸运的是，TensorFlow提供了一些帮助函数来下载数据集，所以让我们首先使用以下两行代码下载数据集:<br>
+```python
+from tensorflow.examples.tutorials.mnist import input_data 
+mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
+```
+&emsp;&emsp;MNIST 数据分为三部分: 培训数据的5.5万个训练数据 (minist.train)、1万个测试数据 (minist.test) 和5000点验证数据 (minist.validation)。在机器学习过程中，这种分流非常重要;我们必须有独立数据，我们不从中学习，才能确保我们所学到的东西实际上是一般化的!<br>
+&emsp;&emsp;如前所述, 每个 MNIST 示例都有两个部分: 手写数字的图像及其对应的标签。训练集和测试集都包含图像及其相应的标签。例如, 训练图像是 mnist.train.images , 训练标签是 mnist.train.labels 。<br>
