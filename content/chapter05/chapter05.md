@@ -650,7 +650,7 @@ Training step 60,  accuracy 0.646465, cost 23.1835, cost change 23.1835
 Training step 70,  accuracy 0.646465, cost 22.3911, cost change 22.3911 
 Training step 80,  accuracy 0.646465, cost 21.7254, cost change 21.7254 
 Training step 90,  accuracy 0.646465, cost 21.1607, cost change 21.1607 
-Training step 100, accuracy 0.666667, cost 20.677, cost change 20.677 
+Training step 100, accuracy 0.666667, cost 20.677,  cost change 20.677 
 Training step 110, accuracy 0.666667, cost 20.2583, cost change 20.2583 
 Training step 120, accuracy 0.666667, cost 19.8927, cost change 19.8927 
 Training step 130, accuracy 0.666667, cost 19.5705, cost change 19.5705 
@@ -661,18 +661,18 @@ Training step 170, accuracy 0.69697,  cost 18.5867, cost change 18.5867
 Training step 180, accuracy 0.69697,  cost 18.3951, cost change 18.3951 
 Training step 190, accuracy 0.717172, cost 18.2191, cost change 18.2191 
 Training step 200, accuracy 0.717172, cost 18.0567, cost change 18.0567 
-Training step 210, accuracy 0.737374, cost 17.906, cost change 17.906 
+Training step 210, accuracy 0.737374, cost 17.906,  cost change 17.906 
 Training step 220, accuracy 0.747475, cost 17.7657, cost change 17.7657 
 Training step 230, accuracy 0.747475, cost 17.6345, cost change 17.6345 
 Training step 240, accuracy 0.757576, cost 17.5113, cost change 17.5113 
 Training step 250, accuracy 0.787879, cost 17.3954, cost change 17.3954 
 Training step 260, accuracy 0.787879, cost 17.2858, cost change 17.2858 
-Training step 270, accuracy 0.787879, cost 17.182, cost change 17.182 
+Training step 270, accuracy 0.787879, cost 17.182,  cost change 17.182 
 Training step 280, accuracy 0.787879, cost 17.0834, cost change 17.0834 
 Training step 290, accuracy 0.787879, cost 16.9895, cost change 16.9895 
 Training step 300, accuracy 0.79798,  cost 16.8999, cost change 16.8999 
 Training step 310, accuracy 0.79798,  cost 16.8141, cost change 16.8141 
-Training step 320, accuracy 0.79798,  cost 16.732, cost change 16.732 
+Training step 320, accuracy 0.79798,  cost 16.732,  cost change 16.732 
 Training step 330, accuracy 0.79798,  cost 16.6531, cost change 16.6531 
 Training step 340, accuracy 0.808081, cost 16.5772, cost change 16.5772 
 Training step 350, accuracy 0.818182, cost 16.5041, cost change 16.5041 
@@ -684,7 +684,7 @@ Training step 400, accuracy 0.848485, cost 16.1741, cost change 16.1741
 Training step 410, accuracy 0.848485, cost 16.1141, cost change 16.1141 
 Training step 420, accuracy 0.848485, cost 16.0558, cost change 16.0558 
 Training step 430, accuracy 0.858586, cost 15.9991, cost change 15.9991 
-Training step 440, accuracy 0.858586, cost 15.944, cost change 15.944
+Training step 440, accuracy 0.858586, cost 15.944,  cost change 15.944
  
 
 Training step 450, accuracy 0.858586, cost 15.8903, cost change 15.8903 
@@ -694,7 +694,7 @@ Training step 480, accuracy 0.878788, cost 15.7371, cost change 15.7371
 Training step 490, accuracy 0.878788, cost 15.6884, cost change 15.6884 
 Training step 500, accuracy 0.878788, cost 15.6409, cost change 15.6409 
 Training step 510, accuracy 0.878788, cost 15.5944, cost change 15.5944 
-Training step 520, accuracy 0.878788, cost 15.549, cost change 15.549 
+Training step 520, accuracy 0.878788, cost 15.549,  cost change 15.549 
 Training step 530, accuracy 0.888889, cost 15.5045, cost change 15.5045 
 Training step 540, accuracy 0.888889, cost 15.4609, cost change 15.4609 
 Training step 550, accuracy 0.89899,  cost 15.4182, cost change 15.4182 
@@ -702,10 +702,10 @@ Training step 560, accuracy 0.89899,  cost 15.3764, cost change 15.3764
 Training step 570, accuracy 0.89899,  cost 15.3354, cost change 15.3354 
 Training step 580, accuracy 0.89899,  cost 15.2952, cost change 15.2952 
 Training step 590, accuracy 0.909091, cost 15.2558, cost change 15.2558 
-Training step 600, accuracy 0.909091, cost 15.217, cost change 15.217 
-Training step 610, accuracy 0.909091, cost 15.179, cost change 15.179 
+Training step 600, accuracy 0.909091, cost 15.217,  cost change 15.217 
+Training step 610, accuracy 0.909091, cost 15.179,  cost change 15.179 
 Training step 620, accuracy 0.909091, cost 15.1417, cost change 15.1417 
-Training step 630, accuracy 0.909091, cost 15.105, cost change 15.105 
+Training step 630, accuracy 0.909091, cost 15.105,  cost change 15.105 
 Training step 640, accuracy 0.909091, cost 15.0689, cost change 15.0689 
 Training step 650, accuracy 0.909091, cost 15.0335, cost change 15.0335 
 Training step 660, accuracy 0.909091, cost 14.9987, cost change 14.9987 
