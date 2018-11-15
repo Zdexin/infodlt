@@ -485,8 +485,8 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/14.png)<br>
 ## 逻辑回归模型–构建和训练
 &emsp;&emsp;基于我们在第2章中对逻辑回归的解释, 以及数据建模的实际应用--泰坦尼克号示例, 我们将在 TensorFlow 中实现逻辑回归算法。简单地说， 逻辑回归通过logistic或sigmoid传递输入, 然后将结果视为概率: <br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/15.png)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 13 "区分0和1的两个线行可分离类<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter05/15.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 13 "区分0和1的两个线行可分离类<br>
 ## TensorFlow 中的逻辑回归
 &emsp;&emsp;为了在TensorFlow中使用逻辑回归，我们首先需要导入将要使用的库。为此，您可以运行以下代码: <br>
 ```python
@@ -500,13 +500,13 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
 ```
 &emsp;&emsp;接下来, 我们将加载要使用的数据集。在本例中, 我们使用的是内置的iris数据集。因此, 没有必要进行任何预处理, 我们可以直接跳转到操作它。我们将数据集分成 x 和 y, 然后将数据集分为训练x和y，并测试x和y，(伪)随机:<br>
 ```python
-iris_dataset = load_iris()
-iris_input_values, iris_output_values = iris_dataset.data[:–1,:], 
-iris_dataset.target[:–1]
-iris_output_values= pd.get_dummies(iris_output_values).values 
-train_input_values, test_input_values, train_target_values, 
-test_target_values = train_test_split(iris_input_values, 
-iris_output_values, test_size=0.33, random_state=42)
+    iris_dataset = load_iris()
+    iris_input_values, iris_output_values = iris_dataset.data[:–1,:], 
+    iris_dataset.target[:–1]
+    iris_output_values= pd.get_dummies(iris_output_values).values 
+    train_input_values, test_input_values, train_target_values, 
+    test_target_values = train_test_split(iris_input_values, 
+    iris_output_values, test_size=0.33, random_state=42)
 ```
 &emsp;&emsp;现在，我们定义x和y，这些占位符将保存我们的iris数据(包括特性和标签矩阵)，并帮助将它们传递到算法的不同部分。您可以将占位符看作是插入数据的空位。稍后，我们将通过feed_dict (提要字典)向占位符提供数据，从而将数据插入到这些占位符中: <br>
 ## 为什么用占位符?
