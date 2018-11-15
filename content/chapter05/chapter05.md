@@ -458,3 +458,27 @@ DT_QUINT8|tf.quint8|8-bits unsigned integer used in quantized ops.
     (90, [3.039222, 1.9782581])
     (95, [3.0404909, 1.9775947])
 ```
+&emsp&emsp;让我们将训练过程可视化，使其符合数据点:<br>
+```python
+    print('Plotting the data points with their corresponding fitted line...') 
+    converter = plt.colors
+    cr, cg, cb = (1.0, 1.0, 0.0)
+
+    for f in train_data:
+        cb += 1.0/ len(train_data) 
+        cg –= 1.0 / len(train_data)
+ 
+
+        if cb >1.0: cb = 1.0 
+        if cg < 0.0: cg = 0.0
+        [a, b] = f
+        f_y = np.vectorize(lambda x: a*x + b)(input_values) 
+        line = plt.plot(input_values, f_y)
+        plt.setp(line, color=(cr,cg,cb))
+
+    plt.plot(input_values, output_values, 'ro')
+    green_line = mpatches.Patch(color='red', label='Data Points') 
+    plt.legend(handles=[green_line]) 
+    plt.show()
+```
+&emsp;&emsp;Output:<br>
