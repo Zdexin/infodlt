@@ -288,7 +288,7 @@ Output: <br>
 &emsp;&emsp;其中一些解释功能是完整的，没有任何缺失的值，例如存活的特性，它有891个条目。其他解释功能包含缺失的值，例如年龄特性，它只有714个条目。DataFrame中的任何缺失值都表示为NaN。<br>
 &emsp;&emsp;如果您研究了所有的数据集特性，您会发现票务和客舱功能有许多缺失的值(NAN)，因此它们不会为我们的分析增加太多的价值。为了处理这件事，我们会将它们从DataFrame中删除。<br>
 &emsp;&emsp;使用以下代码行可以完全从DataFrame中删除票证和机舱功能：<br>
- ```python&emsp;&emsp;
+ ```python
 #完全从DataFrame中删除票证和机舱功能#完全从Dat 
 titanic_data = titanic_data.drop(['Ticket','Cabin'], axis=1)
 ```
@@ -375,4 +375,70 @@ ax2.set_ylim(-1, 2)
 &emsp;&emsp;图 10：按性别分列的泰坦尼克号数据 <br> <br>
 &emsp;&emsp;现在，我们有更多关于这两个可能的类(存活和死亡)的信息。探索和可视化步骤是必要的，因为它可以让您更深入地了解数据的结构帮助您选择适合您的问题的学习算法。正如您所看到的，我们从非常基本的绘图开始，然后增加了绘图的复杂性，以发现更多关于我们正在处理的数据的信息。 <br>
 ### 数据分析-监督机器学习
+&emsp;&emsp;这项分析的目的是预测幸存者。因此，结果是否能够存活，这是一个二进制分类问题；在它中，只有两个可能的类。<br>
+有很多学习算法可以用来解决二进制分类问题。Logistic回归就是其中之一。正如维基百科所解释的：<br>
+&emsp;&emsp;In statistics, logistic regression or logit regression is a type of regression analysis used for predicting the outcome of a categorical dependent variable (a dependent variable that can take on a limited number of values, whose magnitudes are not meaningful but whose ordering of magnitudes may or may not be meaningful) based on one or more predictor variables. That is, it is used in estimating empirical values of the parameters in a qualitative response model. The probabilities describing the possible outcomes of a single trial are modeled, as a function of the explanatory (predictor) variables, using a logistic function. Frequently (and subsequently in this article) "logistic regression" is used to refer specifically to the problem in which the dependent variable is binary—that is, the number of available categories is two—and problems with more than two categories are referred to as multinomial logistic regression or, if the multiple categories are ordered, as ordered logistic regression. Logistic regression measures the relationship between a categorical dependent variable and one or more independent variables, which are usually (but not necessarily) continuous, by using probability scores as the predicted values of the dependent variable.[1] As such it treats the same set of problems as does probit regression using similar techniques.<br>
+为了使用逻辑回归，我们需要创建一个公式，告诉模型我们要给它的特性/输入类型：<br>
+ ```python
+#为了使用logistic回归，我们需要创建一个公式，告诉模型我们要给它的特性/输入类型
+# 模型公式
+# ~表示=, 数据集的特征被写成预测生存的公式。C()让我们的回归知道这些变量是绝对的。
+# Ref: http://patsy.readthedocs.org/en/latest/formulas.html
+formula = 'Survived ~ C(Pclass) + C(Sex) + Age + SibSp + C(Embarked)'
+# create a results dictionary to hold our regression results for easy analysis later
+results = {}
+# 使用 patsy's dmatrices 函数创建一个回归友好的数据框架 
+y,x = dmatrices(formula, data=titanic_data, return_type='dataframe')
+# 实例化模型
+model = sm.Logit(y,x)
+# 将我们的模型与培训数据相匹配
+res = model.fit()
+# 保存结果，以便稍后输出预测
+results['Logit'] = [res, formula]
+res.summary()
+```
+Output:<br>
+Optimization terminated successfully.<br>
+        &emsp;&emsp; Current function value: 0.444388<br>
+        &emsp;&emsp; Iterations 6<br>
+        ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片15.png) <br>
+&emsp;&emsp;&emsp;&emsp;图 11 “Logistic回归结果”<br><br>
+现在，让我们绘制模型与实际模型的预测，以及残差，这是目标变量的实际值和预测值之间的差异：<br>
+ ```python
+#画出我们的模型和实际模型的预测以及残差(目标变量的实际值和预测值之间的差异)
+plt.figure(figsize=(18,4)); 
+plt.subplot(121, facecolor="#DBDBDB")
+# 根据我们的拟合模型生成预测
+ypred = res.predict(x)
+plt.plot(x.index, ypred,'bo',x.index,y,'mo', alpha=.25); 
+plt.grid(color='white', linestyle='dashed')
+plt.title('Logit predictions, Blue: \nFitted/predicted values: Red');
+# 剩余误差
+ax2 = plt.subplot(122, facecolor="#DBDBDB") 
+plt.plot(res.resid_dev, 'r-') 
+plt.grid(color='white', linestyle='dashed') 
+ax2.set_xlim(-1, len(res.resid_dev)) 
+plt.title('Logit Residuals');
+```
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片16.png) <br>
+&emsp;&emsp;&emsp;&emsp;图12“理解Logistic回归模型”<br><br>
+&emsp;&emsp;现在，我们已经建立了我们的Logistic回归模型，在此之前，我们对数据集进行了一些分析和探索。前面的示例向您展示了用于构建机器学习解决方案的一般管道。 <br>
+&emsp;&emsp;大多数情况下，实践者陷入了一些技术陷阱，因为他们缺乏理解机器学习概念的经验。例如，某人可能在测试集上获得99%的准确性，然后不对数据中的类的分布进行任何调查(例如，有多少个样本是阴性的，以及如何)。许多样本是阳性的)，他们部署模型。 <br>
+&emsp;&emsp;为了突出这些概念中的一些，并区分您需要注意的不同类型的错误以及您应该真正关心的错误，我们将继续讨论下一节。 <br>
+## 不同类型的错误
+&emsp;&emsp;在机器学习中，有两种类型的错误，作为数据科学的新手，您需要了解两者之间的关键区别。如果你最终将错误的错误最小化，整个学习系统将是无用的，你将无法在实践中使用它来处理看不见的数据。为了尽量减少从业者对这两类错误的误解，我们将在以下两节中解释这些错误。 <br>
+## 表观(训练集)误差
+&emsp;&emsp;这是您不必关心的第一种错误。获得这类错误的小值并不意味着您的模型能够很好地处理未见数据(泛化)。为了更好地理解这类错误，我们将给出一个简单的类场景示例。在课堂上解决问题的目的不是在考试中再次解决同样的问题，而是能够解决不一定与你类似的其他问题。在教室里练习。考试问题可能来自同一个家庭的课堂问题，但不一定相同。 <br>
+&emsp;&emsp;表观误差是训练模型在我们已经知道真实结果/输出的训练集上执行的能力。如果您设法在培训集上获得0错误，那么这是一个很好的指示，说明您的模型(大部分)在未见数据上不能很好地工作(不会泛化)。另一方面，数据科学是将训练集作为学习算法的基础知识，以便在未来的未见数据上很好地工作。 <br>
+&emsp;&emsp;在图13中，红色曲线表示明显的误差。每当您增加模型记忆事物的能力(例如通过增加解释特性的数量来增加模型的复杂性)，您会发现这种明显的错误方法是零。可以表明，如果你的特征和观测/样本一样多，那么表观误差将为零：<br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/图片17.png) <br>
+&emsp;&emsp;&emsp;&emsp;图13“表观误差(红色曲线)和泛化/真误差(浅蓝色)<br><br>
+## 泛化/真误差
+&emsp;&emsp;这是数据科学中第二种也是更重要的错误类型。建立学习系统的全部目的是在测试集上获得较小的泛化错误；换句话说，，使该模型在一组未在训练阶段使用的观测/样本上运行良好。如果您仍然考虑上一节中的类场景，则可以将泛化错误视为解决不一定类似于您解决的问题的考试问题的能力。在课堂上学习和熟悉这门课。因此，泛化性能是指模型能够利用它在训练阶段学到的技能(参数)来正确地预测未知数据的结果/输出。<br>
+&emsp;&emsp;在图13中，浅蓝线表示泛化错误。您可以看到，随着模型复杂度的增加，泛化误差将减少，直到模型开始失去其不断增长的功率和泛化误差时为止。会减少。曲线的这一部分，当你得到泛化误差而失去它不断增长的泛化能力时，被称为过拟合。<br>
+&emsp;&emsp;从本节得到的信息是尽可能最小化泛化错误。<br>
+## 总结
+&emsp;&emsp;线性模型是一个非常强大的工具，如果数据与它的假设相匹配，您可以使用它作为初始学习算法。理解线性模型将有助于您理解使用线性模型作为构建块的更复杂的模型。<br>
+&emsp;&emsp;接下来，我们将继续使用泰坦尼克号的例子，更详细地讨论模型的复杂性和评估。模型复杂性是一个非常强大的工具，您需要仔细使用它，以提高泛化误差。误解会导致过度适应的问题。<br>
+
 
