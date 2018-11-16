@@ -49,3 +49,6 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 &emsp;&emsp;softmax回归有两个步骤:首先，我们将输入在特定类中的证据加起来，然后将这些证据转换为概率。<br>
 &emsp;&emsp;为了证明给定图像属于特定类别，我们对像素强度进行加权和。如果高强度的像素是不利于该类图像的证据，权重为负;如果是有利于该类图像的证据，权重为正。<br>
 &emsp;&emsp;图7显示了每个类的权重的一个模型。红色表示负权重, 而蓝色表示正权重:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/7.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 7 "权重为每个 MNIST 类的一个学习模型"<br>
+&emsp;&emsp;我们还加入了额外的偏见。基本上，我们想说的是有些东西更可能独立于输入。结果是, 给定一个输入 x 的类 i 的证据是: <br>
