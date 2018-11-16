@@ -38,3 +38,6 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 4 "矩阵表示中的 MNIST 数字”<br>
 &emsp;&emsp;为了将这个像素值矩阵提供给神经网络的输入层，我们需要将这个矩阵合并为一个有784个值的向量。数据集的最终形状是一串的784维向量空间。<br>
 &emsp;&emsp;结果是 mnist.train.images 是一个形状为 (55OOO, 784) 的张量。第一个维度是图像列表的索引, 第二个维度是每个图像中每个像素的索引。张量中的每个条目都是特定图像中特定像素的0到1之间的像素强度:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/5.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 5 "MNIST 数据分析<br>
+&emsp;&emsp;为了实现这个目的，我们将把标签编码为one-hot向量。一个one-hot向量是除此向量表示的数字的索引之外的所有都为零的向量。例如, 3 将是 [00、01、00、00、00]。因此, mnist.train.labels 是一个 (55OOO, 10) 的浮点数组:<br>
