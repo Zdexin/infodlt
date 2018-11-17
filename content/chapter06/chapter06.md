@@ -149,3 +149,9 @@ Label|0|1|2|3|4|5|6|7|8|9
 Array|[0,|0,|0,|0,|0,|0,|0,|1,|0,|0]
 
 
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 11 "数字7的一个one-hot编码"<br>
+&emsp;&emsp;让我们从数据集中可视化一个随机的图像，看看它是什么样子的，所以我们将使用前面的辅助函数来显示数据集中的一个随机数字:<br>
+```python
+    visualize_digit(ran.randint(0, input_values_train.shape[0])) 
+```
+&emsp;&emsp;Output:<br>
