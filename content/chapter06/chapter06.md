@@ -342,8 +342,8 @@ Training step:2500 Accuracy = 0.9067 Loss = 0.23929419
     Output:
     Total Training Images in Dataset = (55000, 784)
     ############################################
-    input_values_train 3amples Loaded = (l, 784) 
-    target_values_train 3amples Loaded = (1, 10) 
+    input_values_train samples Loaded = (l, 784) 
+    target_values_train samples Loaded = (1, 10) 
     [0. 0. 0. 0. 0. 0. 0. 1. 0. 0.]
 ```
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/12.png)<br>
@@ -353,8 +353,11 @@ Training step:2500 Accuracy = 0.9067 Loss = 0.23929419
     print(answer)
 ```
 &emsp;&emsp;前面的代码将给我们一个10维的向量，每一列包含一个概率: <br>
-&emsp;&emsp;    [[2.1248012e–05 1.1646927e–05 8.9631692e–02 1.9201526e–02 8.2086492e–04 
-    1.2516821e–05 3.8538201e–05 8.5374612e–01  6.9188857e–03 2.9596921e–02]]<br>
+&emsp;&emsp;[[2.1248012e–05 1.1646927e–05 <br>
+&emsp;&emsp;8.9631692e–02 1.9201526e–02 <br>
+&emsp;&emsp;8.2086492e–04 1.2516821e–05 <br>
+&emsp;&emsp;3.8538201e–05 8.5374612e–01  <br>
+&emsp;&emsp;6.9188857e–03 2.9596921e–02]]<br>
 &emsp;&emsp;我们可以使用 argmax 函数找出最可能的数字, 以便正确分类输入图像:<br>
 ```python
 answer.argmax()
