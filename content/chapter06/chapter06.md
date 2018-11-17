@@ -225,3 +225,5 @@ output_values = tf.placeholder(tf.float32, shape=[None, 10])
 ```
 &emsp;&emsp;接下来，我们需要为这个模型定义损失函数，它将测量在为输入图像分配类时分类器的好坏。我们的模型的准确性是通过比较数据集中的实际值和我们从模型中得到的预测来计算的。<br>
 &emsp;&emsp;我们的目标是减少实际值和预测值之间的任何错误分类。交叉熵定义为:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/3.jpg)<br>
+&emsp;&emsp;其中:<br>
