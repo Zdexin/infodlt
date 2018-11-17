@@ -235,3 +235,98 @@ output_values = tf.placeholder(tf.float32, shape=[None, 10])
     tf.log(softmax_layer), reduction_indices=[1]))
 ```
 &emsp;&emsp;此函数从 softmax_layer (其值范围从0到 1) 获取我们所有预测的日志, 并将它们按元素大小 (https://en.wikipedia.org/wiki/Hadamard_product_%28matrices%29) 乘以示例的真实值output_values。如果每个值的 log 函数接近零, 该负数值很大 (–np (0.01) = 4.6), 并且如果它接近1, 该负数值很小 (–np (0. 99) = 0.1):<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/15.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 15 "Y=log(x)"<br>
+&emsp;&emsp;如果可以确定预测是不正确的，我们本质上是用一个非常大的数字惩罚分类器，如果可以确定是真确的，那么这个数将会非常小。下面是一个 softmax 预测的简单 Python 示例, 它确信数字是3:<br>
+&emsp;&emsp;j = [0.03, 0.03, 0.01, 0.9, 0.01, 0.01, 0.0025,0.0025, 0.0025, 0.0025]<br>
+&emsp;&emsp;让我们创建一个3的数组标签作为基本的事实来与我们的softmax功能相比<br>
+&emsp;&emsp;K=[0,0,0,1,0,0,0,0,0,0]。<br>
+&emsp;&emsp;你能猜出我们的损失函数给了我们什么吗?你能看出log (K)怎么用一个大的负数来惩罚一个错误的答案吗?请尝试以下操作以了解:<br>
+```python
+    –np.log(j)
+    –np.multiply(np.log(j),k)
+```
+&emsp;&emsp;这将返回九零和值 0.1053;当他们都总结起来, 我们可以认为这是一个很好的预测。请注意, 当我们对实际的2进行相同的预测时会发生什么:<br>
+&emsp;&emsp;k = [0,0,1,0,0,0,0,0,0,0]<br>
+```python
+    np.sum(–np.multiply(np.log(j),k))
+```
+&emsp;&emsp;现在, 我们的 cross_entropy 功能给我们 4.6051, 这显示了一个非常严重的错误预测, 它被严重地惩罚了，因为分类器非常自信它是3，而实际上它是2。<br>
+&emsp;&emsp;接下来，我们开始训练分类器。为了训练它，我们必须为W和b建立适当的值，使我们的损失降到最低。<br>
+&emsp;&emsp;下面是我们可以为训练分配自定义变量的地方。下面所有大写中的任何值都被设计成可以更改和打乱的。事实上，我推荐它!首先，使用这些值，然后注意当您使用的训练示例太少或学习率过高或过低时会发生什么:<br>
+```python
+    input_values_train, target_values_train = train_size(5500) 
+    input_values_test, target_values_test = test_size(10000) 
+    learning_rate = 0.1
+    num_iterations = 2500
+```
+&emsp;&emsp;现在, 我们可以初始化所有变量, 以便我们的 TensorFlow 图可以使用它们:<br>
+```python
+    init = tf.global_variables_initializer()
+    #If using TensorFlow prior to 0.12 use:
+    #init = tf.initialize_all_variables()
+    sess.run(init)
+```
+&emsp;&emsp;接下来, 我们需要使用梯度下降算法训练分类器。因此, 我们首先定义了我们的训练方法和一些变量来测量模型准确度。变量train将采用选择的学习率执行梯度下降优化器，以最小化模型损失函数 model_cross_entropy:<br>
+```python
+    train = 
+    tf.train.GradientDescentOptimizer(learning_rate).minimize(model_cross_entro py)
+    model_correct_prediction = tf.equal(tf.argmax(softmax_layer,1), 
+    tf.argmax(output_values,1))
+    model_accuracy = tf.reduce_mean(tf.cast(model_correct_prediction, 
+    tf.float32))
+```
+## 模型训练
+&emsp;&emsp;现在, 我们将定义一个循环，迭代num_iterations 次。对于每个循环, 它都进行了训练, 喂养， feed_dict 从 input_values_train 使用 target_values_train。为了计算准确性，它将使用不可见数据来对模型进行测试:<br>
+```python
+input_values_test :
+    for i in range(num_iterations+1):
+        sess.run(train, feed_dict=(input_values: input_values_train, 
+    output_values: target_values_train})
+        if i%100 == 0:
+            print('Training 3tep:' + str(i) + ' Accuracy = ' + 
+            str(sess.run(model_accuracy, feed_dict=(input_values: input_values_test, 
+            output_values: target_values_test})) + ' Loss = ' + str(sess.run(model_cross_entropy, 
+            (input_values: input_values_train, output_values: target_values_train})))
+```
+```python
+
+Output:
+Training step:0    Accuracy = 0.5988 Loss = 2.1881988 
+Training step:100  Accuracy = 0.8647 Loss = 0.58029664 
+Training step:200  Accuracy = 0.879  Loss = 0.45982164 
+Training step:300  Accuracy = 0.8866 Loss = 0.40857208 
+Training step:400  Accuracy = 0.8904 Loss = 0.37808096 
+Training step:500  Accuracy = 0.8943 Loss = 0.35697535 
+Training step:600  Accuracy = 0.8974 Loss = 0.34104997 
+Training step:700  Accuracy = 0.8984 Loss = 0.32834956 
+Training step:800  Accuracy = 0.9    Loss = 0.31782663 
+Training step:900  Accuracy = 0.9005 Loss = 0.30886236 
+Training step:1000 Accuracy = 0.9009 Loss = 0.3010645 
+Training step:1100 Accuracy = 0.9023 Loss = 0.29417014 
+Training step:1200 Accuracy = 0.9029 Loss = 0.28799513 
+Training step:1300 Accuracy = 0.9033 Loss = 0.28240603 
+Training step:1400 Accuracy = 0.9039 Loss = 0.27730304 
+Training step:1500 Accuracy = 0.9048 Loss = 0.27260992 
+Training step:1600 Accuracy = 0.9057 Loss = 0.26826677 
+Training step:1700 Accuracy = 0.9062 Loss = 0.2642261 
+Training step:1800 Accuracy = 0.9061 Loss = 0.26044932 
+Training step:1900 Accuracy = 0.9063 Loss = 0.25690478 
+Training step:2000 Accuracy = 0.9066 Loss = 0.2535662 
+Training step:2100 Accuracy = 0.9072 Loss = 0.25041154 
+Training step:2200 Accuracy = 0.9073 Loss = 0.24742197 
+Training step:2300 Accuracy = 0.9071 Loss = 0.24458146 
+Training step:2400 Accuracy = 0.9066 Loss = 0.24187621 
+Training step:2500 Accuracy = 0.9067 Loss = 0.23929419
+```
+&emsp;&emsp;注意，在接近终点的时候损失仍然在减少，但是我们的准确率略有下降!这表明,我们仍然可以减少我们的损失,因此可以使我们的训练数据准确性最大化,但这可能无法帮助我们预测用于测试准确度的测试数据。这也被称为过度拟合(不是泛化)。使用默认设置，我们得到的准确率大约为91%。如果我想作弊以获得94%的准确率，我可以将测试示例设置为100。这显示了没有足够的测试例子能给你一种有偏差的准确性。<br>
+&emsp;&emsp;请记住，这是计算分类器性能的一种非常不准确的方法。然而，我们出于学习和实验的目的，进行了这一操作。理想情况下，当使用大型数据集进行培训时，您可以一次使用小批量的培训数据进行培训，而不是一次全部培训。<br>
+&emsp;&emsp;这是有趣的部分。现在我们已经计算了权重备忘单，我们可以用以下代码创建一个图:<br>
+```python
+    for i in range(10): plt.subplot(2, 5, i+1)
+    weight = sess.run(weights)[:,i] plt.title(i)
+    plt.imshow(weight.reshape([28,28]), cmap=plt.get_cmap('seismic'))
+    frame = plt.gca()
+    frame.axes.get_xaxis().set_visible(False) 
+    frame.axes.get_yaxis().set_visible(False)
+```
