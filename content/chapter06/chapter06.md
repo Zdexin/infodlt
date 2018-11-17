@@ -195,7 +195,7 @@ output_values = tf.placeholder(tf.float32, shape=[None, 10])
 ```python
     print(softmax_layer) 
     Output:
-    Tensor("softmax:0", shape=(?, 10), dtype=float32)
+    Tensor("softmax:0", shape=(？, 10), dtype=float32)
 ```
 &emsp;&emsp;现在, 让我们来试验一下我们以前定义的计算图, 其中有三个来自训练集的样本, 看看它是如何工作的。要执行计算图, 我们需要使用之前定义的会话变量。我们需要使用 tf. global_variables_initializer () 初始化变量。<br>
 &emsp;&emsp;让我们继续，只向计算图提供三个示例:<br>
