@@ -85,28 +85,60 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 ```
 &emsp;&emsp;接下来，我们将定义一些辅助函数，使我们能够从原始数据集下载我们的子集:<br>
 ```python
-#Define some helper functions
-# to assign the size of training and test data we will take from MNI3T dataset
-def train_size(size):
-    print ('Total Training Images in Dataset = ' + 
-str(mnist_dataset.train.images.shape))
-    print ('############################################')
-    input_values_train = mnist_dataset.train.images[:size,:] 
-    print ('input_values_train 3amples Loaded = ' +
-str(input_values_train.shape))
-    target_values_train = mnist_dataset.train.labels[:size,:] 
-    print ('target_values_train 3amples Loaded = ' +
-str(target_values_train.shape))
-    return input_values_train, target_values_train
+    #Define some helper functions
+    # to assign the size of training and test data we will take from MNI3T dataset
+    def train_size(size):
+        print ('Total Training Images in Dataset = ' + 
+    str(mnist_dataset.train.images.shape))
+        print ('############################################')
+        input_values_train = mnist_dataset.train.images[:size,:] 
+        print ('input_values_train 3amples Loaded = ' +
+    str(input_values_train.shape))
+        target_values_train = mnist_dataset.train.labels[:size,:] 
+        print ('target_values_train 3amples Loaded = ' +
+    str(target_values_train.shape))
+        return input_values_train, target_values_train
 
-def test_size(size):
-    print ('Total Test 3amples in MNI3T Dataset = ' + str(mnist_dataset.test.images.shape))
-    print ('############################################')
-    input_values_test = mnist_dataset.test.images[:size,:] 
-    print ('input_values_test 3amples Loaded = ' +
-str(input_values_test.shape))
-    target_values_test = mnist_dataset.test.labels[:size,:] 
-    print ('target_values_test 3amples Loaded = ' +
-str(target_values_test.shape))
-    return input_values_test, target_values_test
+    def test_size(size):
+        print ('Total Test 3amples in MNI3T Dataset = ' + str(mnist_dataset.test.images.shape))
+        print ('############################################')
+        input_values_test = mnist_dataset.test.images[:size,:] 
+        print ('input_values_test 3amples Loaded = ' +
+    str(input_values_test.shape))
+        target_values_test = mnist_dataset.test.labels[:size,:] 
+        print ('target_values_test 3amples Loaded = ' +
+    str(target_values_test.shape))
+        return input_values_test, target_values_test
 ```
+&emsp;emsp;同时,我们将定义两个辅助函数显示数据集的具体数字,甚至显示图像的一个子集的平铺版本:<br>
+```python
+    #Define a couple of helper functions for digit images visualization 
+    def visualize_digit(ind):
+        print(target_values_train[ind])
+        target = target_values_train[ind].argmax(axis=O) 
+        true_image = input_values_train[ind].reshape([28,28]) 
+        plt.title('3ample: %d Label: %d' % (ind, target))     
+        plt.imshow(true_image, cmap=plt.get_cmap('gray_r')) 
+        plt.show()
+
+    def visualize_mult_imgs_flat(start, stop):
+        imgs = input_values_train[start].reshape([l,784]) 
+        for i in range(start+l,stop):
+            imgs = np.concatenate((imgs, 
+    input_values_train[i].reshape([l,784])))
+        plt.imshow(imgs, cmap=plt.get_cmap('gray_r')) 
+        plt.show()
+```
+&emsp;&emsp;现在，让我们进入正题，开始处理数据集。所以我们将定义我们想从原始数据集加载的培训和测试的例子。<br>
+&emsp;&emsp;现在，我们将开始构建和培训我们的模型。首先，我们用希望加载多少训练和测试示例来定义变量。目前，我们将加载所有数据，但稍后我们将更改此值以节省资源:<br>
+```python
+    input_values_train, target_values_train = train_size(55000)
+
+    Output:
+    Total Training Images in Dataset = (55000, 784)
+    ############################################
+    input_values_train samples Loaded = (55000, 784) 
+    target_values_train 3amples Loaded = (55000, 10)
+```
+&emsp;&emsp;现在，我们有一个55000个手写数字样本的训练集，每个样本是28×28像素的图像被压缩，成为一个784维的向量。我们也有相应的标签在one-hot编码格式。<br>
+7emsp;&emsp;target_values_train 数据是所有 input_values_train 样本的关联标签。在下面的示例中, 数组以one-hot格式表示 7:<br>
