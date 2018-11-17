@@ -227,3 +227,11 @@ output_values = tf.placeholder(tf.float32, shape=[None, 10])
 &emsp;&emsp;我们的目标是减少实际值和预测值之间的任何错误分类。交叉熵定义为:<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/3.jpg)<br>
 &emsp;&emsp;其中:<br>
+&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(29).gif)是我们预测的概率分布<br>
+&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(30).gif)是真实分布 (带有数字标签的one-hot向量)<br>
+&emsp;&emsp;从某种粗略的意义上说，交叉熵度量了我们在描述实际输入时的预测效率有多低。<br>
+```python
+    model_cross_entropy = tf.reduce_mean(–tf.reduce_sum(output_values * 
+    tf.log(softmax_layer), reduction_indices=[1]))
+```
+&emsp;&emsp;此函数从 softmax_layer (其值范围从0到 1) 获取我们所有预测的日志, 并将它们按元素大小 (https://en.wikipedia.org/wiki/Hadamard_product_%28matrices%29) 乘以示例的真实值output_values。如果每个值的 log 函数接近零, 该负数值很大 (–np (0.01) = 4.6), 并且如果它接近1, 该负数值很小 (–np (0. 99) = 0.1):<br>
