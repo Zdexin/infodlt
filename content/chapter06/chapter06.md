@@ -187,3 +187,5 @@ output_values = tf.placeholder(tf.float32, shape=[None, 10])
     softmax_layer = tf.nn.softmax(tf.matmul(input_values,weights) + biases)
 ```
 &emsp;&emsp;首先, 让我们忽略 softmax，看softmax 函数内部是什么。matmul 是矩阵乘法的 TensorFlow函数。如果你知道矩阵乘法 (https://en.Wekipedia.org./wiki/Matrix_multiplication), 你会明白这个计算是正确的,并且:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/2.jpg)<br>
+&emsp;&emsp;将会有大量的训练示例以f(m)f(n)矩阵为例：<br>
