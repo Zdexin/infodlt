@@ -386,7 +386,7 @@ Output:
     display_result(ran.randint(0, 55000)) 
     Output:
 ```
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/17.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/17.png)<br>
 &emsp;&emsp;我们又得到了一个正确的分类!<br>
 ## 总结
 &emsp;&emsp;在本章中，我们对数字分类任务进行了基本的FNN实现。我们还回顾了在神经网络环境中使用的术语。<br>
