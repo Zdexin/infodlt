@@ -138,7 +138,14 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
     Total Training Images in Dataset = (55000, 784)
     ############################################
     input_values_train samples Loaded = (55000, 784) 
-    target_values_train 3amples Loaded = (55000, 10)
+    target_values_train samples Loaded = (55000, 10)
 ```
 &emsp;&emsp;现在，我们有一个55000个手写数字样本的训练集，每个样本是28×28像素的图像被压缩，成为一个784维的向量。我们也有相应的标签在one-hot编码格式。<br>
 7emsp;&emsp;target_values_train 数据是所有 input_values_train 样本的关联标签。在下面的示例中, 数组以one-hot格式表示 7:<br>
+
+
+Label|0|1|2|3|4|5|6|7|8|9
+-|-|-|-|-|-|-|-|-|-|-
+Array|[0,|0,|0,|0,|0,|0,|0,|1,|0,|0]
+
+
