@@ -74,4 +74,39 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/11.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 10 "softmax 回归方程的矢量化表示"<br>
 &emsp;&emsp;更简洁地说，我们可以这样写: <br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(28).gif)<br>
+&emsp;&emsp;现在, 让我们把它转化为 TensorFlow 可以使用的东西。<br>
+## 数据分析
+&emsp;&emsp;让我们开始实现分类器，首先从导入这个实现所需的包开始:<br>
+```python
+    import tensorflow as tf
+    import matplotlib.pyplot as plt import numpy as np
+    import random as ran
+```
+&emsp;&emsp;接下来，我们将定义一些辅助函数，使我们能够从原始数据集下载我们的子集:<br>
+```python
+#Define some helper functions
+# to assign the size of training and test data we will take from MNI3T dataset
+def train_size(size):
+    print ('Total Training Images in Dataset = ' + 
+str(mnist_dataset.train.images.shape))
+    print ('############################################')
+    input_values_train = mnist_dataset.train.images[:size,:] 
+    print ('input_values_train 3amples Loaded = ' +
+str(input_values_train.shape))
+    target_values_train = mnist_dataset.train.labels[:size,:] 
+    print ('target_values_train 3amples Loaded = ' +
+str(target_values_train.shape))
+    return input_values_train, target_values_train
 
+def test_size(size):
+    print ('Total Test 3amples in MNI3T Dataset = ' + str(mnist_dataset.test.images.shape))
+    print ('############################################')
+    input_values_test = mnist_dataset.test.images[:size,:] 
+    print ('input_values_test 3amples Loaded = ' +
+str(input_values_test.shape))
+    target_values_test = mnist_dataset.test.labels[:size,:] 
+    print ('target_values_test 3amples Loaded = ' +
+str(target_values_test.shape))
+    return input_values_test, target_values_test
+```
