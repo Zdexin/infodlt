@@ -155,3 +155,35 @@ Array|[0,|0,|0,|0,|0,|0,|0,|1,|0,|0]
     visualize_digit(ran.randint(0, input_values_train.shape[0])) 
 ```
 &emsp;&emsp;Output:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/12.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 12 "display_digit输出数字的方法"<br>
+&emsp;&emsp;我们还可以使用前面定义的辅助函数来可视化一组平面图像。平面中的每个值都表示像素强度，因此将像素可视化如下:<br>
+```python
+    visualize_mult_imgs_flat(0,400) 
+```
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/13.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 13 "前400个训练示例"<br>
+## 构建模型
+&emsp;&emsp;到目前为止，我们还没有开始为这个分类器构建计算图。让我们从创建会话变量开始，该变量将负责执行我们将要构建的计算图:<br>
+```python
+    sess = tf.session()
+```
+&emsp;&emsp;接下来, 我们将定义模型的占位符, 用于将数据输送到计算图中:<br>
+```python
+    input_values = tf.placeholder(tf.float32, shape=[None, 784]
+```
+&emsp;&emsp;当我们在占位符的第一个维度中指定None时，就意味着占位符可以被提供尽可能多的示例。在本例中，我们的占位符可以被赋给任意数量的示例，其中每个示例都有784个值。<br>
+&emsp;&emsp;现在, 我们需要定义另一个占位符来输送图像标签。此外, 我们稍后将使用此占位符将模型预测与图像的实际标签进行比较:<br>
+```python
+output_values = tf.placeholder(tf.float32, shape=[None, 10])
+```
+&emsp;&emsp;接下来, 我们将定义权重和偏差。这两个变量将是我们网络的可训练参数, 它们将是对不可见数据进行预测所需的唯一两个变量:<br>
+```python
+    weights = tf.Variable(tf.zeros([784,10])) biases = tf.Variable(tf.zeros([10]))
+```
+&emsp;&emsp;我喜欢把这些weight看成是每个数字的10个备忘单。这类似于老师用小抄来给多项选择题打分。 <br>
+&emsp;&emsp;现在我们将定义softmax回归，这是我们的分类器函数。这个特殊的分类器被称为多项式逻辑回归，我们通过将这个数字的平型的数字乘以权重来做预测然后再加上偏差。<br>
+```python
+    softmax_layer = tf.nn.softmax(tf.matmul(input_values,weights) + biases)
+```
+&emsp;&emsp;首先, 让我们忽略 softmax，看softmax 函数内部是什么。matmul 是矩阵乘法的 TensorFlow函数。如果你知道矩阵乘法 (https://en.Wekipedia.org./wiki/Matrix_multiplication), 你会明白这个计算是正确的,并且:<br>
