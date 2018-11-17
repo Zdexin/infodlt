@@ -330,3 +330,57 @@ Training step:2500 Accuracy = 0.9067 Loss = 0.23929419
     frame.axes.get_xaxis().set_visible(False) 
     frame.axes.get_yaxis().set_visible(False)
 ```
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/16.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 15 "我们的权重从0-9 的可视化"<br>
+&emsp;&emsp;上图显示了0-9的模型权重，这是我们分类器最重要的方面。所有这些机器学习的工作都是为了找出最优的权重。一旦根据优化标准进行计算，你就有了备忘单，并且可以很容易地使用所学的权重找到答案。<br>
+&emsp;&emsp; 学习的模型通过比较输入数字样本与红蓝权重的相似程度或不同程度来进行预测。红色越深，效果越好;白色表示中性，蓝色表示失误。<br>
+&emsp;&emsp;现在,让我们使用备忘单,看看我们的模型执行:<br>
+```python
+    input_values_train, target_values_train = train_size(1) 
+    visualize_digit(0)
+
+    Output:
+    Total Training Images in Dataset = (55000, 784)
+    ############################################
+    input_values_train 3amples Loaded = (l, 784) 
+    target_values_train 3amples Loaded = (1, 10) 
+    [0. 0. 0. 0. 0. 0. 0. 1. 0. 0.]
+```
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/12.png)<br>
+&emsp;&emsp;让我们看看我们的softmax预测器:<br>
+```python
+    answer = sess.run(softmax_layer, feed_dict=(input_values: input_values_train})
+    print(answer)
+```
+&emsp;&emsp;前面的代码将给我们一个10维的向量，每一列包含一个概率: <br>
+```python
+    [[2.1248012e–05 1.1646927e–05 8.9631692e–02 1.9201526e–02 8.2086492e–04 
+    1.2516821e–05 3.8538201e–05 8.5374612e–01  6.9188857e–03 2.9596921e–02]]
+```
+&emsp;&emsp;我们可以使用 argmax 函数找出最可能的数字, 以便正确分类输入图像:<br>
+```python
+answer.argmax()
+
+Output:
+7
+```
+&emsp;&emsp;现在，我们从网络中得到了一个正确的分类。让我们用我们的知识来定义一个辅助函数，它可以从数据集中选择一个随机的图像，并根据它测试模型:<br>
+```python
+    def display_result(ind):
+        # Loading a training sample
+        input_values_train = mnist_dataset.train.images[ind,:].reshape(1,784) 
+        target_values_train = mnist_dataset.train.labels[ind,:]
+        # getting the label as an integer instead of one–hot encoded vector 
+        label = target_values_train.argmax()
+        # Getting the prediction as an integer
+        prediction = sess.run(softmax_layer, feed_dict=(input_values: 
+    input_values_train}).argmax()
+        plt.title('Prediction: %d Label: %d' % (prediction, label)) 
+        plt.imshow(input_values_train.reshape([28,28]),
+    cmap=plt.get_cmap('gray_r')) 
+    plt.show()
+```
+&emsp;&emsp;现在试一下:<br>
+```python
+    display_result(ran.randint(0, 55000)) Output:
+```
