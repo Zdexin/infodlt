@@ -187,5 +187,41 @@ output_values = tf.placeholder(tf.float32, shape=[None, 10])
     softmax_layer = tf.nn.softmax(tf.matmul(input_values,weights) + biases)
 ```
 &emsp;&emsp;首先, 让我们忽略 softmax，看softmax 函数内部是什么。matmul 是矩阵乘法的 TensorFlow函数。如果你知道矩阵乘法 (https://en.Wekipedia.org./wiki/Matrix_multiplication), 你会明白这个计算是正确的,并且:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/2.jpg)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/2.jpg)<br>
 &emsp;&emsp;将会有大量的训练示例以f(m)f(n)矩阵为例：<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/14.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 14 "简单矩阵乘法"<br>
+&emsp;&emsp;您可以通过评估 softmax_layer 来确认:<br>
+```python
+    print(softmax_layer) 
+    Output:
+    Tensor("softmax:0", shape=(?, 10), dtype=float32)
+```
+&emsp;&emsp;现在, 让我们来试验一下我们以前定义的计算图, 其中有三个来自训练集的样本, 看看它是如何工作的。要执行计算图, 我们需要使用之前定义的会话变量。我们需要使用 tf. global_variables_initializer () 初始化变量。<br>
+&emsp;&emsp;让我们继续，只向计算图提供三个示例:<br>
+```python
+    input_values_train, target_values_train = train_size(3)
+    sess.run(tf.global_variables_initializer())
+    #If using TensorFlow prior to 0.12 use:
+        #sess.run(tf.initialize_all_variables()) 
+    print(sess.run(softmax_layer, feed_dict=(input_values: 
+    input_values_train}))
+
+    Output:
+
+    [[	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1]
+    [	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1]
+    [	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1	0.1]]
+```
+&emsp;&emsp;在这里，您可以看到提供给它的三个训练样本的模型预测。目前，模型对我们的任务一无所知因为我们还没有经过培训过程，所以它只输出了10%的概率作为输入样本的正确类。<br>
+&emsp;&emsp;如前所述，softmax是一个激活函数，它将输出压缩到0到1之间，softmax的TensorFlow确保了单个输入示例的所有概率之和为1。<br>
+&emsp;&emsp;让我们来实验一下 TensorFlow 的 softmax 函数:<br>
+```python
+    sess.run(tf.nn.softmax(tf.zeros([4])))
+    sess.run(tf.nn.softmax(tf.constant([0.1, 0.005, 2])))
+    
+    Output:
+    array([0.11634309, 0.10579926, 0.7778576 ], dtype=float32)
+```
+&emsp;&emsp;接下来，我们需要为这个模型定义损失函数，它将测量在为输入图像分配类时分类器的好坏。我们的模型的准确性是通过比较数据集中的实际值和我们从模型中得到的预测来计算的。<br>
+&emsp;&emsp;我们的目标是减少实际值和预测值之间的任何错误分类。交叉熵定义为:<br>
