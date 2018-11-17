@@ -57,4 +57,4 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 &emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(22).gif)是权重<br>
 &emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(23).gif)是类 <br>
 &emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(24).gif)是对输入图像x中的像素求和的索引。<br>
-&emsp;&emsp;然后，使用softmax函数将证据转换为我们预测的概率![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(22).gif):<br>
+&emsp;&emsp;然后，使用softmax函数将证据转换为我们预测的概率![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(25).gif):<br>
