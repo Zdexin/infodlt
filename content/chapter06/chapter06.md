@@ -62,4 +62,6 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 &emsp;&emsp;在在这里，softmax充当一个激活函数或链接函数，将线性函数的输出塑造成我们想要的形式，在本例中是10种情况下的概率分布(因为我们有10种可能的类，从0到9)。你可以把它看作是把证据转换成每个类的输入的概率。它的定义为:<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(27).gif):<br>
 &emsp;&emsp;如果你展开这个方程，你会得到:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/8.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/8.png)<br>
+&emsp;emsp;但是把softmax看作第一种方法通常更有帮助:对输入进行幂运算，然后对其进行规范化。求幂意味着多一个单位的证据就会成倍地增加任何假设的权重。反过来说，如果证据少一个单位，就意味着一个假设得到的只是其早期权重的一小部分。没有一个假设的权重是零或负的。Softmax将这些权值规范化，使它们相加为1，形成一个有效的概率分布。<br>
+&emsp;&emsp;你可以把我们的softmax回归想象成如下图所示，尽管有更多的x。对于每个输出，我们计算x的加权和，添加一个偏差，然后应用softmax:<br>
