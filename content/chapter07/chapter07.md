@@ -10,4 +10,4 @@
 &emsp;&emsp;卷积操作的主要目的是从图像中提取信息或特征。任何图像都可以被视为一个数值矩阵，该矩阵中的一组特定值将形成一个特征。卷积操作的目的是扫描该矩阵并尝试提取该图像的相关或解释性特征。例如，考虑一个5乘5的图像，其对应的强度或像素值显示为0和1：<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/1.jpg) <br>
 &emsp;&emsp;并考虑以下3*3的矩阵：
-  ![]（https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/1.png）
+  ![image]（https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/1.png）
