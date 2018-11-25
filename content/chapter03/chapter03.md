@@ -378,7 +378,7 @@ print(pca_df.shape[l], " reduced components which describe ", str(variance_perce
 &emsp;&emsp;在完成所有这些训练、测试和绘图之后，我们将得到一个由两条曲线组成的曲线图，用相同的模型表示train和test误差，但是跨越不同的train集合大小。从这个图里我们会知道我们的模型有多好。<br>
 
 &emsp;&emsp;输出图将包含表示训练和测试错误的两条曲线，它将是图8所示的四种可能的形状之一。 <br>
-&emsp;&emsp;这种不同形状的来源是Andrew Ng's关于Coursera的机器学习课程(https://www.coursera.org/learn/machine–learning)，这是一个很棒的课程，有很多机器学习新手的见解和最佳实践。<br>
+&emsp;&emsp;这种不同形状的来源是Andrew Ng's关于Coursera的机器学习课程(https://www.coursera.org/learn/machine–learning)<br>
 ![图片8](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter03/chapter03_images/image8.png)<br>
 &emsp;&emsp;图8绘制不同训练集大小上的训练和测试错误的可能形状<br>
 &emsp;&emsp;那么，我们什么时候应该接受我们的模型并投入生产呢？我们什么时候知道我们的模型在测试集上表现不佳，因此不会有一个糟糕的泛化误差？对于这些问题，取决于从绘制训练误差到不同训练集大小上的测试误差所得到的形状：<br>
@@ -401,7 +401,8 @@ print(pca_df.shape[l], " reduced components which describe ", str(variance_perce
 ### 打破经验法则
 &emsp;&emsp;在实践中，您可以通过使用数据中不到10倍的特征数来学习这个规则；如果你的模型很简单，并且你正在使用称为正规化的东西(在下一章中讨论)，这种情况通常会发生。<br>
 
-&emsp;&emsp;Jake Vanderplas撰写了一篇文章(https://jakevdp.github.io/blog/2Ol5/O7/O6/model–complexity–myth/)，表明即使数据的参数多于示例，也可以学习。为了证明这一点，他使用了正则化。<br>
+&emsp;&emsp;Jake Vanderplas撰写了一篇文章(https://jakevdp.github.io/blog/2Ol5/O7/O6/model-complexity–myth/)<br>
+&emsp;&emsp;这篇文章表明即使数据的参数多于示例也可以学习。为了证明这一点，他使用了正则化。<br>
 
 ### 总结
 &emsp;&emsp;在这一章中，我们介绍了机器学习实践者为了理解他们的数据和从他们的数据中获取最大限度的学习算法而使用的最重要的工具。<br>
