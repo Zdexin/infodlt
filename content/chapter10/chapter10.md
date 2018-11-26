@@ -45,15 +45,90 @@ Second Senator:<br>
 They are away this miseries, produced upon my soul,<br>
 Breaking and strongly should be buried, when I perish The earth and thoughts of many states.<br>
 &emsp;&emsp; 虽然该神经网络只知道怎样一次生成一个字符，但它生成的文本和以及内容是具有情感意义的，它们实际上具有莎士比亚作品的结构和风格。<br>
-
-
-
-
-
-
-
-
-
+## 梯度消失问题
+&emsp;&emsp; 在训练这些RNN型结构的同时，我们使用梯度下降和时间的反向传播，这给许多基于序列的学习任务带来了一些成功。但是由于梯度的性质和使用了快速训练策略，所有梯度值将明显趋近于零或消失。<br>
+&emsp;&emsp; 这个过程引入了梯度消失的问题，许多研究者会陷入其中。在本章的后面，我们将讨论研究人员如何处理这些问题，并产生普通的递归神经网络的变异来克服这个问题：<br>
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap5.JPG)<br>
+图5：梯度消失问题
+## 长期依赖问题
+&emsp;&emsp; 研究人员所面临的另一个挑战性问题是人们在文本中可以找到的长期依赖性。例如，如果像我以前在法国生活一样，我学会了说话……顺序中的下一个显而易见的词是法语。<br>
+&emsp;&emsp; 在这种情况下，普通的递归神经网络将能够处理它，因为它具有短期依赖性，如图6所示：<br>
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap6.JPG)<br>
+图6：文本的短期依赖<br>
+&emsp;&emsp; 另一个例子是，如果有人说我以前住在法国…然后他开始描述那里的生活，最后我学会了说法语。因此，为了让模型预测他/她在序列末尾所学的语言，模型需要一些关于早期单词live和法国的信息。如果模型无法跟踪文本中的长期依赖性，那么它将无法处理此类情况：
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap7.JPG)<br>
+图7：文本中长期依赖性的挑战<br>
+&emsp;&emsp; 为了处理文本中逐渐消失的梯度和长期依赖性，研究人员引入了一种称为长短期记忆网络（LSTM）的普通循环神经网络。
+## 长短期记忆网络
+&emsp;&emsp; 长短期记忆网络是循环神经网络的一种变形，用于帮助解决文本学习中的长期依赖关系。长短期记忆网络最初由Hochreiter &Schmidhuber(1997)引入，已经许多研究者对其进行了研究，并在许多领域产生了有趣的结果。<br>
+&emsp;&emsp; 这些类型的体系结构将能够处理文本中的长期依赖问题，主要是因为它们的内部体系结构决定的。<br>
+&emsp;&emsp; 长短期记忆网络与普通循环神经网络类似，因为随着时间推移，它有一个重复模块，但是这个重复模块的内部结构与普通循环神经网络不同。它包含了更多的被遗忘和已经更新信息的层次：<br>
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap8.JPG)<br>
+图8：包含单个层的标准循环神经网络中的重复模块<br>
+&emsp;&emsp; 如前所述，普通递归神经网络具有单个神经网络层，但是长短期记忆网络具有以特殊方式相互作用的四个不同层。这种特殊的交互使得长短期记忆网络在很多领域都能很好地工作，我们将在构建语言模型示例时看到：<br>
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap9.JPG)<br>
+图9：包含四个相互作用层的长短期记忆网络中的重复模块<br>
+&emsp;&emsp; 关数学细节以及四个层如何实现交互的更多细节，可以看一下这个有趣的教程：
+`http://colah. github.io/posts/2Ol5–O8–Understanding–L3TMs/`
+## 长短期记忆网络的工作原理是什么？
+&emsp;&emsp; 在我们的普通的长短期记忆网络架构中，第一步是确定哪些信息不是必需的，并且通过丢弃这些信息来为更重要的信息留出更多的空间。为此，我们有一个称为遗忘栅极层的层，它查看以前的输出ht-1和当前输入xt，并决定要丢弃哪些信息。<br>
+有&emsp;&emsp; 长短期记忆网络体系结构的下一步是决定哪些信息值得保存，并存储在单元格中。这是通过两个步骤完成的：
+1、一个称为输入控制门的层，它决定单元的前一个状态的值需要更新。<br>
+2、第二步是生成一组新的候选值，这些值将被添加到单元格中。<br>
+&emsp;&emsp; 最后，我们需要决定长短期记忆网络单元将输出什么。此输出将基于我们的单元格状态，但将是经过过滤的版本。
+## 语言模型的实现
+&emsp;&emsp; 在本节中，我们将构建一个通过字符操作的语言模型。对于这个模型的实现，我们将使用安娜·卡列尼娜的小说作为实例，看看网络将如何学习实现文本的结构和风格：
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap10.JPG)<br>
+图10：字符级循环神经网络的一般体系结构<br>
+&emsp;&emsp; 这个网络结构是基于Andrej Karpathy's在循环神经网络系统实现的。<br>
+&emsp;&emsp; 我们将构建一个基于安娜·卡列尼娜小说的人物的循环神经网络，它能够根据书中的文本生成新的文本。将找到包含在该实现的现实中的.txt文件。让我们先为这个字符级模型的实现导入必要的库：
+```import numpy as np import tensorflow as tf
+from collections import namedtuple
+```
+&emsp;&emsp; 首先，我们需要通过加载数据集并将其转换成整数来准备训练数据集。因此，我们将字符转换成整数编码，然后将它们编码为整数，这使得它作为模型的输入变量变得简单且易于使用：
+```
+#reading the Anna Karenina novel text file with open('Anna_Karenina.txt', 'r') as f:
+textlines=f.read()
+#Building the vocan and encoding the characters as integers language_vocab = set(textlines)
+vocab_to_integer = (char: j for j, char in enumerate(language_vocab)} integer_to_vocab = dict(enumerate(language_vocab))
+encoded_vocab = np.array([vocab_to_integer[char] for char in textlines], dtype=np.int32)
+```
+&emsp;&emsp; 那么，让我们来看看Anna Karenina文本中的前200个字符：
+```
+extlines[:2OO] Output:
+"Chapter l\n\n\nHappy families are all alike; every unhappy family is unhappy in its own\nway.\n\nEverything was in confusion in the Oblonskys' house. The wife had\ndiscovered that the husband was carrying on"
+```
+&emsp;&emsp; 我们还把字符转换成一种方便的形式--整数。那么，让我们来看看字符的编码版本：
+```
+encoded_vocab[:2OO] Output:
+array([7O, 34, 54, 29, 24, l9, 76, 45, 2, 79, 79, 79, 69, 54, 29, 29, 49,
+45, 66, 54, 39, l5, 44, l5, l9, l2, 45, 54, 76, l9, 45, 54, 44, 44,
+45, 54, 44, l5, 27, l9, 58, 45, l9, 3O, l9, 76, 49, 45, 59, 56, 34,
+54,	29,	29,	49,	45,	66,	54,	39,	l5,	44,	49,	45,	l5,	l2,	45,	59,	56,
+34,	54,	29,	29,	49,	45,	l5,	56,	45,	l5,	24,	l2,	45,	ll,	35,	56,	79,
+35,	54,	49,	53,	79,	79,	36,	3O,	l9,	76,	49,	24,	34,	l5,	56,	l6,	45,
+35,	54,	l2,	45,	l5,	56,	45,	3l,	ll,	56,	66,	59,	l2,	l5,	ll,	56,	45,
+l5, 56, 45, 24, 34, l9, 45, l, 82, 44, ll, 56, l2, 27, 49, l2, 37,
+45, 34, ll, 59, l2, l9, 53, 45, 2l, 34, l9, 45, 35, l5, 66, l9, 45,
+34, 54, 64, 79, 64, l5, l2, 3l, ll, 3O, l9, 76, l9, 64, 45, 24, 34,
+54, 24, 45, 24, 34, l9, 45, 34, 59, l2, 82, 54, 56, 64, 45, 35, 54,
+l2, 45, 3l, 54, 76, 76, 49, l5, 56, l6, 45, ll, 56], dtype=int32)
+```
+&emsp;&emsp; 由于网络处理单个字符的时候，它类似于一个分类问题，在这个问题中我们试图从前一个文本中预测下一个字符。下面是我们的网络需要选择的类。因此，我们将一次向模型反馈传送一个字符，并且模型将通过对可能接下来出现的字符数(词汇)产生概率分布来预测下一个字符，该概率分布应该是需要从以下几个类中挑选出来的类：
+```
+len(language_vocab) 
+Output:
+83
+```
+&emsp;&emsp; 由于我们将使用随机梯度法下降来训练我们的模型，我们需要将我们的数据转换成训练多个批次。
+## 生成小批量训练集
+&emsp;&emsp; 在这一节中，我们将我们的数据分成小批次用于训练模型。因此，小批次训练集将由期望序列数的有序序列步骤组成。那么，让我们看看图11中的一个可视化示例：<br>
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap11.JPG)<br>
+图11说明批次和序列的例子<br>
+&emsp;&emsp; 所以，现在我们需要定义一个函数，它将迭代经过编码的文本并生成批处理训练集。在这个函数中，我们将使用一个非常好的Python机制，叫做yield。<br>
+&emsp;&emsp; 一个典型的批次将具有N×M个字符，其中N是序列的数目，M是序列步长的数目。为了获得数据集中可能批的数量，我们可以简单地将数据的长度除以所需的批大小，在获得该数量的可能批之后，我们可以知道需要操作的每个批中应该有多少字符。<br>
+&emsp;&emsp; 之后，我们需要将数据集分割成期望数量的序列（N）。我们可以使用数组重塑（尺寸）。我们知道我们需要N个序列（num_seqs被使用，遵循代码），让我们做第一个维度的大小。对于第二个维度，可以使用-1作为占位符；它将填充数组，并提供适当的数据。在此之后，应该有一个N×（M`*`K)的数组，其中K是批数。<br>
+&emsp;&emsp; 现在我们有了这个数组，我们可以遍历它来获得训练批次，每个批次都有N×M字符。对于每一个后续批次，窗口通过num_steps移动。最后，我们还希望为我们的输入和输出数组创建模型输入。创建输出值的这一步骤非常简单；记住目标是在一个字符上移位的输入。通常会看到第一个输入字符作为最后一个目标字符，所以像这样：
 
 
 
