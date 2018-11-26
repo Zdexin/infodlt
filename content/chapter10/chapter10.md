@@ -199,8 +199,10 @@ targets_y = tf.placeholder(tf.int32, [batch_size, num_steps], name='targets')
 ## 构建一个长短期记忆网络神经元
 &emsp;&emsp; 在本节中，我们将编写一个用于创建长短期记忆网络单元的函数，该函数将在隐藏层中使用。这个神经元将是我们模型的基石。因此，我们将使用TensorFlow创建这个单元格。让我们看看如何使用TensorFlow构建一个基本长短期记忆网络的单元。我们调用下面的代码行来创建具有参数num_units的长短期记忆网络单元。表示隐藏层中的单元数目：<br>
 `lstm_cell = tf.contrib.rnn.BasicL3TMCell(num_units)`
+<br>
 &emsp;&emsp; 为了防止过拟合，我们可以使用称为放弃或者丢弃的方法，这是一种通过降低模型的复杂度来防止模型数据过拟合的机制：<br>
 `tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_probability)`
+<br>
 &emsp;&emsp; 正如我们前面提到的，我们将使用堆叠长短期记忆模型架构；它将帮助我们从不同的角度来查看数据，并且发现在实际上已经执行得很好。为了定义层叠的长短期记忆网络在张量流中，我们可以使用
 ```
 tf.contrib.rnn.MultiRNNCell function 
