@@ -140,20 +140,20 @@ plot_imgs(imgs=imgs, true_class=true_class)
 ```
 输出：<br>
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter09/chapter_09image/ap1.JPG)<br>
-图10.4：测试集的前九个图像
+图10.4：测试集的前九个图像<br>
 ## 初始模型迁移值
 &emsp;&emsp; 正如我们前面提到的，我们将在IMANET数据集上使用预训练的初始模型。所以，我们需要从互联网上下载这个预先训练的模型。<br>
-让我们从初始模型的定义开始：
+让我们从初始模型的定义开始：<br>
 `inception.data_dir = 'inception/'`
 &emsp;&emsp; 预训练起始模型的权重约为85 MB。如果在前面定义的data_dir中不存在，那么下面的代码行将下载它：
-`inception.maybe_download() `
+`inception.maybe_download() `<br>
 &emsp;&emsp; 我们将加载初始模型，以便我们可以使用它作为CIFAR–10图像的特征提取器：
 ```python
 # Loading the inception model so that we can inialized it with the pre– trained weights and customize for our model
 inception_model = inception.Inception()
 ```
 &emsp;&emsp; 如前所述，计算CIFAR-10数据集的传输值需要一些时间，因此我们需要缓存它们以便将来使用。谢天谢地，在开始模块中有一个辅助函数可以帮助我们做到这一点：
-`from inception import transfer_values_cache`
+`from inception import transfer_values_cache`<br>
 &emsp;&emsp; 下一步，我们需要为缓存的训练和测试文件设置文件路径：
 ```python
 file_path_train = os.path.join(cifarlO.data_path, 'inception_cifarlO_train.pkl')
@@ -170,13 +170,13 @@ imgs_scaled = testing_images * 255.O
 # Checking if the transfer–values for our training images are already calculated and loading them, if not calcaulate and save them. transfer_values_testing = transfer_values_cache(cache_path=file_path_test,images=imgs_scaled, model=inception_model)
 ```
 &emsp;&emsp; 如前所述，我们在CIFAR-10数据集的训练集中有50000个图像。让我们检查这些图像的传输值的形状。这个训练集中的每个图像应该是2048：
-`transfer_values_training.shape`
+`transfer_values_training.shape`<br>
 输出：
-(5OOOO, 2O48)
+(5OOOO, 2O48)<br>
 &emsp;&emsp; 我们需要设置相同的测试数据;
-`transfer_values_testing.shape`
+`transfer_values_testing.shape`<br>
 输出：
-(lOOOO, 2O48)
+(lOOOO, 2O48)<br>
 &emsp;&emsp; 直观地从迁移价值来看，我们将从训练或测试集定义一个辅助函数，使我们能够使用一个特定的图像细节来传递特征值：
 ```python
 def plot_transferValues(ind): print("Original input image:")
@@ -188,7 +188,7 @@ plt.imshow(transferValues_img, interpolation='nearest', cmap='Reds') plt.show()
 plot_transferValues(i=l6) Input image:
 ```
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter09/chapter_09image/ap2.JPG)<br>
-图片10.5 输出图片<br。
+图片10.5 输出图片<br>
 使用初始模型传递图像的值：<br>
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter09/chapter_09image/ap3.JPG)<br>
 图10.6：图10.3中输入图像的迁移值<br>
@@ -201,23 +201,23 @@ plot_transferValues(i=l6) Input image:
 ## 迁移学习的价值分析
 &emsp;&emsp; 在这一部分中，我们将对训练图像所得到的传递值做一些分析。这个分析的目的是要看看这些传递值是否足以对CIFAR-10中的图像进行分类。
 &emsp;&emsp; 对于每个输入图像，我们有2048个传输值。为了绘制这些传递值并对其做进一步的分析，我们可以使用诸如scikit-learning中的主成分分析(PCA)法，例如降维技术。我们将把转移值从2048减少到2，以便能够得到可视化结果，并查看它们是否是区分不同类别CIFAR-10的良好特征：
-`from sklearn.decomposition import PCA`
+`from sklearn.decomposition import PCA`<br>
 &emsp;&emsp; 下一步，我们需要创建一个PCA对象，其中组件的数量只有2个：
-`pca_obj = PCA(n_components=2)`
+`pca_obj = PCA(n_components=2)`<br>
 &emsp;&emsp; 将传输值从2048减少到2需要很多时间，因此我们将在具有以下传输值的5000个图像中仅对其中3000个图像形成的子集进行处理
-`subset_transferValues = transfer_values_training[O:3OOO]`
+`subset_transferValues = transfer_values_training[O:3OOO]`<br>
 &emsp;&emsp; 我们还需要得到这些图像的类号：
-`cls_integers = testing_cls_integers[O:3OOO]`
+`cls_integers = testing_cls_integers[O:3OOO]`<br>
 &emsp;&emsp; 我们可以通过打印传输值的形状来检查我们的子设置：
-`subset_transferValues.shape`
+`subset_transferValues.shape`<br>
 输出：
-(3OOO, 2O48)
+(3OOO, 2O48)<br>
 &emsp;&emsp; 接下来，我们使用我们的PCA对象来减少从2048到2的传输值：
-`reduced_transferValues = pca_obj.fit_transform(subset_transferValues)`
+`reduced_transferValues = pca_obj.fit_transform(subset_transferValues)`<br>
 &emsp;&emsp; 现在，让我们看看PCA还原过程的输出：
-`reduced_transferValues.shape`
+`reduced_transferValues.shape`<br>
 输出：
-(3OOO, 2)
+(3OOO, 2)<br>
 &emsp;&emsp; 在将传递值的维数降低到仅2之后，让我们绘制这些值：
 ```python
 #Importing the color map for plotting each class with different color. import matplotlib.cm as color_map
