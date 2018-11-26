@@ -144,7 +144,7 @@ plot_imgs(imgs=imgs, true_class=true_class)
 ## 初始模型迁移值
 &emsp;&emsp; 正如我们前面提到的，我们将在IMANET数据集上使用预训练的初始模型。所以，我们需要从互联网上下载这个预先训练的模型。<br>
 让我们从初始模型的定义开始：<br>
-`inception.data_dir = 'inception/'`
+`inception.data_dir = 'inception/'`<br>
 &emsp;&emsp; 预训练起始模型的权重约为85 MB。如果在前面定义的data_dir中不存在，那么下面的代码行将下载它：
 `inception.maybe_download() `<br>
 &emsp;&emsp; 我们将加载初始模型，以便我们可以使用它作为CIFAR–10图像的特征提取器：
@@ -236,11 +236,11 @@ pca_obj = PCA(n_components=5O)
 transferValues_5Od = pca_obj.fit_transform(subset_transferValues)
 ```
 &emsp;&emsp; 接下来，我们使用第二降维技术进行叠加，并将PCA过程的输出反馈给叠加值：
-`reduced_transferValues = tsne_obj.fit_transform(transferValues_5Od)`
+`reduced_transferValues = tsne_obj.fit_transform(transferValues_5Od)`<br>
 &emsp;&emsp; 并仔细检查是否有正确的形状：
 `reduced_transferValues.shape`
 输出：(3OOO, 2)<br>
-&emsp;&emsp; 们用T-SNE方法绘制减少的传递值。正如在下一个图像中看到的，T-SNE能够比PCA更好地分离不同组的传输值。
+&emsp;&emsp; 我们用T-SNE方法绘制减少的传递值。正如在下一个图像中看到的，T-SNE能够比PCA更好地分离不同组的传输值。<br>
 &emsp;&emsp; 从该分析中得出的结论是，通过将输入图像反馈送到预先训练的初始模型而获得的提取传输值可用于将训练图像分成10类。由于以下图表中的微小重叠，这种分离不会达到100%精确，但是我们可以通过对预先训练的模型进行一些微调来消除这种重叠：
 `plot_reduced_transferValues(reduced_transferValues, cls_integers)`
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter09/chapter_09image/ap7.JPG)<br>
@@ -252,7 +252,7 @@ transferValues_5Od = pca_obj.fit_transform(subset_transferValues)
 transferValues_arrLength = inception_model.transfer_len input_values = tf.placeholder(tf.float32, shape=[None,transferValues_arrLength], name='input_values') y_actual = tf.placeholder(tf.float32, shape=[None, num_classes], name='y_actual')
 ```
 &emsp;&emsp; 我们还可以通过定义另一个占位符变量，从1到10得到每个类的相应的整数值：
-`y_actual_cls = tf.argmax(y_actual, axis=l)`
+`y_actual_cls = tf.argmax(y_actual, axis=l)`<br>
 &emsp;&emsp; 接下来，我们需要建立实际分类的神经网络，该神经网络将采用这些输入占位符并产生预测的类：
 ```python
 def new_weights(shape):
@@ -288,7 +288,7 @@ correct_prediction = tf.equal(y_predicted_cls, y_actual_cls)
 model_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 ```
 &emsp;&emsp; 下一步，我们需要定义一个TensorFlow会话，它将实际执行该图，然后初始化在本实现中更早定义的变量：
-`session = tf.3ession() session.run(tf.global_variables_initializer())`
+`session = tf.3ession() session.run(tf.global_variables_initializer())`<br>
 &emsp;&emsp; 在这个实现中，我们将使用随机梯度下降（SGD），所以我们需要定义一个函数，来从我们的50000幅图像的训练集中随机生成特定大小的批次。
 因此，我们将定义一个辅助函数，用于从输入值的传递值集合中生成一个随机集合：
 ```
