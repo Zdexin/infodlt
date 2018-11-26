@@ -105,7 +105,7 @@ print("–Number of images in the testing set:\t\t(}".format(len(testing_images)
 ```
 输出:
 ```python
-–Number of images in the training set: 5OOOO
+–Number of images in the training set:	5OOOO
 –Number of images in the testing set:	lOOOO
 ```
 &emsp;&emsp; 让我们定义一些辅助函数，使我们能够探索数据集。以下辅助函数在网格中绘制了一组九幅图像：
