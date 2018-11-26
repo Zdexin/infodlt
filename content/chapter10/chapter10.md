@@ -55,7 +55,7 @@ Breaking and strongly should be buried, when I perish The earth and thoughts of 
 &emsp;&emsp; 在这种情况下，普通的递归神经网络将能够处理它，因为它具有短期依赖性，如图6所示：<br>
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap6.JPG)<br>
 图6：文本的短期依赖<br>
-&emsp;&emsp; 另一个例子是，如果有人说我以前住在法国…然后他开始描述那里的生活，最后我学会了说法语。因此，为了让模型预测他/她在序列末尾所学的语言，模型需要一些关于早期单词live和法国的信息。如果模型无法跟踪文本中的长期依赖性，那么它将无法处理此类情况：
+&emsp;&emsp; 另一个例子是，如果有人说我以前住在法国…然后他开始描述那里的生活，最后我学会了说法语。因此，为了让模型预测他/她在序列末尾所学的语言，模型需要一些关于早期单词live和法国的信息。如果模型无法跟踪文本中的长期依赖性，那么它将无法处理此类情况：<br>
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap7.JPG)<br>
 图7：文本中长期依赖性的挑战<br>
 &emsp;&emsp; 为了处理文本中逐渐消失的梯度和长期依赖性，研究人员引入了一种称为长短期记忆网络（LSTM）的普通循环神经网络。
@@ -77,7 +77,7 @@ Breaking and strongly should be buried, when I perish The earth and thoughts of 
 2、第二步是生成一组新的候选值，这些值将被添加到单元格中。<br>
 &emsp;&emsp; 最后，我们需要决定长短期记忆网络单元将输出什么。此输出将基于我们的单元格状态，但将是经过过滤的版本。
 ## 语言模型的实现
-&emsp;&emsp; 在本节中，我们将构建一个通过字符操作的语言模型。对于这个模型的实现，我们将使用安娜·卡列尼娜的小说作为实例，看看网络将如何学习实现文本的结构和风格：
+&emsp;&emsp; 在本节中，我们将构建一个通过字符操作的语言模型。对于这个模型的实现，我们将使用安娜·卡列尼娜的小说作为实例，看看网络将如何学习实现文本的结构和风格：<br>
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap10.JPG)<br>
 图10：字符级循环神经网络的一般体系结构<br>
 &emsp;&emsp; 这个网络结构是基于Andrej Karpathy's在循环神经网络系统实现的。<br>
@@ -184,7 +184,7 @@ target
 图12：构建长短期记忆网络模型<br>
 &emsp;&emsp; 因此，在这个例子中，我们将使用这种堆叠的长短期记忆网络体系结构，从而提供更好的性能。
 ## 模型结构
-&emsp;&emsp; 这是我们构建网络的地方。我们将把它分解成部分，以便更容易对每一个比特进行推理。然后，我们可以将它们与整个网络连接起来：
+&emsp;&emsp; 这是我们构建网络的地方。我们将把它分解成部分，以便更容易对每一个比特进行推理。然后，我们可以将它们与整个网络连接起来：<br>
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap13.JPG)<br>
 图13：字符级模型体系结构
 ## 输入
