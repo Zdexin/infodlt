@@ -130,11 +130,293 @@ Output:
 &emsp;&emsp; 之后，我们需要将数据集分割成期望数量的序列（N）。我们可以使用数组重塑（尺寸）。我们知道我们需要N个序列（num_seqs被使用，遵循代码），让我们做第一个维度的大小。对于第二个维度，可以使用-1作为占位符；它将填充数组，并提供适当的数据。在此之后，应该有一个N×（M`*`K)的数组，其中K是批数。<br>
 &emsp;&emsp; 现在我们有了这个数组，我们可以遍历它来获得训练批次，每个批次都有N×M字符。对于每一个后续批次，窗口通过num_steps移动。最后，我们还希望为我们的输入和输出数组创建模型输入。创建输出值的这一步骤非常简单；记住目标是在一个字符上移位的输入。通常会看到第一个输入字符作为最后一个目标字符，所以像这样：<br>
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap14.JPG)<br>
+&emsp;&emsp; 其中X是输入批次，Y是目标批次。<br>
+&emsp;&emsp; 这个窗口的方法是使用排列的方法来采取规模为num_steps的步骤，从0到arr..[l]，每个序列中的步骤之和就是总数。这样，从范围中得到的整数总是指向批的开始，并且每个窗口都是num_steps宽的：<br>
+```def generate_character_batches(data, num_seq, num_steps): '''Create a function that returns batches of size
+num_seq x num_steps from data.
+'''
+# Get the number of characters per batch and number of batches num_char_per_batch = num_seq * num_steps
+num_batches = len(data)//num_char_per_batch
+# Keep only enough characters to make full batches data = data[:num_batches * num_char_per_batch]
+# Reshape the array into n_seqs rows data = data.reshape((num_seq, –l))
+for i in range(O, data.shape[l], num_steps):
+# The input variables
+input_x = data[:, i:i+num_steps]
+# The output variables which are shifted by one
+output_y = np.zeros_like(input_x)
+output_y[:, :–l], output_y[:, –l] = input_x[:, l:], input_x[:, O] yield input_x, output_y
+```
+&emsp;&emsp; 因此，让我们通过使用一个15个序列和50个序列步骤来演示这个函数：
+```
+generated_batches = generate_character_batches(encoded_vocab, l5, 5O) input_x, output_y = next(generated_batches)
+print('input\n', input_x[:lO, :lO]) print('\ntarget\n', output_y[:lO, :lO]) 
+Output:
+input
+[[7O 34 54 29 24 l9 76 45 2 79]
+[45	l9	44	l5	l6	l5	82	44	l9	45]
+[ll	45	44	l5	l6	34	24	38	34	l9]
+[45	34	54	64	45	82	l9	l9	56	45]
+[45	ll	56	l9	45	27	56	l9	35	79]
+[49	l9	54	76	l2	45	44	54	l2	24]
+[45	4l	l9	45	l6	ll	45	l5	56	24]
+[ll	35	45	24	ll	45	39	54	27	l9]
+[82	l9	66	ll	76	l9	45	8l	l9	56]
+[l2	54	l6	l9	45	44	l5	27	l9	45]]
+target
+[[34 54 29 24 l9 76 45 2 79 79]
+[l9	44	l5	l6	l5	82	44	l9	45	l6]
+[45	44	l5	l6	34	24	38	34	l9	54]
+[34	54	64	45	82	l9	l9	56	45	82]
+[ll	56	l9	45	27	56	l9	35	79	35]
+[l9	54	76	l2	45	44	54	l2	24	45]
+[4l	l9	45	l6	ll	45	l5	56	24	ll]
+[35	45	24	ll	45	39	54	27	l9	33]
+[l9	66	ll	76	l9	45	8l	l9	56	24]
+[54	l6	l9	45	44	l5	27	l9	45	24]]
+```
+&emsp;&emsp; 下一步，我们将期待建立这个例子的核心，就是是长短期记忆网络模型。<br>
+## 构建模型
+&emsp;&emsp; 在使用长短期记忆网络构建人物级模型之前，值得一提的是被称为堆叠长短期记忆网络的东西。堆叠的长短期记忆网络在不同的时间尺度上查看你的信息是非常有用的。
+## 长短期记忆网络的堆叠
+&emsp;&emsp; 大多数研究人员正在使用堆叠长短期记忆网络挑战序列预测问题。堆叠长短期记忆网络体系结构可以定义为由多个长短期记忆网络层组成的长短期记忆网络模型。前面的长短期记忆网络层提供了序列输出，而不是单个值输出到长短期记忆网络层，如下所述。<br。
+&emsp;&emsp; 具体而言，它是每个输入时间步长的一个输出，而不是用于所有输入时间步长的一个输出时间步长：
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap12.JPG)<br>
+图12：构建长短期记忆网络模型<br>
+&emsp;&emsp; 因此，在这个例子中，我们将使用这种堆叠的长短期记忆网络体系结构，从而提供更好的性能。
+## 模型结构
+&emsp;&emsp; 这是我们构建网络的地方。我们将把它分解成部分，以便更容易对每一个比特进行推理。然后，我们可以将它们与整个网络连接起来：
+![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter10/chapter_10image/ap13.JPG)<br>
+图13：字符级模型体系结构
+## 输入
+&emsp;&emsp; 图13是字符级模型架构，我们首先定义占位符作为模型输入。模型的输入将是训练数据和目标。我们还将使用一个称为keep_probability概率的参数，用于帮助模型避免过度拟合：
+```
+def build_model_inputs(batch_size, num_steps):
+# Declare placeholders for the input and output variables inputs_x = tf.placeholder(tf.int32, [batch_size, num_steps],
+name='inputs')
+targets_y = tf.placeholder(tf.int32, [batch_size, num_steps], name='targets')
+# define the keep_probability for the dropout layer keep_probability = tf.placeholder(tf.float32, name='keep_prob') return inputs_x, targets_y, keep_probability
+```
+## 构建一个长短期记忆网络神经元
+&emsp;&emsp; 在本节中，我们将编写一个用于创建长短期记忆网络单元的函数，该函数将在隐藏层中使用。这个神经元将是我们模型的基石。因此，我们将使用TensorFlow创建这个单元格。让我们看看如何使用TensorFlow构建一个基本长短期记忆网络的单元。我们调用下面的代码行来创建具有参数num_units的长短期记忆网络单元。表示隐藏层中的单元数目：
+`lstm_cell = tf.contrib.rnn.BasicL3TMCell(num_units)`
+&emsp;&emsp; 为了防止过拟合，我们可以使用称为放弃或者丢弃的方法，这是一种通过降低模型的复杂度来防止模型数据过拟合的机制：
+`tf.contrib.rnn.DropoutWrapper(lstm, output_keep_prob=keep_probability)`
+&emsp;&emsp; 正如我们前面提到的，我们将使用堆叠长短期记忆模型架构；它将帮助我们从不同的角度来查看数据，并且发现在实际上已经执行得很好。为了定义层叠的长短期记忆网络在张量流中，我们可以使用
+```
+tf.contrib.rnn.MultiRNNCell function 
+(link: https://www.tensorflow.org/versions/ rl.O/api_docs/python/tf/contrib/rnn/MultiRNNCell):
+tf.contrib.rnn.MultiRNNCell([cell]*num_layers)
+```
+&emsp;&emsp; 最初，对于第一个单元格，以前没有信息，我们需要将单元格状态初始化为零。我们可以使用以下函数来完成：
+`initial_state = cell.zero_state(batch_size, tf.float32)`
+&emsp;&emsp; 所以，让我们一起来创建我们的长短期记忆网络神经元：
+```
+def build_lstm_cell(size, num_layers, batch_size, keep_probability):
+### Building the L3TM Cell using the tensorflow function lstm_cell = tf.contrib.rnn.BasicL3TMCell(size)
+# Adding dropout to the layer to prevent overfitting drop_layer = tf.contrib.rnn.DropoutWrapper(lstm_cell,
+output_keep_prob=keep_probability)
+# Add muliple cells together and stack them up to oprovide a level of more understanding
+stakced_cell = tf.contrib.rnn.MultiRNNCell([drop_layer] * num_layers) initial_cell_state = lstm_cell.zero_state(batch_size, tf.float32) return lstm_cell, initial_cell_state
+```
+## 循环神经网络
+&emsp;&emsp; 接下来，我们需要创建输出层，该输出层负责读取各个长短期记忆网络单元的输出并将其传递给全连接层。该层具有SoftMax输出，用于在输入一个字符之后预测下一个字符的概率分布。<br>
+&emsp;&emsp; 如大家所知，我们已经为具有大小N×M字符的网络生成了输入批次的数据集，其中N是该批次中的序列数，M是序列步骤数。<br>
+&emsp;&emsp; 在创建模型时，我们还在隐藏层中使用了L隐藏单元。基于隐藏单元的批量大小和数量，网络的输出将是一个大小为N×M×L的3D张量，这时我们将长短期记忆网络单元称为M次，每个序列有步骤一个。每次调用长短期记忆网络神经元都会产生一个大小为L的输出。最后，我们需要按照需求去做N个序列。<br>
+&emsp;&emsp; 因此，我们把这个N×M×L的输出传递到一个完全连接的层（对于所有输出具有相同权重的都是相同的），但是在这样做之前，我们将输出整形形成2D张量，它具有（M×N）×L的形状。这种整形将使我们在输出上操作时变得更容易。因为新形状将更方便；每行的值表示长短期记忆网络神经元的输出L，因此它是每个序列和步骤的一行。<br>
+&emsp;&emsp; 在得到新的形状之后，我们可以通过与权重进行矩阵乘法将其连接到具有SoftMax的全连接层。在长短期记忆网络单元格中创建的权重和我们在这里将要创建的权重默认具有相同的名称，在这种情况下，TensorFlow将引发错误。为了避免这个错误，我们可以使用TensorFlow函数包装在可变范围内创建新的权重和偏差变量tf.variable_scope().<br>
+&emsp;&emsp; 在解释输出的形状以及我们将如何重塑它之后，为了简化工作，让我们继续编写build model output函数：
+```
+ef build_model_output(output, input_size, output_size):
+# Reshaping output of the model to become a bunch of rows, where each row correspond for each step in the seq
+sequence_output = tf.concat(output, axis=l)
+reshaped_output = tf.reshape(sequence_output, [–l, input_size])
+# Connect the RNN outputs to a softmax layer with tf.variable_scope('softmax'):
+softmax_w = tf.Variable(tf.truncated_normal((input_size, output_size), stddev=O.l))
+softmax_b = tf.Variable(tf.zeros(output_size))
+# the output is a set of rows of L3TM cell outputs, so the logits will be a set
+# of rows of logit outputs, one for each step and sequence logits = tf.matmul(reshaped_output, softmax_w) + softmax_b
+# Use softmax to get the probabilities for predicted characters model_out = tf.nn.softmax(logits, name='predictions') return model_out, logits
+```
+## 训练损失
+&emsp;&emsp; 接下来是训练损失。我们得到了对数损失函数和目标，并计算了SoftMax交叉熵损失。首先，我们需要对目标进行单热编码，我们将它们作为字符编码。然后，我们重塑单热目标，因此它是一个具有大小（M×N）×C的2D张量，其中C是我们拥有的类/字符的数量。请记住，我们重塑了长短期记忆网络的输出，并运行它们，通过一个完全连接层和张量C。因此，我们的对数损失函数也将具有大小（M×N）×C。<br>
+&emsp;&emsp; 然后，我们运行对数损失函数和目标通过tf.nn.softmax_cross_entropy_with_logits 并且得到了损失的意义。
+```
+def model_loss(logits, targets, lstm_size, num_classes):
+# convert the targets to one–hot encoded and reshape them to match the logits, one row per batch_size per step
+output_y_one_hot = tf.one_hot(targets, num_classes) output_y_reshaped = tf.reshape(output_y_one_hot, logits.get_shape())
+#Use the cross entropy loss
+model_loss = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=output_y_reshaped)
+model_loss = tf.reduce_mean(model_loss) return model_loss
+```
+## 优化器
+&emsp;&emsp; 最后，我们需要使用一种优化方法来帮助我们从数据集中学习一些东西。正如我们所知，普通递归神经网络有梯度爆炸和梯度消失的问题长短期记忆网络只解决了一个问题，即梯度值的消失，但是即使在使用长短期记忆网络之后，一些梯度值也会爆炸并无限增长。为了解决这个问题，我们可以使用称为梯度裁剪的工具，这是一种将爆炸到特定阈值的梯度裁剪的技术。<br>
+&emsp;&emsp; 因此，让我们通过使用Adam优化来定义我们的优化器，用于学习过程：
+```
+def build_model_optimizer(model_loss, learning_rate, grad_clip):
+# define optimizer for training, using gradient clipping to avoid the exploding of the gradients
+trainable_variables = tf.trainable_variables()
+gradients, _ = tf.clip_by_global_norm(tf.gradients(model_loss, trainable_variables), grad_clip)
+#Use Adam Optimizer
+train_operation = tf.train.AdamOptimizer(learning_rate) model_optimizer = train_operation.apply_gradients(zip(gradients,
+trainable_variables)) return model_optimizer
+```
+##构建网络
+&emsp;&emsp; 现在，我们可以把所有的碎片放在一起，为网络构建一个类。为了通过长短期记忆网络单元实际运行数据，我们将使用`tf.nn.dynamic_rnn`。此函数将适当地传递长短期记忆网络单元上的隐藏状态和单元格状态。它为每个批次中的每个序列返回每个长短期记忆网络单元的输出。它还给了我们最终的长短期记忆网络状态。我们想把这个状态保存为最终状态，这样我们就可以把它传递到下一个小批量运行的第一个长短期记忆网络单元。对于tf.nn.dynamic_rnn，我们从创建长短期记忆网络中获得神经元和初始状态，以及我们的输入序列。另外，我们需要在输入循环神经网络之前对输入进行热编码：
+```
+class CharL3TM:
+def   init  (self, num_classes, batch_size=64, num_steps=5O,
+lstm_size=l28, num_layers=2, learning_rate=O.OOl, grad_clip=5, sampling=False):
+# When we're using this network for generating text by sampling, we'll be providing the network with
+# one character at a time, so providing an option for it. if sampling == True:
+batch_size, num_steps = l, l else:
+batch_size, num_steps = batch_size, num_steps
+tf.reset_default_graph()
+# Build the model inputs placeholders of the input and target variables
+self.inputs, self.targets, self.keep_prob = build_model_inputs(batch_size, num_steps)
+# Building the L3TM cell
+lstm_cell, self.initial_state = build_lstm_cell(lstm_size, num_layers, batch_size, self.keep_prob)
+### Run the data through the L3TM layers
+# one_hot encode the input
+input_x_one_hot = tf.one_hot(self.inputs, num_classes)
+# Runing each sequence step through the L3TM architecture and finally collecting the outputs
+outputs, state = tf.nn.dynamic_rnn(lstm_cell, input_x_one_hot, initial_state=self.initial_state)
+self.final_state = state
+# Get softmax predictions and logits
+self.prediction, self.logits = build_model_output(outputs, lstm_size, num_classes)
+# Loss and optimizer (with gradient clipping)
+self.loss = model_loss(self.logits, self.targets, lstm_size, num_classes)
+self.optimizer = build_model_optimizer(self.loss, learning_rate, grad_clip)
+```
+## 超参数模型
+&emsp;&emsp; 与任何深度学习体系结构一样，有一些超参数可用于控制模型并微调它。下面是我们正在为这个体系结构使用的超参数集合：<br>
+&emsp;&emsp; 批大小是一次通过网络的序列数。步骤的数目是网络被训练的序列中的字符数。较大的通常更好，神经网络学习更加长远。但要花更长的时间来训练。100在这里通常是个好数字。<br>
+&emsp;&emsp; 长短期学习网络的大小是隐藏层中的单位数。<br>
+&emsp;&emsp; 架构编号层使用的是隐藏LSTM层的数量。学习率是学习的典型学习率。<br>
+&emsp;&emsp; 最后，我们称保留概率的新信息被放弃层使用，它帮助神经网络避免过拟合。因此，如果神经网络过度拟合，尝试减少这个超参数。
+## 训练此模型
+&emsp;&emsp; 现在，让我们通过向所构建的模型提供输入和输出来开始进行训练，然后使用优化器来训练网络。不要忘记，我们需要使用之前的状态，同时对当前状态进行预测。因此，我们需要将输出状态传递回网络作为输入，以便在下一个输入的预测期间可以使用它。<br>
+&emsp;&emsp; 让我们为我们的超参数提供初始值（您可以根据您用来训练此体系结构的数据集来调整它们）：
+```
+batch_size = lOO	# 3equences per batch
+num_steps = lOO	# Number of sequence steps per batch lstm_size = 5l2	# 3ize of hidden layers in L3TMs num_layers = 2	# Number of L3TM layers learning_rate = O.OOl	# Learning rate
+keep_probability = O.5	# Dropout keep probability epochs = 5
+# 3ave a checkpoint N iterations save_every_n = lOO
+L3TM_model = CharL3TM(len(language_vocab), batch_size=batch_size, num_steps=num_steps,
+lstm_size=lstm_size, num_layers=num_layers, learning_rate=learning_rate)
+saver = tf.train.3aver(max_to_keep=lOO) with tf.3ession() as sess:
+sess.run(tf.global_variables_initializer())
+# Use the line below to load a checkpoint and resume training
+#saver.restore(sess, 'checkpoints/ 	.ckpt') counter = O
+for e in range(epochs):
+# Train network
+new_state = sess.run(L3TM_model.initial_state) loss = O
+for x, y in generate_character_batches(encoded_vocab, batch_size, num_steps):
+counter += l
+start = time.time()
+feed = (L3TM_model.inputs: x, L3TM_model.targets: y, L3TM_model.keep_prob: keep_probability, L3TM_model.initial_state: new_state}
+batch_loss, new_state, _ = sess.run([L3TM_model.loss,
+L3TM_model.final_state, L3TM_model.optimizer], feed_dict=feed)
+end = time.time()
+print('Epoch number: (}/(}... '.format(e+l, epochs),
+'3tep: (}... '.format(counter),
+'loss: (:.4f}... '.format(batch_loss),
+'(:.3f} sec/batch'.format((end–start))) if (counter % save_every_n == O):
+saver.save(sess, "checkpoints/i(}_l(}.ckpt".format(counter,
+lstm_size))
+saver.save(sess, "checkpoints/i(}_l(}.ckpt".format(counter, lstm_size))
+```
+&emsp;&emsp; 在训练模型的最后，你应该会得到类似于下面的错误：
+```
+Epoch	number:	5/5...	3tep:	978...	loss:	l.7l5l...	O.O5O	sec/batch
+Epoch	number:	5/5...	3tep:	979...	loss:	l.7428...	O.O5l	sec/batch
+Epoch	number:	5/5...	3tep:	98O...	loss:	l.7l5l...	O.O5O	sec/batch
+Epoch	number:	5/5...	3tep:	98l...	loss:	l.7236...	O.O5O	sec/batch
+Epoch	number:	5/5...	3tep:	982...	loss:	l.73l4...	O.O5l	sec/batch
+Epoch	number:	5/5...	3tep:	983...	loss:	l.7369...	O.O5l	sec/batch
+Epoch	number:	5/5...	3tep:	984...	loss:	l.7O75...	O.O65	sec/batch
+Epoch	number:	5/5...	3tep:	985...	loss:	l.73O4...	O.O5l	sec/batch
+Epoch	number:	5/5...	3tep:	986...	loss:	l.7l28...	O.O49	sec/batch
+Epoch	number:	5/5...	3tep:	987...	loss:	l.7lO7...	O.O5l	sec/batch
+Epoch	number:	5/5...	3tep:	988...	loss:	l.735l...	O.O5l	sec/batch
+Epoch	number:	5/5...	3tep:	989...	loss:	l.726O...	O.O49	sec/batch
+Epoch	number:	5/5...	3tep:	99O...	loss:	l.7l44...	O.O5l	sec/batch
+```
+## 保存检查点
+&emsp;&emsp; 让我们加载检查点。有关保存和加载检查点的更多信息，您可以查看TensorFlow文档：
+```
+tf.train.get_checkpoint_state('checkpoints') Output:
+model_checkpoint_path: "checkpoints/i99O_l5l2.ckpt"
+all_model_checkpoint_paths: "checkpoints/ilOO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i2OO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i3OO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i4OO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i5OO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i6OO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i7OO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i8OO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i9OO_l5l2.ckpt" all_model_checkpoint_paths: "checkpoints/i99O_l5l2.ckpt"
+```
+## 生成文本
+&emsp;&emsp; 我们有一个基于我们的输入数据集的训练模型。下一步是使用这个经过训练的模型来生成文本，并查看这个模型是如何学习输入数据的样式和结构的。要做到这一点，我们可以从一些初始字符开始，然后在下一步中输入新的预测字符作为输入。我们将重复这个过程，直到我们得到一个具有特定长度的文本。<br>
+&emsp;&emsp; 在下面的代码中，我们还向函数添加了额外的语句，以便用一些初始文本启动神经网络，并从那里开始。<br>
+&emsp;&emsp; 神经网络给我们每个单词的预测或概率。为了减少干扰并且只使用神经网络更有把握的字符，我们将只从输出中最可能的N个字符中选择一个新字符：
+```
+def choose_top_n_characters(preds, vocab_size, top_n_chars=4): p = np.squeeze(preds)
+p[np.argsort(p)[:–top_n_chars]] = O p = p / np.sum(p)
+c = np.random.choice(vocab_size, l, p=p)[O] 
+return c
+def sample_from_L3TM_output(checkpoint, n_samples, lstm_size, vocab_size, prime="The "):
+samples = [char for char in prime]
+L3TM_model = CharL3TM(len(language_vocab), lstm_size=lstm_size, sampling=True)
+saver = tf.train.3aver() with tf.3ession() as sess:
+saver.restore(sess, checkpoint)
+new_state = sess.run(L3TM_model.initial_state) for char in prime:
+x = np.zeros((l, l))
+x[O,O] = vocab_to_integer[char] feed = (L3TM_model.inputs: x,
+L3TM_model.keep_prob: l., L3TM_model.initial_state: new_state}
+preds, new_state = sess.run([L3TM_model.prediction, L3TM_model.final_state],feed_dict=feed)
+c = choose_top_n_characters(preds, len(language_vocab)) samples.append(integer_to_vocab[c])
+for i in range(n_samples): x[O,O] = c 
+feed = (L3TM_model.inputs: x, L3TM_model.keep_prob: l., L3TM_model.initial_state: new_state}
+preds, new_state = sess.run([L3TM_model.prediction, L3TM_model.final_state], feed_dict=feed)
+c = choose_top_n_characters(preds, len(language_vocab)) samples.append(integer_to_vocab[c])
+return ''.join(samples)
+```
+&emsp;&emsp; 让我们启动最新的检查点来检查采样过程：
+```
+tf.train.latest_checkpoint('checkpoints') Output:
+'checkpoints/i99O_l5l2.ckpt'
+```
+&emsp;&emsp; 现在，是时候使用这个最新的检查点：
+```
+checkpoint = tf.train.latest_checkpoint('checkpoints')
+sampled_text = sample_from_L3TM_output(checkpoint, lOOO, lstm_size, len(language_vocab), prime="Far")
+print(sampled_text)
+Output:
+```
+<br>
+```
+INFO:tensorflow:Restoring parameters from checkpoints/i99O_l5l2.ckpt
+Farcial the
+confiring to the mone of the correm and thinds. 3he she saw the
+streads of herself hand only astended of the carres to her his some of the princess of which he came him of
+all that his white the dreasing of
+thisking the princess and with she was she had
+bettee a still and he was happined, with the pood on the mush to the peaters and seet it.
 
+"The possess a streatich, the may were notine at his mate a misted and the
+man of the mother at the same of the seem her felt. He had not here.
 
+"I conest only be alw you thinking that the partion of their said."
 
+"A much then you make all her somether. Hower their centing
+ 
 
+about
+this, and I won't give it in himself.
+I had not come at any see it will that there she chile no one that him.
 
+"The distiction with you all.... It was
+a mone of the mind were starding to the simple to a mone. It to be to ser in the place," said Vronsky.
+"And a plais in
+his face, has alled in the consess on at they to gan in the sint at as that
+he would not be and t
+```
+&emsp;&emsp; 你可以看到我们能够产生一些有意义的单词和一些毫无意义的单词。为了获得更多的结果，您以运行更多的模型，并尝试使用超参数。
+## 总结
+&emsp;&emsp; 我们了解了递归神经网络，它是如何工作的，以及为什么它们会成为一个大的处理算法。我们在一个字符循环神经网络语言模型上训练了有趣的数据集，并看到递归神经网络的去向。你可以有信心地期待在递归神经网络空间中有大量的创新，并且我相信它们将成为一个智能系统通用和关键的部分。
 
 
 学号|姓名|专业
