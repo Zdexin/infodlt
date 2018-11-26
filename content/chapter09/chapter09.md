@@ -38,5 +38,13 @@
 图10.3是使用迁移学习的方法对CIFAR-10数据集的对象进行检测的解决方案概述<br>
 ### 加载和探索CIFAR-10<br>
 &emsp;&emsp; 让我们开始导入实现这个程序所需的包：
+```python %matplotlib inline
+import matplotlib.pyplot as plt 
+import tensorflow as tf
+import numpy as np 
+import time
+from datetime import timedelta import os
+
+# Importing a helper module for the functions of the Inception model. import inception
 
 
