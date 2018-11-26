@@ -100,14 +100,12 @@ Loading data: data/CIFAR–lO/cifar–lO–batches–py/test_batch
 ```
 让我们看看CIFAR–10中训练和测试集的分布情况：
 ```python
-print("–Number of images in the training 
-set:\t\t(}".format(len(training_images))) 
-print("–Number of images in the testing 
-set:\t\t(}".format(len(testing_images)))
+print("–Number of images in the training set:\t\t(}".format(len(training_images))) 
+print("–Number of images in the testing set:\t\t(}".format(len(testing_images)))
 ```
 输出:
 ```python
-–Number of images in the training set:	5OOOO
+–Number of images in the training set: 5OOOO
 –Number of images in the testing set:	lOOOO
 ```
 &emsp;&emsp; 让我们定义一些辅助函数，使我们能够探索数据集。以下辅助函数在网格中绘制了一组九幅图像：
@@ -141,7 +139,7 @@ plt.show()
 plot_imgs(imgs=imgs, true_class=true_class)
 ```
 输出：<br>
-![image](infodlt/content/chapter09/chapter_09image/ap1.JPG)<br>
+![image](https://github.com/computeryanjiusheng2018/infodlt/content/chapter09/chapter_09image/ap1.JPG)<br>
 
 
 
