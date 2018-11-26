@@ -385,9 +385,7 @@ checkpoint = tf.train.latest_checkpoint('checkpoints')
 sampled_text = sample_from_L3TM_output(checkpoint, lOOO, lstm_size, len(language_vocab), prime="Far")
 print(sampled_text)
 Output:
-```
 <br>
-```
 INFO:tensorflow:Restoring parameters from checkpoints/i99O_l5l2.ckpt
 Farcial the
 confiring to the mone of the correm and thinds. 3he she saw the
