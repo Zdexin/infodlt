@@ -260,7 +260,7 @@ gradients, _ = tf.clip_by_global_norm(tf.gradients(model_loss, trainable_variabl
 train_operation = tf.train.AdamOptimizer(learning_rate) model_optimizer = train_operation.apply_gradients(zip(gradients,
 trainable_variables)) return model_optimizer
 ```
-##构建网络
+## 构建网络
 &emsp;&emsp; 现在，我们可以把所有的碎片放在一起，为网络构建一个类。为了通过长短期记忆网络单元实际运行数据，我们将使用`tf.nn.dynamic_rnn`。此函数将适当地传递长短期记忆网络单元上的隐藏状态和单元格状态。它为每个批次中的每个序列返回每个长短期记忆网络单元的输出。它还给了我们最终的长短期记忆网络状态。我们想把这个状态保存为最终状态，这样我们就可以把它传递到下一个小批量运行的第一个长短期记忆网络单元。对于tf.nn.dynamic_rnn，我们从创建长短期记忆网络中获得神经元和初始状态，以及我们的输入序列。另外，我们需要在输入循环神经网络之前对输入进行热编码：
 ```
 class CharL3TM:
