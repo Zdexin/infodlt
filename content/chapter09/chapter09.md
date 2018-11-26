@@ -46,12 +46,12 @@ import time
 from datetime import timedelta import os
 # Importing a helper module for the functions of the Inception model. import inception
 ```
-&emsp;&emsp; 下一步，我们需要加载另一个脚本来帮助下载和处理CIFAR-10数据集：<br>
+&emsp;&emsp; 下一步，我们需要加载另一个脚本来帮助下载和处理CIFAR-10数据集：
 ```python 
 import cifarlO
 #importing number of classes of CIFAR–lO from cifarlO import num_classes
 ```
-&emsp;&emsp; 如果您还没有设置，您需要设置CIFAR-10的路径。此路径将被cifar–lO.py脚本用于保存数据集：<br>
+&emsp;&emsp; 如果您还没有设置，您需要设置CIFAR-10的路径。此路径将被cifar–lO.py脚本用于保存数据集：
 ```python
 cifarlO.data_path = "data/CIFAR–lO/"
 The CIFAR–lO dataset is about l7O MB, the next line checks if the dataset is already downloaded if not it downloads the dataset and store in the previous data_path:
@@ -59,13 +59,13 @@ cifarlO.maybe_download_and_extract</span>() Output:
 –	Download progress: lOO.O%
 Download finished. Extracting files. Done.
 ```
-&emsp;&emsp; 让我们看看CIFAR-10数据集中的类别：<br>
+&emsp;&emsp; 让我们看看CIFAR-10数据集中的类别：
 ```python
 #Loading the class names of CIFAR–lO dataset 
 class_names = cifarlO.load_class_names() 
 class_names
 ```
-输出：<br>
+输出：
 ```python
 Loading data: data/CIFAR–lO/cifar–lO–batches–py/batches.meta ['airplane',
 'automobile', 'bird',
@@ -78,11 +78,11 @@ Loading data: data/CIFAR–lO/cifar–lO–batches–py/batches.meta ['airplane'
 'truck']
 Load the training–set.
 ```
-它将图像、类号作为整数，并将类号作为one hot编码数组称为标签：<br>
+它将图像、类号作为整数，并将类号作为one hot编码数组称为标签：
 ```python
 training_images, training_cls_integers, trainig_one_hot_labels = cifarlO.load_training_data()
 ```
-输出：<br>
+输出：
 ```python
 Loading data: data/CIFAR–lO/cifar–lO–batches–py/data_batch_l 
 Loading data: data/CIFAR–lO/cifar–lO–batches–py/data_batch_2 
@@ -91,26 +91,26 @@ Loading data: data/CIFAR–lO/cifar–lO–batches–py/data_batch_4
 Loading data: data/CIFAR–lO/cifar–lO–batches–py/data_batch_5 
 Load the test–set.
 ```
-&emsp;&emsp; 接下来，让我们对测试集执行相同的操作，通过加载目标类的图像和其对应的整数来表示其单热编码：<br>
+&emsp;&emsp; 接下来，让我们对测试集执行相同的操作，通过加载目标类的图像和其对应的整数来表示其单热编码：
 ```python
 #Loading the test images, their class integer, and their corresponding one– hot encoding
 testing_images, testing_cls_integers, testing_one_hot_labels = cifarlO.load_test_data()
 Output:
 Loading data: data/CIFAR–lO/cifar–lO–batches–py/test_batch
 ```
-让我们看看CIFAR–10中训练和测试集的分布情况：<br>
+让我们看看CIFAR–10中训练和测试集的分布情况：
 ```python
 print("–Number of images in the training 
 set:\t\t(}".format(len(training_images))) 
 print("–Number of images in the testing 
 set:\t\t(}".format(len(testing_images)))
 ```
-输出:<br>
+输出:
 ```python
 –Number of images in the training set:	5OOOO
 –Number of images in the testing set:	lOOOO
 ```
-&emsp;&emsp; 让我们定义一些辅助函数，使我们能够探索数据集。以下辅助函数在网格中绘制了一组九幅图像：<br>
+&emsp;&emsp; 让我们定义一些辅助函数，使我们能够探索数据集。以下辅助函数在网格中绘制了一组九幅图像：
 ```python
 def plot_imgs(imgs, true_class, predicted_class=None): assert len(imgs) == len(true_class)
 # Creating a placeholders for 9 subplots fig, axes = plt.subplots(3, 3)
@@ -133,7 +133,7 @@ ax.set_xlabel(xlabel)
 # Remove ticks from the plot. ax.set_xticks([]) ax.set_yticks([])
 plt.show()
 ```
-我们先将测试集中的一些图像连同它们对应的实际类可视化：<br>
+我们先将测试集中的一些图像连同它们对应的实际类可视化：
 ```python
 # get the first 9 images in the test set imgs = testing_images[O:9]
 # Get the integer representation of the true class. true_class = testing_cls_integers[O:9]
@@ -141,7 +141,7 @@ plt.show()
 plot_imgs(imgs=imgs, true_class=true_class)
 ```
 输出：<br>
-![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter09/ap2.jpg)<br>
+![image](infodlt/content/chapter09/chapter_09image/ap1.JPG)<br>
 
 
 
