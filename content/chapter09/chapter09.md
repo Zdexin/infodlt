@@ -1,5 +1,5 @@
 # 目标检测-卷积神经网络的迁移学习<br>
-## 如何在一个环境迁移到另一个具有相似特征的环境中加以应用。
+### 如何在一个环境迁移到另一个具有相似特征的环境中加以应用。
                                                        – E. L. Thorndike, R. S. Woodworth (1991)
 &emsp;&emsp; 迁移学习（TL）是数据科学中的一个研究问题，主要涉及在解决特定任务中获得的知识的持续性，并利用所获得的知识来解决另一个不同但相似的任务。在这一章中，我们将演示迁移学习。数据科学领域中使用的一种现代实践和共同主题。这里的想法是如何从具有非常大的数据集的领域获得对数据集较小的领域的帮助。最后，我们将重温CIFAR-10的目标检测示例，并尝试通过迁移学习减少训练时间和性能误差。<br>
 &emsp;&emsp; 本章将讨论以下主题：<br>
@@ -392,12 +392,12 @@ print("Confusion Matrix:") plot_confusionMatrix(cls_predicted=cls_pred)
 &emsp;&emsp; 让我们看看之前的神经网络模型的性能，然后再做其他优化：
 ```python
 test_accuracy(show_example_errors=True,
-show_confusion_matrix=True) Accuracy on Test–3et: 9.4% (939 / lOOOO)
+show_confusion_matrix=True) Accuracy 
 ```
 &emsp;&emsp; 正如您所看到的，网络的性能非常低，但是基于我们已经定义的优化标准进行一些优化之后，它会变得更好。因此，我们将优化器进行10000次迭代，然后测试模型准确度：
 ```python
 optimize(num_iterations=lOOOO) test_accuracy(show_example_errors=True,
-show_confusion_matrix=True) Accuracy on Test–3et: 9O.7% (9O69 / lOOOO)
+show_confusion_matrix=True) Accuracy
 ```
 Example errors:<br>
 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter09/chapter_09image/ap8.JPG)<br>
