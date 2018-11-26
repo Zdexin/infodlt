@@ -44,7 +44,7 @@ import tensorflow as tf
 import numpy as np 
 import time
 from datetime import timedelta import os
-
 # Importing a helper module for the functions of the Inception model. import inception
+&emsp;&emsp; 下一步，我们需要加载另一个脚本来帮助下载和处理CIFAR-10数据集：<br>
 
 
