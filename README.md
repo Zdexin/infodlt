@@ -12,6 +12,8 @@
 
 -  正确的上传内容，如下图所示哟<(＾－＾)>  
 
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/image/right.png)
+
 
 ## 目录
 -  [第一章](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01.md)<br>
