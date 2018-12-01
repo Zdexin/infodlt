@@ -11,7 +11,7 @@
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/1.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1“有一个隐含层的简单FNN”<br>
 &emsp;&emsp;如前所述, 此网络中最左侧的层称为输入层, 而层内的神经元称为输入神经元。最右边或输出层包含输出神经元，或者在这种情况下包含单个输出神经元。中间层被称为隐含层, 因为这个层中的神经元既不是输入也不是输出。“隐含”这个词听起来可能有点神秘。第一次听到这个词时，我想它一定有很深的哲学或数学意义。没有别的意思。前一个网络只有一个隐含层，但有些网络有多个隐含层。例如，下面的四层网络有两个隐含层:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/2.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/2.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2“具有更多隐含层的人工神经网络”<br>
 &emsp;&emsp;其中组织输入、隐含和输出层的体系结构非常简单。例如，让我们通过一个实际的例子来看看一个特定的手写图像中是否有数字9。<br>
 &emsp;&emsp;首先，我们将把输入图像的像素输入到输入层;例如，在MNIST数据集中，我们有单色图像。每一个都是28×28，所以我们需要在输入层中有28* 28= 784个神经元来接收这个输入图像。<br>
@@ -20,7 +20,7 @@
 ## MNIST数据集分析
 &emsp;&emsp;在这部分，我们将用一个分类器来获取手写图像的信息。这种实现可以看作是神经网络中的Hello world!。<br>
 &emsp;&emsp;MINST是一种广泛使用的用于测试机器学习技术的数据集。数据集包含一组手写数字，如下图所示:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/3.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/3.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图3 "mnist 数据集中的采样数字”<br>
 &emsp;&emsp;因此, 数据集还包括手写图像及其相应的标签。<br>
 &emsp;&emsp;在这一节中，我们将对这些图像进行基本模型的训练，我们的目标是在输入图像中分辨出哪个数字是手写的。<br>
@@ -34,14 +34,14 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 &emsp;&emsp;MNIST 数据分为三部分: 培训数据的5.5万个训练数据 (minist.train)、1万个测试数据 (minist.test) 和5000点验证数据 (minist.validation)。在机器学习过程中，这种分流非常重要;我们必须有独立数据，我们不从中学习，才能确保我们所学到的东西实际上是一般化的!<br>
 &emsp;&emsp;如前所述, 每个 MNIST 示例都有两个部分: 手写数字的图像及其对应的标签。训练集和测试集都包含图像及其相应的标签。例如, 训练图像是 mnist.train.images , 训练标签是 mnist.train.labels 。<br>
 &emsp;&emsp;每个图像是28像素 x 28 像素。我们可以把它看做一个大的数字数组:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/4.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/4.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 4 "矩阵表示中的 MNIST 数字”<br>
 &emsp;&emsp;为了将这个像素值矩阵提供给神经网络的输入层，我们需要将这个矩阵合并为一个有784个值的向量。数据集的最终形状是一串的784维向量空间。<br>
 &emsp;&emsp;结果是 mnist.train.images 是一个形状为 (55OOO, 784) 的张量。第一个维度是图像列表的索引, 第二个维度是每个图像中每个像素的索引。张量中的每个条目都是特定图像中特定像素的0到1之间的像素强度:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/5.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/5.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 5 "MNIST 数据分析<br>
 &emsp;&emsp;为了实现这个目的，我们将把标签编码为one-hot向量。一个one-hot向量是除此向量表示的数字的索引之外的所有都为零的向量。例如, 3 将是 [00、01、00、00、00]。因此, mnist.train.labels 是一个 (55OOO, 10) 的浮点数组:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/6.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/6.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 6 "MNIST 数据分析<br>
 ## 数字分类–模型构建和训练
 &emsp;&emsp;现在，让我们继续构建我们的模型。我们的数据集中有10个类0-9目标是将任何输入图像分类到这些类中。我们将生成一个10个可能值的向量(因为我们有10个类)。它将表示从0到9的每一位数字作为输入图像的正确类的概率。<br>
@@ -49,32 +49,32 @@ mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 &emsp;&emsp;softmax回归有两个步骤:首先，我们将输入在特定类中的证据加起来，然后将这些证据转换为概率。<br>
 &emsp;&emsp;为了证明给定图像属于特定类别，我们对像素强度进行加权和。如果高强度的像素是不利于该类图像的证据，权重为负;如果是有利于该类图像的证据，权重为正。<br>
 &emsp;&emsp;图7显示了每个类的权重的一个模型。红色表示负权重, 而蓝色表示正权重:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/7.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/7.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 7 "权重为每个 MNIST 类的一个学习模型"<br>
-&emsp;&emsp;我们还加入了额外的偏见。基本上，我们想说的是有些东西更可能独立于输入。结果是, 给定一个输入![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(20).gif)的类![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(21).gif)的证据是: <br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/1.jpg)<br>
+&emsp;&emsp;我们还加入了额外的偏见。基本上，我们想说的是有些东西更可能独立于输入。结果是, 给定一个输入![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(20).gif)的类![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(21).gif)的证据是: <br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/1.jpg)<br>
 &emsp;&emsp;其中:<br>
-&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(22).gif)是权重<br>
-&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(23).gif)是类 <br>
-&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(24).gif)是对输入图像x中的像素求和的索引。<br>
-&emsp;&emsp;然后，使用softmax函数将证据转换为我们预测的概率![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(25).gif):<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(26).gif):<br>
+&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(22).gif)是权重<br>
+&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(23).gif)是类 <br>
+&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(24).gif)是对输入图像x中的像素求和的索引。<br>
+&emsp;&emsp;然后，使用softmax函数将证据转换为我们预测的概率![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(25).gif):<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(26).gif):<br>
 &emsp;&emsp;在在这里，softmax充当一个激活函数或链接函数，将线性函数的输出塑造成我们想要的形式，在本例中是10种情况下的概率分布(因为我们有10种可能的类，从0到9)。你可以把它看作是把证据转换成每个类的输入的概率。它的定义为:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(27).gif):<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(27).gif):<br>
 &emsp;&emsp;如果你展开这个方程，你会得到:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/8.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/8.png)<br>
 &emsp;emsp;但是把softmax看作第一种方法通常更有帮助:对输入进行幂运算，然后对其进行规范化。求幂意味着多一个单位的证据就会成倍地增加任何假设的权重。反过来说，如果证据少一个单位，就意味着一个假设得到的只是其早期权重的一小部分。没有一个假设的权重是零或负的。Softmax将这些权值规范化，使它们相加为1，形成一个有效的概率分布。<br>
-&emsp;&emsp;你可以把我们的softmax回归想象成如下图所示，尽管有更多的![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(20).gif)。对于每个输出，我们计算![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(20).gif)的加权和，添加一个偏差，然后应用softmax:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/9.png)<br>
+&emsp;&emsp;你可以把我们的softmax回归想象成如下图所示，尽管有更多的![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(20).gif)。对于每个输出，我们计算![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(20).gif)的加权和，添加一个偏差，然后应用softmax:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/9.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 8 "softmax 回归的可视化"<br>
 &emsp;&emsp;如果我们把它写成方程式, 我们得到: <br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/10.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/10.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 9 "softmax 回归的等式表示法"<br>
 &emsp;&emsp;我们可以使用向量表示法进行此过程。这意味着我们将把它变成一个矩阵乘法和向量加法。这对于计算效率和可读性非常有帮助:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/11.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/11.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 10 "softmax 回归方程的矢量化表示"<br>
 &emsp;&emsp;更简洁地说，我们可以这样写: <br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(28).gif)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(28).gif)<br>
 &emsp;&emsp;现在, 让我们把它转化为 TensorFlow 可以使用的东西。<br>
 ## 数据分析
 &emsp;&emsp;让我们开始实现分类器，首先从导入这个实现所需的包开始:<br>
@@ -155,13 +155,13 @@ Array|[0,|0,|0,|0,|0,|0,|0,|1,|0,|0]
     visualize_digit(ran.randint(0, input_values_train.shape[0])) 
 ```
 &emsp;&emsp;Output:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/12.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/12.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 12 "display_digit输出数字的方法"<br>
 &emsp;&emsp;我们还可以使用前面定义的辅助函数来可视化一组平面图像。平面中的每个值都表示像素强度，因此将像素可视化如下:<br>
 ```python
     visualize_mult_imgs_flat(0,400) 
 ```
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/13.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/13.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 13 "前400个训练示例"<br>
 ## 构建模型
 &emsp;&emsp;到目前为止，我们还没有开始为这个分类器构建计算图。让我们从创建会话变量开始，该变量将负责执行我们将要构建的计算图:<br>
@@ -187,9 +187,9 @@ output_values = tf.placeholder(tf.float32, shape=[None, 10])
     softmax_layer = tf.nn.softmax(tf.matmul(input_values,weights) + biases)
 ```
 &emsp;&emsp;首先, 让我们忽略 softmax，看softmax 函数内部是什么。matmul 是矩阵乘法的 TensorFlow函数。如果你知道矩阵乘法 (https://en.Wekipedia.org./wiki/Matrix_multiplication), 你会明白这个计算是正确的,并且:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/2.jpg)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/2.jpg)<br>
 &emsp;&emsp;将会有大量的训练示例以f(m)f(n)矩阵为例：<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/14.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/14.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 14 "简单矩阵乘法"<br>
 &emsp;&emsp;您可以通过评估 softmax_layer 来确认:<br>
 ```python
@@ -225,17 +225,17 @@ output_values = tf.placeholder(tf.float32, shape=[None, 10])
 ```
 &emsp;&emsp;接下来，我们需要为这个模型定义损失函数，它将测量在为输入图像分配类时分类器的好坏。我们的模型的准确性是通过比较数据集中的实际值和我们从模型中得到的预测来计算的。<br>
 &emsp;&emsp;我们的目标是减少实际值和预测值之间的任何错误分类。交叉熵定义为:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/3.jpg)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/3.jpg)<br>
 &emsp;&emsp;其中:<br>
-&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(29).gif)是我们预测的概率分布<br>
-&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/CodeCogsEqn%20(30).gif)是真实分布 (带有数字标签的one-hot向量)<br>
+&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(29).gif)是我们预测的概率分布<br>
+&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/CodeCogsEqn%20(30).gif)是真实分布 (带有数字标签的one-hot向量)<br>
 &emsp;&emsp;从某种粗略的意义上说，交叉熵度量了我们在描述实际输入时的预测效率有多低。<br>
 ```python
     model_cross_entropy = tf.reduce_mean(–tf.reduce_sum(output_values * 
     tf.log(softmax_layer), reduction_indices=[1]))
 ```
 &emsp;&emsp;此函数从 softmax_layer (其值范围从0到 1) 获取我们所有预测的日志, 并将它们按元素大小 (https://en.wikipedia.org/wiki/Hadamard_product_%28matrices%29) 乘以示例的真实值output_values。如果每个值的 log 函数接近零, 该负数值很大 (–np (0.01) = 4.6), 并且如果它接近1, 该负数值很小 (–np (0. 99) = 0.1):<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/15.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/15.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 15 "Y=log(x)"<br>
 &emsp;&emsp;如果可以确定预测是不正确的，我们本质上是用一个非常大的数字惩罚分类器，如果可以确定是真确的，那么这个数将会非常小。下面是一个 softmax 预测的简单 Python 示例, 它确信数字是3:<br>
 &emsp;&emsp;j = [0.03, 0.03, 0.01, 0.9, 0.01, 0.01, 0.0025,0.0025, 0.0025, 0.0025]<br>
@@ -330,7 +330,7 @@ Training step:2500 Accuracy = 0.9067 Loss = 0.23929419
     frame.axes.get_xaxis().set_visible(False) 
     frame.axes.get_yaxis().set_visible(False)
 ```
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/16.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/16.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图 15 "我们的权重从0-9 的可视化"<br>
 &emsp;&emsp;上图显示了0-9的模型权重，这是我们分类器最重要的方面。所有这些机器学习的工作都是为了找出最优的权重。一旦根据优化标准进行计算，你就有了备忘单，并且可以很容易地使用所学的权重找到答案。<br>
 &emsp;&emsp; 学习的模型通过比较输入数字样本与红蓝权重的相似程度或不同程度来进行预测。红色越深，效果越好;白色表示中性，蓝色表示失误。<br>
@@ -346,7 +346,7 @@ Training step:2500 Accuracy = 0.9067 Loss = 0.23929419
     target_values_train samples Loaded = (1, 10) 
     [0. 0. 0. 0. 0. 0. 0. 1. 0. 0.]
 ```
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/12.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/12.png)<br>
 &emsp;&emsp;让我们看看我们的softmax预测器:<br>
 ```python
     answer = sess.run(softmax_layer, feed_dict=(input_values: input_values_train})
@@ -386,7 +386,7 @@ Output:
     display_result(ran.randint(0, 55000)) 
     Output:
 ```
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/17.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/17.png)<br>
 &emsp;&emsp;我们又得到了一个正确的分类!<br>
 ## 总结
 &emsp;&emsp;在本章中，我们对数字分类任务进行了基本的FNN实现。我们还回顾了在神经网络环境中使用的术语。<br>
