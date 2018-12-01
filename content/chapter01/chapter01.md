@@ -15,11 +15,11 @@
 <br><br>
 ## 通过一个例子了解数据科学
 &emsp;&emsp;为了说明为特定数据构建学习算法的生命周期和挑战，让我们考虑一个实际的例子。自然保护协会正在与其他渔业公司和部门合作渔农处负责监察渔业活动，并为日后的渔业作出保护。因此，他们希望在未来使用相机来扩大这一监测过程。这些摄像机的部署将产生大量的数据，手工处理将十分繁琐和昂贵。因此，该部门希望开发一种自动测试的学习算法。对不同种类的鱼类进行总体检测和分类，加快视频审查过程。<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%871.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/%E5%9B%BE%E7%89%871.png) <br>
 图1.1显示了一个由保护配置相机拍摄的图像样本,这些图像将用于构建系统。<br><br>
 
 &emsp;&emsp;因此，我们在这个例子中的目的是分离不同的物种，如金枪鱼，月鱼，和更多的渔船捕获的鱼。作为一个说明性的例子，我们可以将问题限制为两类，即金枪鱼和月鱼。<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/%E5%9B%BE%E7%89%872.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/%E5%9B%BE%E7%89%872.png) <br>
 图1.2 金枪鱼(左)和月鱼(右)<br><br>
 &emsp;&emsp;在限制我们的问题只包含两种类型的鱼之后，我们可以从我们收集的一些随机图像中抽取一个样本，并开始注意这两种类型之间的一些物理区别。考试请考虑以下物理差异：<br>
 &emsp;&emsp;&emsp;&emsp;长度：你可以看到，与月鱼相比，金枪鱼长得很长。<br>
@@ -29,7 +29,7 @@
 &emsp;&emsp;对象的解释特征是我们在日常生活中用来区分周围事物的东西。甚至婴儿也会利用这些解释功能来了解周围的环境。数据科学也是如此，以便建立一个能够区分不同对象(例如，鱼类类型)的学习模型，我们需要给它一些可供学习的解释特性(例如，鱼的长度)。为了使模型更加确定，减少混淆误差，可以在一定程度上增加对象的解释特征。<br>
 &emsp;&emsp;鉴于这两种鱼类之间的物理差异，这两种不同的鱼类种群有不同的模型或描述。因此，我们分类任务的最终目标是让分类器学习这些不同的模型，然后给出这两种类型之一的图像作为输入。分类器将通过选择与此图像最匹配的模型(金枪鱼模型或月鱼模型)对其进行分类。<br>
 &emsp;&emsp;在这种情况下，金枪鱼和月鱼的收集将作为我们分类器的知识库。最初，知识库(训练样本)将被标记/标记，对于每个图像，您将事先知道它是金枪鱼还是月鱼。因此，分类器将使用这些训练样本来建模不同类型的鱼，然后我们可以使用训练阶段的输出来自动标记未标记/未标记的鱼，即分类在训练阶段没有看到。这种未标记的数据通常称为看不见的数据。生命周期的培训阶段如下图所示：监督数据科学是从已知目标或输出的历史数据(如鱼类类型)中学习，然后使用这个学习模型来预测我们不知道目标/输出案例或数据样本。<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/1图片.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/1图片.png) <br>
 图1.3 训练阶段运行周期<br><br>
 &emsp;&emsp;让我们看看分类器的培训阶段将如何工作：<br>
 &emsp;&emsp;&emsp;&emsp;预处理：在这一步中，我们将尝试利用相关的分割技术从图像中分割出鱼。<br>
@@ -42,7 +42,7 @@ If length(fish)> length* then label(fish) =Tuna
 Otherwise label(fish) = Opah
 ```  
 &emsp;&emsp;为了找到这个长度，我们可以根据训练样本进行长度测量。因此，假设我们得到这些长度测量，并得到如下直方图：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/2图片.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/2图片.png) <br>
 图1.4 两种鱼类长度测量的直方图<br><br>
 &emsp;&emsp;在这种情况下，我们可以根据长度特征导出一个规则，并区分金枪鱼和月鱼。在这个特殊的例子中，我们可以知道长度是7。这样我们就可以更新前面的规则：<br>
 ```python
@@ -50,25 +50,25 @@ If length(fish)> 7 then label(fish) =Tuna
 Otherwise label(fish) = Opah
 ```  
 &emsp;&emsp;正如您可能注意到的，这不是一个有希望的结果，因为这两个直方图之间的重叠，因为长度特征不是一个完美的特点，仅用于区分这两种类型。因此，我们可以尝试合并更多的功能，如宽度，然后结合他们。因此，如果我们设法测量训练样本的宽度，我们可能会得到类似于跟随，接着:<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片3.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片3.png) <br>
 图1.5 两种鱼类宽度测量的直方图<br><br>
 &emsp;&emsp;正如您所看到的，依赖于一个特性不会给出准确的结果，输出模型会造成许多错误分类。所以，我们可以用某种方式将这两个特性结合起来，使其看上去很合理。<br>
 &emsp;&emsp;因此，如果我们将这两个特性结合起来，我们可能会得到类似于下面的图形的东西：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片4.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片4.png) <br>
 图1.6 两种鱼类的长度和宽度测量子集之间的组合<br><br>
 &emsp;&emsp;结合长度和宽度特征的读数，我们将得到像前面的图表中的散点图。我们有红色的点代表金枪鱼，绿色的点代表opah鱼，我们可以建议这条黑线作为区分这两种鱼的规则或决策边界。例如，如果一条鱼的读数高于这个决定边界，那么它就是一条金枪鱼；否则，它将被预测为一条月鱼。<br>
 &emsp;&emsp;我们可以设法增加规则的复杂性，以避免任何错误，并获得如下图形中的决策边界：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片5.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片5.png) <br>
 图1.7 增加决策边界的复杂性以避免对培训数据的错误分类<br><br>
 &emsp;&emsp;该模型的优点是我们在训练样本上得到了几乎0种错误分类。但实际上，这并不是使用数据科学的目的。数据科学的目标是建立一个模型，该模型能够对未见的数据进行良好的概括和执行。为了了解我们是否建立了一个推广的模型，我们将引入一个新的阶段，称为测试阶段，在这个阶段中，我们给训练的模型一个未标记的图像并希望模型可以指定正确的标签(Tuna和opah)。<br>
 &emsp;&emsp;数据科学的最终目标是建立一个在生产中运行良好的模型，而不是训练集。所以，当你看到你的模型在训练中表现良好时，不要高兴，就像图1.7中的模型一样。大多数情况下，这种模型在识别图像中的鱼类类型时效果不佳。你的模型只有在训练集上才能正常工作，这一事件被称为“过度拟合”，而且大多数从业者都落入了这个陷阱。<br>
 &emsp;&emsp;代替提出这样一个复杂的模型，您可以使用一个不那么复杂的模型，它将在测试阶段泛化。下图显示了如何使用不太复杂的模型来获得较少的错误分类错误，并对未见数据进行概括：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片6.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片6.png) <br>
 图 1.8 使用不太复杂的模型，以便能够对测试样本(未见数据)进行归纳。<br><br>
 ## 数据科学算法的设计过程
 &emsp;&emsp;不同的学习系统通常遵循相同的设计过程。它们从获取知识库开始，从数据中选择相关的解释性特征，通过一系列候选学习算法，同时关注每一个算法，最后是评估过程，衡量培训过程的成功程度。<br>
 &emsp;&emsp;在本节中，我们将更详细地讨论所有这些不同的设计步骤：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片7.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片7.png) <br>
 图1.11 “模型学习过程大纲”<br><br>
 ### 数据预处理
 &emsp;&emsp;学习周期的这一部分代表了我们算法的知识库。因此，为了帮助学习算法对未知数据做出准确的决策，我们需要以最好的形式提供这个知识库。因此，我们的数据可能需要大量的清理和预处理(转换)。<br>
@@ -151,7 +151,7 @@ Otherwise label(fish) = Opah
 &emsp;&emsp;&emsp;&emsp;1.训练集：这将作为我们的模型的知识库。通常，会是70%的原始数据样本。<br>
 &emsp;&emsp;&emsp;&emsp;2.验证集：这将用于在一组模型中选择性能最好的模型。通常这将是10%的原始数据样本。<br>
 &emsp;&emsp;&emsp;&emsp;3.测试集：这将用于测量和报告所选模型的准确性。通常，它与验证集一样大。<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片8.png) <br><br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片8.png) <br><br>
 图 1.9 将数据拆分为训练、验证和测试集。<br><br>
 &emsp;&emsp;如果您只使用一种学习方法，则可以取消验证集，并将数据重新拆分为仅训练和测试集。通常，数据科学家使用75/25或者70/30作为百分比。<br>
 ### 数据分析预处理
@@ -268,7 +268,7 @@ def load_normalize_testing_samples():
 ### 建立模型
 &emsp;&emsp;现在是建立模型的时候了。正如我们所提到的，我们将使用一种称为CNN的深度学习架构作为这项鱼类识别任务的学习算法。同样，您不需要理解本章中的任何前面或即将出现的代码，因为我们只是在演示如何通过只使用几行代码，并借助Keras和TensorFlow作为一个深度学习平台来解决复杂的数据科学任务。<br>
 &emsp;&emsp;还请注意，CNN和其他深度学习架构将在后面的章节中进行更详细的解释：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片9.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片9.png) <br>
 图 1.10 CNN结构<br><br>
 &emsp;&emsp;因此，让我们继续创建一个函数，它将负责创建CNN的体系结构，用于我们的鱼类识别任务：<br>
 ```python
@@ -397,14 +397,15 @@ if __name__== '_main_':
 ## 不同学习类型
 &emsp;&emsp;根据Arthur_Samuel(https://en.wikipedia.org/wiki/Arthur_Samuel )的说法，数据科学赋予了计算机学习的能力，而无需显式编程。因此，任何在没有显式编程的情况下使用培训示例以便对未见数据做出决策的软件都被认为是学习的。数据科学或学习有三种不同的形式。<br>
 图1.12显示了常用的数据科学/机器学习类型：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片10.png) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片10.png) <br>
 ### 有监督的学习
 &emsp;&emsp;大多数数据科学家使用监督学习。监督学习是指您有一些解释性特性，称为输入变量(X)，并且您的标签是Associa使用训练样本，称为输出变量(Y)。任何监督学习算法的目的是学习从输入变量(X)到输出变量(Y)的映射函数：<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Y=f(X)<br>
 &emsp;&emsp;因此，监督学习算法将尝试学习从输入变量(X)到输出变量(Y)的映射，以便以后可以用来预测看不见的样本。<br>
 &emsp;&emsp;图1.13 显示了用于任何受监督的数据科学系统的典型工作流：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片11.png) <br>
-图1.13 典型的监督学习工作流/管道。上面的部分展示了从将原始数据输入到特征提取模块开始的培训过程，在该模块中，我们将选择有意义的解释性特征来表示我们的数据。然后将提取的/选择的解释性特征与训练集相结合，将其反馈到学习算法中进行学习。然后我们做一些模型评估来调优。参数和学习算法，以获得最佳的数据样本。<br><br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片11.png) <br>
+图1.13 典型的监督学习工作流/管道。<br>
+上面的部分展示了从将原始数据输入到特征提取模块开始的培训过程，在该模块中，我们将选择有意义的解释性特征来表示我们的数据。然后将提取的/选择的解释性特征与训练集相结合，将其反馈到学习算法中进行学习。然后我们做一些模型评估来调优。参数和学习算法，以获得最佳的数据样本。<br><br>
 &emsp;&emsp;这种学习被称为监督学习，因为你得到了与它相关的每个训练样本的标签/输出。在这种情况下，我们可以说学习过程是由主管监督的。该算法对训练样本进行决策，并根据数据的正确标签进行校正。当监督学习算法达到可接受的精度时，学习过程就会停止。<br>
 &emsp;&emsp;有监督的学习任务有两种不同的形式：回归和分类：<br>
 &emsp;&emsp;&emsp;&emsp;分类：分类任务是当标签或输出变量是一个类别时，例如金枪鱼或opah或垃圾邮件和非垃圾邮件。<br>
@@ -415,8 +416,8 @@ if __name__== '_main_':
 &emsp;&emsp;&emsp;&emsp;聚类：集群任务是您希望发现类似的培训示例组并将它们分组的地方，例如按主题对文	档进行分组。<br>
 &emsp;&emsp;&emsp;&emsp;关联：关联规则学习任务是您希望在培训示例中发现一些描述关系的规则的地方（例如看X电影的人也倾向于看电影Y）<br>
 &emsp;&emsp;图1.14 展示了一个无监督学习的小例子，在那里我们得到了分散的文档，并且我们试图将相似的文档组合在一起：<br>
-![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/图片12.png) <br>
-图1.14“显示了如何无监督地使用相似度量，例如欧几里得距离，将相似的文档组合在一起，并为它们绘制决策边界。<br><br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter01/chapter01_image/图片12.png) <br>
+图1.14 “显示了如何无监督地使用相似度量，例如欧几里得距离，将相似的文档组合在一起，并为它们绘制决策边界。<br><br>
 ### 半监督学习
 &emsp;&emsp;半监督学习是介于监督学习和非监督学习之间的一种学习方式，有输入变量(X)的训练实例，但只有一部分是使用输出变量(Y)标记标注的。<br>
 &emsp;&emsp;这类学习的一个很好的例子是Flickr(https://www.flickr.com/ )，用户上传了很多图片，但只有一些图片被标记了)(比如日落、海洋和狗)和其余的都没有贴上标签。<br>
