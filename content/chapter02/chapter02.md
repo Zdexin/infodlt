@@ -214,7 +214,7 @@ Output:<br>
 图6 sigmoid函数<br><br>
 &emsp;&emsp;因此，假设我们有一组训练样本，其中包含相应的二进制标签{(x(I)，y(I)：i=1，.，m}。我们需要最小化以下成本函数，该函数度量给定的h8的性能：<br>
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/chapter02_image/图片8.png) <br>
-&emsp;&emsp;注意，对于每个训练样本，我们只有一个等式的求和为非零(取决于标签y(I)的值是0还是)。当y(I)=1时，最小化模型成本函数意味着我们需要使h8(X)变大，并且当y=0时，![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/chapter02_image/图1.jpg)我们想把1-H8做大一点。<br>
+&emsp;&emsp;注意，对于每个训练样本，我们只有一个等式的求和为非零(取决于标签y(I)的值是0还是)。当y(I)=1时，最小化模型成本函数意味着我们需要使h8(X)变大，并且当y=0时，![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/chapter02_image/图1.png)我们想把1-h(0)做大一点。<br>
 &emsp;&emsp;现在，我们有一个成本函数来计算给定的假设H8是否适合我们的训练样本。我们可以学习使用优化技术对训练样本进行分类，使J(8)最小化，并找到参数8的最佳选择。一旦我们这样做了，我们就可以使用这些参数将一个新的测试样本分类为1或0，检查这两个类标签中哪一个是最有可能的。如果P(y=1|x)<P(y=0|x)，则输出0，否则输出1，这等于在类之间定义0.5的阈值，并检查h8(X)是否>0.5。<br>
 &emsp;&emsp;为了使成本函数J(8)最小化，我们可以使用一种优化技术，找到最优值为8，从而使成本函数最小化。因此，我们可以使用一个名为梯度的微积分工具，它试图找出成本函数的最大增长率。然后，我们可以向相反的方向求出这个函数的最小值；例如，梯度。用D8J(8)来表示J(8)，这意味着取成本函数的梯度关于模型参数。因此，我们需要提供一个计算J(8)和D8J(8)要求的任何选择8。如果我们导出了J(8)以上的成本函数对于8j，我们将得到以下结果：<br>
 ![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter02/chapter02_image/图片9.png) <br>
