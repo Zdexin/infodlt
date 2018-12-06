@@ -35,6 +35,40 @@
 &emsp;&emsp;在进入下一节之前，让我们介绍一些通常在CNN上下文中使用的术语：<br>
 &emsp;&emsp;stride：我们之前简要地提到了这个术语。 通常，stride是我们在输入矩阵的像素上移filter weigh的像素数。 例如，步幅1意味着在对输入图像进行卷积时将filter移动一个像素，而步幅2意味着在对输入图像进行卷积时将filter移动两个像素。 我们的步幅越大，生成的特征映射越小。<br>
 &emsp;&emsp;Zero-padding：如果我们想要包含输入图像的边框像素，那么我们的部分滤镜将位于输入图像之外。 Zero-padding是将边界周围填充0，直至满足要求。<br>
-### 推动<br>
-&emsp;&emsp;传统的计算机视觉技术用于执行大多数计算机视觉任务，例如检测目标和分割对象。这些传统的计算机视觉技术的性能很好，但它从未真正使用，例如自动驾驶汽车。2012年，Alex Krizhevsky 介绍了CNN，它通过将对象分类错误率从26％降低到到15％，在ImageNet竞赛中取得了突破。自此之后，CNN已经被广泛使用，并且已经发现了不同的变化。它甚至在ImageNet 竞赛中的正确率超过人类识别，如下图所示：
+## 二.推动<br>
+&emsp;&emsp;传统的计算机视觉技术用于执行大多数计算机视觉任务，例如检测目标和分割对象。这些传统的计算机视觉技术的性能很好，但它从未真正使用，例如自动驾驶汽车。2012年，Alex Krizhevsky 介绍了CNN，它通过将对象分类错误率从26％降低到到15％，在ImageNet竞赛中取得了突破。自此之后，CNN已经被广泛使用，并且已经发现了不同的变化。它甚至在ImageNet 竞赛中的正确率超过人类识别，如下图所示：<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/12.jpg) <br>
+### 卷积神经网络的应用
+&emsp;&emsp;自从CNN在计算机视觉甚至自然语言处理的不同领域取得突破以来，大多数公司已将这种深度学习解决方案集成到他们的计算机视觉回声系统中。 例如，谷歌使用这种架构作为其图像搜索引擎，Facebook使用它进行自动标记等等：
+&emsp;&emsp;CNNs凭借其架构实现了这一突破，该架构直观地使用卷积操作从图像中提取特征。在接下来的介绍中，你会发现它与人类大脑的工作方式非常相似。<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/13.jpg) <br>
+## 三.卷积神经网络的不同层
+典型的CNN架构由多个执行不同任务的层组成，如上图所示。在本节中，我们会详细介绍他们，并且通过特别的方法将他们联系在一起，将会给计算机带来大的突破。
+### 输入层
+所有卷积网络结构都包含输入层。所有在这之后的卷积层和池化层都期望输入层有特殊的格式，输入应该是张量，具有以下格式：<br>
+[batch_size, image_width, image_height, channels]<br>
+batch_size是在应用随机梯度下降期间使用的原始训练的随机样本。<br>
+image_width是卷积网络中输入图像的宽度。<br>
+image_height是卷积网络中输入图像到网络的高度。<br>
+channels是输入图像的颜色通道数。 这个数字可以是RPG图像中的3或者是二值图像中的1<br>
+举个例子，考虑著名的MNIST数据集，我们要利用卷积神经网络来执行数字分类就要使用此数据集。<br>
+如果数据集由单色28 x 28像素图像（如MNIST数据集）组成，则输入图层的所需形状如下：<br>
+[batch_size, 28, 28, l].
+要更改输入要素的形状，我们可以执行以下华政操作：<br>
+input_layer = tf.reshape(features["x"], [–l, 28, 28, l])<br>
+正如我们所见我们将batch_size的值规定为-1，这就意味着这个值应该根据features中的输入值来决定。通过此操作，我们能够通过batch size来微调卷积神经网络。
+正如重塑操作的例子，假设我们将输入样本分成5份，我们的数组x将保存输入图像的3920个值。其中该数组的每个值对应于一个像素。这样的操作下，输入层将有以下格式：<br>
+[5, 28, 28, l]<br>
+### 卷积层
+如前所述，卷积层的名称来自卷积运算。 进行这些卷积步骤的主要目的是从输入图像中提取特征，然后将它们提供给线性分类器。<br>
+在自然图像中，特征值可以在图像中的任何位置。 例如，边缘可能位于图像的中间或角落，因此卷积步骤是能够在图像中的任何位置检测这些特征。<br>
+在TensorFlow中定义卷积步骤非常容易。 例如，如果我们想要使用ReLU激活函数将大小为5乘5的20个filter应用于输入层，那么我们可以使用以下代码行来执行此操作：<br>
+conv_layerl = tf.layers.conv2d( inputs=input_layer, filters=2O,<br>
+kernel_size=[5, 5], padding="same", activation=tf.nn.relu)<br>
+这个conv2d函数的第一个参数是我们在前面的代码中定义的输入层，它具有适当的形状，第二个参数是filters参数，它指定要应用于图像的过滤器的数量，其中过滤镜数量越多，从输入图像中提取的特征就越多。 第三个参数是kernel_size，它表示过滤器或特征检测器的大小。‘same’处是填充参数，以将零填充引入输入图像的边角像素。 最后一个参数指定应该用于卷积运算输出的激活函数。<br>
+因此，在我们的MNIST示例中，输入张量将具有以下形状：<br>
+[batch_size, 28, 28, l]<br>
+经过卷积操作的形状如下：<br>
+[batch_size, 28, 28, 2O]<br>
+输出张量与输入图像具有相同的尺寸，但现在我们有20个通道表示将20个滤镜应用于输入图像。<br>
 
