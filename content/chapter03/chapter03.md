@@ -415,6 +415,6 @@ print(pca_df.shape[l], " reduced components which describe ", str(variance_perce
 
 学号|姓名|专业
 -|-|-
-2018021104825|刘明瑶|计算机软件与理论
+201802110482|刘明瑶|计算机软件与理论
 <br>
 
