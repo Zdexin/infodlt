@@ -50,9 +50,14 @@
  从技术层面上讲，给实词赋高概率值的过程称为负采样(https://papers.nips)。(https://papers.nips.cc/paper/5O2l–distributed–representations–of–words–and–phrases–and–their–compositionality.pdf)，使用这种损失函数有很好的数学动力:它提出的校正在极限下近似softmax函数的校正。但在计算上，它是很好的方法，因为计算损失函数现在只与我们选择的干扰词的数量(k)成比例，而不是词汇表中的所有单词(V)成比例。实际上，我们将使用非常类似的噪声对比估计(NCE) (https://papers.nips.cc/paper/5l65–learning–word–embeddings–efficiently–with–noise–contrastive–estimation.pdf) <br> 损失，对于这种损失，TensorFlow有一个方便的辅助函数，tf.nn.nce_loss().
 ## skip-gram体系结构的一个实例
  &emsp;&emsp;让我们通过一个实际的例子，看看skip-gram模型将如何在这种情况下工作:<br>
- &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;*the quick brown fox jumped over the lazy dog*<br>
+ &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;*the quick brown fox jumped over the lazy dog*<br>
  &emsp;&emsp;首先，我们需要建立一个词及其上下文的数据集。上下文的定义取决于我们，但上下文必须有意义。因此，我们将在目标单词周围设置一个窗口，从右边取一个单词，从左边取一个单词。
 通过使用这种对于上下文操作的技术，我们最终会得到以下一组词及其对应的语境:<br>
- &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;([the, brown], quick), ([quick, fox], brown), ([brown, jumped], fox), ...<br>
+ &emsp;&emsp; &emsp; &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;([the, brown], quick), ([quick, fox], brown), ([brown, jumped], fox), ...<br>
 &emsp;&emsp;生成的单词及其对应的上下文将表示为形如(上下文、目标单词)这样的一对。skip- gram模型的思想与CBOW模型相反。在skip- gram模型中，我们将尝试基于目标词来预测单词的上下文。例如，考虑到第一对的时候，skip-gram模型将尝试从目标词敏捷的来预测那只和棕色等等。因此，我们可以重写我们的数据集如下:<br>
- &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;(quick, the), (quick, brown), (brown, quick), (brown, fox), ...<br>
+ &emsp;&emsp; &emsp; &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;(quick, the), (quick, brown), (brown, quick), (brown, fox), ...<br>
+ &emsp;&emsp; 现在，我们有了一组输入和输出。<br>
+ &emsp;&emsp; 让我们尝试模拟特定步骤t的训练过程，因此，skip-gram模型将取第一个训练样本，其中输入为单词快速的，目标输出为单词那只。接下来，我们还需要构造干扰输入，因此我们将从输入数据的一元模型中随机选择。为了简单起见，干扰向量将只有一个。例如，我们可以选择睡觉这个词作为一个干扰的例子。<br>
+ &emsp;&emsp; 现在，我们可以继续计算真正的一对词组和干扰词组之间的损失为:<br>
+&emsp;&emsp;&emsp;&emsp; &emsp; &emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image013.png)<br>
+
