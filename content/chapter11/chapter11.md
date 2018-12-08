@@ -79,4 +79,14 @@
 <br>
  &emsp;&emsp;因此，为了避免计算产生的浪费，取而代之的是我们将使用权重来查找这个权矩阵以便找到嵌入的权重。首先，需要构建此查找。为此，我们将把所有输入单词编码为整数，如下图所示，然后为了得到这个单词的相应值，我们将使用它的整数表示作为这个权矩阵中的行数。查找特定单词的相应嵌入值的过程称为嵌入查找。如前所述，嵌入层将只是一个全连接层，其中单位数表示嵌入维数。<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image018.png)<br>
- &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp; 图15.10„标记化的查找表
+ &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;  &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp; 图15.10„标记化的查找表<br>
+ &emsp;&emsp;你可以看到这个过程是非常直观和直接的;我们只需要遵循以下步骤:<br>
+
+&emsp;&emsp;1.定义查找表，将其视为权矩阵<br>
+&emsp;&emsp;2.将嵌入层定义为具有特定单元数的全连接的隐藏层(嵌入维数)<br>
+&emsp;&emsp;3.使用权矩阵查找作为计算不必要的矩阵乘法的替代方法<br>
+&emsp;&emsp;4最后，将查找表训练成任何权矩阵
+<br>
+&emsp;&emsp;如前所述，我们将在本节中构建一个skip-gram Word2Vec模型，这是一种学习词汇表示的有效方法，同时也保留了词汇所具有的语义信息。
+因此，让我们继续使用skip-gram体系结构构建一个Word2Vec模型，该体系结构被证明优于其他体系结构。<br>
+
