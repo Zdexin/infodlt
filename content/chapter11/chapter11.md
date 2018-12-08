@@ -70,4 +70,6 @@
  &emsp;&emsp;文本是许多自然语言处理应用程序(如机器翻译、情感分析和文本转语音系统)的主要输入。因此，学习文本的实值表示将帮助我们对这些项目使用不同的深度学习技术。在这本书的前几章中，我们介绍了一种叫做独热编码的东西，它产生除该向量表示的字索引之外的0向量。所以，你可能好奇为什么我们不在这里使用它。因为这种方法效率很低，通常有一大堆不同的单词，可能大约有50,000个单词，使用独热编码就会产生一个49,999个为0的向量集，而只有一个向量集为1。
 这样一个非常多余的输入将会导致巨大的计算浪费，因为我们会在神经网络的隐藏层中做矩阵乘法。<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image016.png)<br>
- &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.8„在独热编码计算将导致巨大的浪费<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp&emsp;&emsp;图15.8„在独热编码计算将导致巨大的浪费<br>
+  &emsp;&emsp;前面的示例提供了这些向量背后非常好的直观信息，以及它们如何对大多数NLP应用程序(如机器翻译或词性标记)有用。<br>
+  ## Skip-gram 的Word2Vec实现
