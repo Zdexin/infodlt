@@ -185,5 +185,49 @@ integer_words = [vocab_to_integer[word] for word in preprocessed_words]
 ```
 &emsp;&emsp;为了构建一个更精确的模型，我们可以删除不太改变上下文的单词，比如of、for、the等等。实践证明，我们可以在舍弃这类词语的同时建立更准确的模型。从上下文中删除与上下文无关的单词的过程称为二次抽样。为了定义"丢弃"的一种通用机制，米卡洛夫引入了一个函数来计算某个单词的丢弃概率，如下所示:<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image019.png)<br>
+&emsp;&emsp;其中:<br>
+&emsp;&emsp;t是一个词被舍弃时的阈值参数<br>
+&emsp;&emsp;f(wi)是输入数据集中特定目标字wi出现的频率<br>
+&emsp;&emsp;因此，我们将构造一个辅助函数，它将计算数据集中每个单词被舍弃的概率:<br>
+```# removing context–irrelevant words threshold word_threshold = le–5
+
+word_counts = Counter(integer_words) total_number_words = len(integer_words)
+
+#Calculating the freqs for the words
+frequencies = (word: count/total_number_words for word, count in word_counts.items()}
+
+#Calculating the discard probability
+prob_drop = (word: l – np.sqrt(word_threshold/frequencies[word]) for word in word_counts}
+training_words = [word for word in integer_words if random.random() < (l – prob_drop[word])]
+Now, we have a more refined an
+```
+&emsp;&emsp;现在，我们有了一个更加精炼和清晰的输入文本的版本。<br>
+&emsp;&emsp;我们注意到，skip-gram体系结构在生成实值表示时考虑了目标字的上下文，因此它在目标字周围定义了一个大小为C的窗口。与其平等处理所有上下文相关的单词，我们不如将为那些离目标单词有点远的单词分配更少的权重。例如，如果我们选择窗口的大小为C = 4，那么我们将从1到C的范围中选择一个随机数L，然后从当前单词的前后文本中抽取L个单词作为样本。。有关这方面的详细信息，请参阅Mikolov等人的论文：https://arxiv.org/pdf/l3Ol.378l.pdf.<br>
+&emsp;&emsp;接着我们来定义这个函数：<br>
+```# Defining a function that returns the words around specific index in a specific window
+def get_target(input_words, ind, context_window_size=5):
+#selecting random number to be used for genearting words form history and feature of the current word
+rnd_num = np.random.randint(l, context_window_size+l) start_ind = ind – rnd_num if (ind – rnd_num) > O else O stop_ind = ind + rnd_num
+target_words = set(input_words[start_ind:ind] + input_words[ind+l:stop_ind+l])
+return list(target_words)
+```
+&emsp;&emsp;另外，让我们定义一个生成器函数，从训练样本中生成一个随机的批处理，并得到该批处理中每个单词的上下文单词:<br>
+#Defining a function for generating word batches as a tuple (inputs, targets)
+def generate_random_batches(input_words, train_batch_size, context_window_size=5):
+num_batches = len(input_words)//train_batch_size
+# working on only only full batches
+```input_words = input_words[:num_batches*train_batch_size] for ind in range(O, len(input_words), train_batch_size):
+input_vals, target = [], []
+input_batch = input_words[ind:ind+train_batch_size]
+#Getting the context for each word for ii in range(len(input_batch)):
+batch_input_vals = input_batch[ii]
+batch_target = get_target(input_batch, ii, context_window_size) target.extend(batch_target) input_vals.extend([batch_input_vals]*len(batch_target))
+yield input_vals, target
+```
+## 构建模型
+&emsp;&emsp;接下来，我们将使用以下结构来构建计算图:<br>
+ &emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image020.png)<br>
+ &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;  &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; 
+图15.11„计算图的模型架构<br>
 
 
