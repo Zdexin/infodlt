@@ -74,4 +74,9 @@
   &emsp;&emsp;正如我们前面提到的，使用独热编码的结果将得到非常多的稀疏向量，特别是当你想要编码大量不同的单词时。<br>
    &emsp;&emsp;如下图所示，当我们将除一项外的所有0的稀疏向量乘以一个权矩阵时，输出将仅为矩阵的一行，该行对应于稀疏向量的一个值:<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image017.png)<br>
- &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp; 图15.9„一个几乎全是0的独热向量与隐藏层权矩阵相乘的效果<br>
+ &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp; 图15.9„一个几乎全是0的独热向量与隐藏层权矩阵相乘的效果<br>
+ &emsp;&emsp;为了避免这种巨大的计算浪费，我们将使用嵌入的方法，这是一个全连接层，其中带有一些嵌入权重。在这一层，我们跳过这个低效的乘法，从权值矩阵查找嵌入层的嵌入权值。
+<br>
+ &emsp;&emsp;因此，为了避免计算产生的浪费，取而代之的是我们将使用权重来查找这个权矩阵以便找到嵌入的权重。首先，需要构建此查找。为此，我们将把所有输入单词编码为整数，如下图所示，然后为了得到这个单词的相应值，我们将使用它的整数表示作为这个权矩阵中的行数。查找特定单词的相应嵌入值的过程称为嵌入查找。如前所述，嵌入层将只是一个全连接层，其中单位数表示嵌入维数。<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image018.png)<br>
+ &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp; 图15.10„标记化的查找表
