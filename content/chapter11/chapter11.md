@@ -202,7 +202,7 @@ training_words = [word for word in integer_words if random.random() < (l – pro
 Now, we have a more refined an
 ```
 &emsp;&emsp;现在，我们有了一个更加精炼和清晰的输入文本的版本。<br>
-&emsp;&emsp;我们注意到，skip-gram体系结构在生成实值表示时考虑了目标字的上下文，因此它在目标字周围定义了一个大小为C的窗口。与其平等处理所有上下文相关的单词，我们不如将为那些离目标单词有点远的单词分配更少的权重。例如，如果我们选择窗口的大小为C = 4，那么我们将从1到C的范围中选择一个随机数L，然后从当前单词的前后文本中抽取L个单词作为样本。。有关这方面的详细信息，请参阅Mikolov等人的论文：https://arxiv.org/pdf/l3Ol.378l.pdf.<br>
+&emsp;&emsp;我们注意到，skip-gram体系结构在生成实值表示时考虑了目标字的上下文，因此它在目标字周围定义了一个大小为C的窗口。与其平等处理所有上下文相关的单词，我们不如将为那些离目标单词有点远的单词分配更少的权重。例如，如果我们选择窗口的大小为C = 4，那么我们将从1到C的范围中选择一个随机数L，然后从当前单词的前后文本中抽取L个单词作为样本。。有关这方面的详细信息，请参阅Mikolov等人的论文：https://arxiv.org/pdf/l301.3781.pdf.<br>
 &emsp;&emsp;接着我们来定义这个函数：<br>
 ```# Defining a function that returns the words around specific index in a specific window
 def get_target(input_words, ind, context_window_size=5):
@@ -244,7 +244,7 @@ name='labels_values')
 &emsp;&emsp;权矩阵将从均匀分布中随机初始化:<br>
 ```num_vocab = len(integer_to_vocab)
 
-num_embedding =	3OO
+num_embedding =	300
 with train_graph.as_default():
 embedding_layer = tf.Variable(tf.random_uniform((num_vocab, num_embedding), –l, l))
 # Next, we are going to use tf.nn.embedding_lookup function to get the output of the hidden layer
@@ -326,7 +326,7 @@ embed_mat = sess.run(normalized_embed)
 ```Epoch Number lO/lO Iteration Number: 43lOO Avg. Training loss: 5.O38O Epoch Number lO/lO Iteration Number: 432OO Avg. Training loss: 4.96l9 Epoch Number lO/lO Iteration Number: 433OO Avg. Training loss: 4.9463 Epoch Number lO/lO Iteration Number: 434OO Avg. Training loss: 4.9728 Epoch Number lO/lO Iteration Number: 435OO Avg. Training loss: 4.9872 Epoch Number lO/lO Iteration Number: 436OO Avg. Training loss: 5.O534
  
 
-Epoch Number lO/lO Iteration Number: 437OO Avg. Training loss: 4.826l Epoch Number lO/lO Iteration Number: 438OO Avg. Training loss: 4.8752 Epoch Number lO/lO Iteration Number: 439OO Avg. Training loss: 4.98l8 Epoch Number lO/lO Iteration Number: 44OOO Avg. Training loss: 4.925l The nearest to nine: one, seven, zero, two, three, four, eight, five, The nearest to such: is, as, or, some, have, be, that, physical,
+Epoch Number 10/10 Iteration Number: 43700 Avg. Training loss: 4.826l Epoch Number lO/lO Iteration Number: 43800 Avg. Training loss: 4.8752 Epoch Number 10/10Iteration Number: 43900 Avg. Training loss: 4.98l8 Epoch Number lO/lO Iteration Number: 44000 Avg. Training loss: 4.925l The nearest to nine: one, seven, zero, two, three, four, eight, five, The nearest to such: is, as, or, some, have, be, that, physical,
 The nearest to who: his, him, he, did, to, had, was, whom,
 The nearest to two: zero, one, three, seven, four, five, six, nine, The nearest to which: as, a, the, in, to, also, for, is,
 The nearest to seven: eight, one, three, five, four, six, zero, two,
@@ -341,7 +341,7 @@ The nearest to orthodox: churches, orthodoxy, church, catholic, catholics, orien
 The nearest to scale: scales, parts, important, note, between, its, see, measured,
 The nearest to mean: is, exactly, defined, denote, hence, are, meaning, example,
 
-Epoch Number lO/lO Iteration Number: 45lOO Avg. Training loss: 4.8466 Epoch Number lO/lO Iteration Number: 452OO Avg. Training loss: 4.8836 Epoch Number lO/lO Iteration Number: 453OO Avg. Training loss: 4.9Ol6 Epoch Number lO/lO Iteration Number: 454OO Avg. Training loss: 5.O2l8 Epoch Number lO/lO Iteration Number: 455OO Avg. Training loss: 5.l4O9 Epoch Number lO/lO Iteration Number: 456OO Avg. Training loss: 4.7864 Epoch Number lO/lO Iteration Number: 457OO Avg. Training loss: 4.93l2 Epoch Number lO/lO Iteration Number: 458OO Avg. Training loss: 4.9O97 Epoch Number lO/lO Iteration Number: 459OO Avg. Training loss: 4.6924 Epoch Number lO/lO Iteration Number: 46OOO Avg. Training loss: 4.8999 The nearest to nine: one, eight, seven, six, four, five, american, two, The nearest to such: can, example, examples, some, be, which, this, or, The nearest to who: him, his, himself, he, was, whom, men, said,
+Epoch Number l0/l0 Iteration Number: 45l00 Avg. Training loss: 4.8466 Epoch Number l0/l0 Iteration Number: 45200 Avg. Training loss: 4.8836 Epoch Number l0/l0 Iteration Number: 45300 Avg. Training loss: 4.9Ol6 Epoch Number l0/l0 Iteration Number: 45400 Avg. Training loss: 5.O2l8 Epoch Number l0/l0 Iteration Number: 455OO Avg. Training loss: 5.l4O9 Epoch Number l0/l0 Iteration Number: 45600 Avg. Training loss: 4.7864 Epoch Number l0/l0 Iteration Number: 45700 Avg. Training loss: 4.93l2 Epoch Number l0/l0 Iteration Number: 45800 Avg. Training loss: 4.9O97 Epoch Number l0/l0 Iteration Number: 45900 Avg. Training loss: 4.6924 Epoch Number l0/l0 Iteration Number: 46OOO Avg. Training loss: 4.8999 The nearest to nine: one, eight, seven, six, four, five, american, two, The nearest to such: can, example, examples, some, be, which, this, or, The nearest to who: him, his, himself, he, was, whom, men, said,
 The nearest to two: zero, five, three, four, six, one, seven, nine The nearest to which: to, is, a, the, that, it, and, with,
 The nearest to seven: one, six, eight, five, nine, four, three, two, The nearest to american: musician, actor, actress, nine, singer, politician, d, one,
  
@@ -355,20 +355,20 @@ The nearest to arts: art, school, martial, schools, students, styles, education,
 The nearest to orthodox: orthodoxy, churches, church, christianity, christians, catholics, christian, oriental,
 The nearest to scale: scales, can, amounts, depends, tend, are, structural, for,
 The nearest to mean: we, defined, is, exactly, equivalent, denote, number, above,
-Epoch Number lO/lO Iteration Number: 46lOO Avg. Training loss: 4.8583 Epoch Number lO/lO Iteration Number: 462OO Avg. Training loss: 4.8887
+Epoch Number l0/l0 Iteration Number: 46lOO Avg. Training loss: 4.8583 Epoch Number l0/l0 Iteration Number: 462OO Avg. Training loss: 4.8887
 ```
 &emsp;&emsp;从输出中可以看到，网络在某种程度上学到了输入词的语义上的一些有用的表示。为了帮助我们更清楚地了解嵌入矩阵，我们将使用维数约简技术，如t-SNE，将实值向量降为二维，然后我们将把它们形象化，并用相应的词来标记每个点:<br>
-```Epoch Number lO/lO Iteration Number: 43lOO Avg. Training loss: 5.O38O 
-Epoch Number lO/lO Iteration Number: 432OO Avg. Training loss: 4.96l9 
-Epoch Number lO/lO Iteration Number: 433OO Avg. Training loss: 4.9463
-Epoch Number lO/lO Iteration Number: 434OO Avg. Training loss: 4.9728
-Epoch Number lO/lO Iteration Number: 435OO Avg. Training loss: 4.9872 
-Epoch Number lO/lO Iteration Number: 436OO Avg. Training loss: 5.O534
-num_visualize_words = 5OO tsne_obj = T3NE() embedding_tsne =
+```Epoch Number l0/l0 Iteration Number: 43l00 Avg. Training loss: 5.0380 
+Epoch Number l0/l0 Iteration Number: 43200 Avg. Training loss: 4.96l9 
+Epoch Number l0/l0 Iteration Number: 43300 Avg. Training loss: 4.9463
+Epoch Number l0/l0 Iteration Number: 43400 Avg. Training loss: 4.9728
+Epoch Number l0/l0 Iteration Number: 43500 Avg. Training loss: 4.9872 
+Epoch Number l0/l0 Iteration Number: 43600 Avg. Training loss: 5.0534
+num_visualize_words = 500 tsne_obj = T3NE() embedding_tsne =
 tsne_obj.fit_transform(embedding_matrix[:num_visualize_words, :])
 fig, ax = plt.subplots(figsize=(l4, l4)) for ind in range(num_visualize_words):
-plt.scatter(*embedding_tsne[ind, :], color='steelblue') plt.annotate(integer_to_vocab[ind], (embedding_tsne[ind, O],
-embedding_tsne[ind, l]), alpha=O.7)
+plt.scatter(*embedding_tsne[ind, :], color='steelblue') plt.annotate(integer_to_vocab[ind], (embedding_tsne[ind, 0],
+embedding_tsne[ind, l]), alpha=0.7)
 ```
 &emsp;&emsp;输出:<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image020.png)<br>
