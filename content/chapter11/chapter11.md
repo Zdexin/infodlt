@@ -43,3 +43,8 @@
 &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image009.png)<br>
 &emsp;&emsp; 其中:<br>
   ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image010.jpg)是基于模型在数据集D中理解语境h中的单词w的二元逻辑回归的概率，它是用0向量来计算的。这个向量表示已学习的嵌入。
+&emsp;&emsp;  ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image011.jpg)是我们可以从一个有干扰的概率分布(如训练输入示例的单位图)中生成的虚词或干扰词。<br>
+&emsp;&emsp; 综上所述，这些模型的目标是区分真实有用和无用的输入，因此，对于虚词和干扰词，模型为实词赋较高的概率值，为干扰词或虚词赋较少的概率值。
+当模型将高概率值赋给实词，低概率值赋给干扰词时，此时目标函数最大化。<br>
+ ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image012.jpg)
+ 从技术层面上讲，给实词赋高概率值的过程称为负采样(https://papers.nips)。(https://papers.nips.cc/paper/5O2l– distributed–representations–of–words–and–phrases–and–their– compositionality.pdf)，使用这种损失函数有很好的数学动力:它提出的校正在极限下近似softmax函数的校正。但在计算上，它是很好的方法，因为计算损失函数现在只与我们选择的干扰词的数量(k)成比例，而不是词汇表中的所有单词(V)成比例。实际上，我们将使用非常类似的噪声对比估计(NCE) (https://papers.nips.cc/paper/5l65–learning–word–embeddings–efficiently–with–noise–contrastive–estimation.pdf)损失，对于这种损失，TensorFlow有一个方便的辅助函数，tf.nn.nce_loss().
