@@ -60,4 +60,7 @@
  &emsp;&emsp; 让我们尝试模拟特定步骤t的训练过程，因此，skip-gram模型将取第一个训练样本，其中输入为单词快速的，目标输出为单词那只。接下来，我们还需要构造干扰输入，因此我们将从输入数据的一元模型中随机选择。为了简单起见，干扰向量将只有一个。例如，我们可以选择睡觉这个词作为一个干扰的例子。<br>
  &emsp;&emsp; 现在，我们可以继续计算真正的一对词组和干扰词组之间的损失为:<br>
 &emsp;&emsp;&emsp;&emsp; &emsp; &emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image013.png)<br>
-
+&emsp;&emsp;在本例中，目标是更新0参数来改进之前的目标函数。通常，我们可以使用梯度。因此，我们将尝试计算目标函数参数0的梯度损失，它将被表示为 ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image014.jpg)。<br>
+&emsp;&emsp;经过训练后，我们可以根据实值向量表示的降维结果对其进行显示。你会发现这个向量空间很有趣因为你可以用它做很多有趣的事情。例如，你可以在这个空间里通过说国王之于皇后就像男人之于女人。我们甚至可以通过从皇后向量中减去国王向量然后加上男人来得到女人向量;这样做得到的结果将非常接近女人的实际学习向量。你也可以在这个空间里学习如何布局。<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image003.png)<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.7„用t分布随机相邻嵌入（t-SNE）维度减少技术对两个维度的学习向量的规划<br>
