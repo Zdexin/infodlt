@@ -42,4 +42,4 @@
  &emsp;&emsp;更正式地说，这些技术的目标函数最大化了如下式子:<br>
 &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image009.png)<br>
 &emsp;&emsp; 其中:<br>
-  ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image010.png)是基于模型在数据集D中理解语境h中的单词w的二元逻辑回归的概率，它是用0向量来计算的。这个向量表示已学习的嵌入。
+  ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image010.jpg)是基于模型在数据集D中理解语境h中的单词w的二元逻辑回归的概率，它是用0向量来计算的。这个向量表示已学习的嵌入。
