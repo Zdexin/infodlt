@@ -18,3 +18,7 @@
 &emsp;&emsp;从下图的描述中，模型将习得love和adore这两个词有着非常相似的上下文，它们应该放在非常接近的向量空间中。而like这个词的语境可能和love这个词有点相似，但不会像单词adore那样接近love:<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image002.png)<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图图15.2„表感情程度句子的样本
+&emsp;&emsp;Word2Vec模型也依赖于输入句子的语义特征;例如，单词爱慕（adore）和爱（love）主要用于积极的语境，通常放在名词短语或名词之前。因此，模型会知道这两个词有一些共同之处，它更有可能把这两个向量的向量表示放在相似的上下文中。因此，句子的结构会提供Word2Vec模型很多关于类似单词的信息。<br>
+&emsp;&emsp;在实践中，人们向Word2Vec模型输入大量的文本。该模型将学习如何为相似的单词生成相似的向量，并且它将为输入文本中的每个唯一的单词执行此操作。所有这些单词的向量将被组合在一起，最终的输出将是一个嵌入矩阵，其中每一行表示一个特定单词的实值向量表示。因此，模型的最终输出将是训练语料库中所有唯一单词的嵌入矩阵。通常，好的嵌入矩阵可以包含数百万个实值向量。<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image003.png)<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图图15.3„Word2Vec管道模型的例子<br>
