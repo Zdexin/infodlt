@@ -10,4 +10,8 @@
 &emsp;&emsp;我们在这种管道模型中提到过，我们将文本输入到机器学习模型中，比如情感分析这种模型，这将会产生问题而无法工作，因为我们无法应用反向传播或其他任何操作,比如输入的点它只是一个字符串而已。因此，我们需要使用一种自然语言处理的机制，它将使我们能够构建一个文本的中间表示，它可以携带与文本相同的信息，并被输入到机器学习模型中。<br>
 &emsp;&emsp;我们需要将输入文本中的每个单词或标记转换为实值向量。如果这些向量不包含原始输入的模式、信息、含义和语义，那么它们将是无用的。例如，在真实文本中，爱（love）和爱慕（adore）这两个词非常相似，意思几乎相同。我们需要这两个词的实值向量的结果彼此接近并处在同一个向量空间中。因此，这两个词的向量表示和另一个与它们不相似的词的表示会如下图：<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image001.png)<br>
- &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.1„单词的向量表示
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.1„单词的向量表示<br>
+&emsp;&emsp;有许多技术可以用于这项工作。这种技术被称为嵌入，即将文本嵌入到另一个实值向量空间中。<br>
+&emsp;&emsp;之后我们会看到，这个向量空间实际上非常有趣，因为你会发现你可以把一个单词的向量从其他与它相似的单词中提取出来，或者在这个空间中做一些布局上的处理。<br>
+## Word2Vec<br>
+
