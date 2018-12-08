@@ -107,12 +107,12 @@ import random
 ```
 &emsp;&emsp;接下来，我们将定义一个类，如果之前没有下载数据集，它就用于下载数据集:
 ```# In this implementation we will use a cleaned up version of Wikipedia from Matt Mahoney.
-# 3o we will define a helper class that will helps to download the dataset wiki_dataset_folder_path = 'wikipedia_data'
+# 30 we will define a helper class that will helps to download the dataset wiki_dataset_folder_path = 'wikipedia_data'
 wiki_dataset_filename = 'text8.zip' wiki_dataset_name = 'Text8 Dataset'
 
-class DLProgress(tqdm): last_block = O
+class DLProgress(tqdm): last_block = 0
 
-def hook(self, block_num=l, block_size=l, total_size=None): self.total = total_size
+def hook(self, block_num=1, block_size=1, total_size=None): self.total = total_size
 self.update((block_num – self.last_block) * block_size) self.last_block = block_num
 # Cheking if the file is not already downloaded if not isfile(wiki_dataset_filename):
 with DLProgress(unit='B', unit_scale=True, miniters=l, desc=wiki_dataset_name) as pbar:
@@ -126,10 +126,10 @@ with open('wikipedia_data/text8') as f: cleaned_wikipedia_text = f.read()
 
 Output:
 
-Text8 Dataset: 3l.4MB [OO:39, 794kB/s]
+Text8 Dataset: 31.4MB [00:39, 794kB/s]
 ```
 &emsp;&emsp;我们可以看看这个数据集的前100个字符:
-```cleaned_wikipedia_text[O:lOO]
+```cleaned_wikipedia_text[0:100]
 
 ' anarchism originated as a term of abuse first used against early working class radicals including t'
 ```
@@ -148,7 +148,7 @@ trimmed_words = [word for word in text_words if text_word_counts[word]
 return trimmed_words
 ```
 &emsp;&emsp;现在，让我们在输入文本时调用这个函数并查看输出:
-```preprocessed_words = preprocess_text(cleaned_wikipedia_text) print(preprocessed_words[:3O])
+```preprocessed_words = preprocess_text(cleaned_wikipedia_text) print(preprocessed_words[:30])
 
 Output:
 ['anarchism', 'originated', 'as', 'a', 'term', 'of', 'abuse', 'first',
@@ -162,7 +162,7 @@ Output:
 
 Output:
 
-Total number of words in the text: l668O599 Total number of unique words in the text: 6364l
+Total number of words in the text: 16680599 Total number of unique words in the text: 63641
 ```
 &emsp;&emsp;在这里，我创建了字典来将单词转换成整数，之后也是如此，也就是说，将整数转换成单词。整数按降序分配，所以最常用的单词(The)是整数0，其次常用的是1，依此类推。这些单词被转换为整数并存储在列表int_words中。<br>
 &emsp;&emsp;正如本节前面提到的，我们需要使用单词的整数索引在权矩阵中查找它们的值，因此我们将建立他们之间的对应关系。这将帮助我们查找单词，并获得特定索引的实际单词。例如，输入文本中重复次数最多的单词将在位置0处建立索引，其次是重复次数第二多的单词，依此类推。<br>
@@ -189,7 +189,7 @@ integer_words = [vocab_to_integer[word] for word in preprocessed_words]
 &emsp;&emsp;t是一个词被舍弃时的阈值参数<br>
 &emsp;&emsp;f(wi)是输入数据集中特定目标字wi出现的频率<br>
 &emsp;&emsp;因此，我们将构造一个辅助函数，它将计算数据集中每个单词被舍弃的概率:<br>
-```# removing context–irrelevant words threshold word_threshold = le–5
+```# removing context–irrelevant words threshold word_threshold = 1e–5
 
 word_counts = Counter(integer_words) total_number_words = len(integer_words)
 
@@ -197,8 +197,8 @@ word_counts = Counter(integer_words) total_number_words = len(integer_words)
 frequencies = (word: count/total_number_words for word, count in word_counts.items()}
 
 #Calculating the discard probability
-prob_drop = (word: l – np.sqrt(word_threshold/frequencies[word]) for word in word_counts}
-training_words = [word for word in integer_words if random.random() < (l – prob_drop[word])]
+prob_drop = (word: 1 – np.sqrt(word_threshold/frequencies[word]) for word in word_counts}
+training_words = [word for word in integer_words if random.random() < (1 – prob_drop[word])]
 Now, we have a more refined an
 ```
 &emsp;&emsp;现在，我们有了一个更加精炼和清晰的输入文本的版本。<br>
@@ -207,16 +207,16 @@ Now, we have a more refined an
 ```# Defining a function that returns the words around specific index in a specific window
 def get_target(input_words, ind, context_window_size=5):
 #selecting random number to be used for genearting words form history and feature of the current word
-rnd_num = np.random.randint(l, context_window_size+l) start_ind = ind – rnd_num if (ind – rnd_num) > O else O stop_ind = ind + rnd_num
-target_words = set(input_words[start_ind:ind] + input_words[ind+l:stop_ind+l])
+rnd_num = np.random.randint(1, context_window_size+l) start_ind = ind – rnd_num if (ind – rnd_num) > 0 else 0 stop_ind = ind + rnd_num
+target_words = set(input_words[start_ind:ind] + input_words[ind+l:stop_ind+1])
 return list(target_words)
 ```
 &emsp;&emsp;另外，让我们定义一个生成器函数，从训练样本中生成一个随机的批处理，并得到该批处理中每个单词的上下文单词:<br>
-#Defining a function for generating word batches as a tuple (inputs, targets)
+```#Defining a function for generating word batches as a tuple (inputs, targets)
 def generate_random_batches(input_words, train_batch_size, context_window_size=5):
 num_batches = len(input_words)//train_batch_size
 #working on only only full batches
-```input_words = input_words[:num_batches*train_batch_size] for ind in range(O, len(input_words), train_batch_size):
+input_words = input_words[:num_batches*train_batch_size] for ind in range(0, len(input_words), train_batch_size):
 input_vals, target = [], []
 input_batch = input_words[ind:ind+train_batch_size]
 #Getting the context for each word for ii in range(len(input_batch)):
@@ -246,14 +246,14 @@ name='labels_values')
 
 num_embedding =	300
 with train_graph.as_default():
-embedding_layer = tf.Variable(tf.random_uniform((num_vocab, num_embedding), –l, l))
+embedding_layer = tf.Variable(tf.random_uniform((num_vocab, num_embedding), –1, 1))
 # Next, we are going to use tf.nn.embedding_lookup function to get the output of the hidden layer
 embed_tensors = tf.nn.embedding_lookup(embedding_layer, inputs_values)
 ```
 &emsp;&emsp;一次性更新嵌入层中的所有嵌入权重是非常低效的。相反，我们将使用负采样技术，它只会用不正确单词中的一小部分来更新正确单词的权重。<br>
 &emsp;&emsp;同样，我们不需要自己实现这个函数因为它已经在TensorFlow中了<br>
 ```tf.nn.sampled_softmax_loss:
-# Number of negative labels to sample num_sampled = lOO
+# Number of negative labels to sample num_sampled = 100
 
 with train_graph.as_default():
 # create softmax weights and biases
@@ -266,16 +266,16 @@ model_optimizer = tf.train.AdamOptimizer().minimize(model_cost)
 ```
 &emsp;&emsp;为了验证我们训练过的模型，我们将对一些常见或普遍的单词和一些不常见的单词进行采样，并尝试根据学习到的skip-gram体系结构的表示来输出我们最接近的一组单词:<br>
 ```with train_graph.as_default():
-# set of random words for evaluating similarity on valid_num_words = l6
-valid_window = lOO
-# pick 8 samples from (O,lOO) and (lOOO,llOO) each ranges. lower id implies more frequent
+# set of random words for evaluating similarity on valid_num_words = 16
+valid_window = 100
+# pick 8 samples from (0,100) and (1000,1100) each ranges. lower id implies more frequent
 valid_samples = np.array(random.sample(range(valid_window), valid_num_words//2))
 valid_samples = np.append(valid_samples,
-random.sample(range(lOOO,lOOO+valid_window),
+random.sample(range(1000,1000+valid_window),
 valid_num_words//2))
 valid_dataset_samples = tf.constant(valid_samples, dtype=tf.int32)
 # Calculating the cosine distance
-norm = tf.sqrt(tf.reduce_sum(tf.square(embedding_layer), l, keep_dims=True))
+norm = tf.sqrt(tf.reduce_sum(tf.square(embedding_layer), 1, keep_dims=True))
 normalized_embed = embedding_layer / norm
 valid_embedding = tf.nn.embedding_lookup(normalized_embed, valid_dataset_samples)
 cosine_similarity = tf.matmul(valid_embedding, tf.transpose(normalized_embed))
@@ -283,16 +283,16 @@ cosine_similarity = tf.matmul(valid_embedding, tf.transpose(normalized_embed))
 &emsp;&emsp;现在，我们已经为我们的模型做好了准备过程，现在我们准备开始训练过程。<br>
 ## 训练
 &emsp;&emsp;让我们开始训练过程:<br>
-```num_epochs = lO train_batch_size = lOOO contextual_window_size = lO
+```num_epochs = 10 train_batch_size = 1000 contextual_window_size = 10
 
 with train_graph.as_default(): saver = tf.train.3aver()
 
-with tf.3ession(graph=train_graph) as sess: iteration_num = l
-average_loss = O
+with tf.3ession(graph=train_graph) as sess: iteration_num = 1
+average_loss = 0
 #Initializing all the vairables sess.run(tf.global_variables_initializer())
  
 
-for e in range(l, num_epochs+l):
+for e in range(1, num_epochs+1):
 #Generating random batch for training
 batches = generate_random_batches(training_words, train_batch_size, contextual_window_size)
 #Iterating through the batch samples for input_vals, target in batches:
@@ -300,11 +300,11 @@ batches = generate_random_batches(training_words, train_batch_size, contextual_w
 feed_dict = (inputs_values: input_vals, labels_values: np.array(target)[:, None]}
 train_loss, _ = sess.run([model_cost, model_optimizer], feed_dict=feed_dict)
 #commulating the loss average_loss += train_loss
-#Printing out the results after lOO iteration if iteration_num % lOO == O:
+#Printing out the results after 100 iteration if iteration_num % 100 == 0:
 print("Epoch Number (}/(}".format(e, num_epochs), "Iteration Number: (}".format(iteration_num), "Avg. Training loss:
-(:.4f}".format(average_loss/lOO))
-average_loss = O
-if iteration_num % lOOO == O:
+(:.4f}".format(average_loss/100))
+average_loss = 0
+if iteration_num % 1000 == 0:
 ##Using cosine similarity to get the nearest words to a
 
 word
@@ -315,18 +315,18 @@ valid_word = integer_to_vocab[valid_samples[i]]
 #number of nearest neighbors top_k = 8
 nearest_words = (–similarity[i,
  
-:]).argsort()[l:top_k+l]
+:]).argsort()[l:top_k+1]
 msg = 'The nearest to %s:' % valid_word for k in range(top_k):
 similar_word = integer_to_vocab[nearest_words[k]] msg = '%s %s,' % (msg, similar_word)
-print(msg) iteration_num += l
+print(msg) iteration_num += 1
 save_path = saver.save(sess, "checkpoints/cleaned_wikipedia_version.ckpt")
 embed_mat = sess.run(normalized_embed)
 ```
 &emsp;&emsp;运行上述代码段训练10次后，您将得到以下输出:<br>
-```Epoch Number lO/lO Iteration Number: 43lOO Avg. Training loss: 5.O38O Epoch Number lO/lO Iteration Number: 432OO Avg. Training loss: 4.96l9 Epoch Number lO/lO Iteration Number: 433OO Avg. Training loss: 4.9463 Epoch Number lO/lO Iteration Number: 434OO Avg. Training loss: 4.9728 Epoch Number lO/lO Iteration Number: 435OO Avg. Training loss: 4.9872 Epoch Number lO/lO Iteration Number: 436OO Avg. Training loss: 5.O534
+```Epoch Number 10/10 Iteration Number: 43l00 Avg. Training loss: 5.0380 Epoch Number 10/10 Iteration Number: 43200 Avg. Training loss: 4.96l9 Epoch Number 10/10 Iteration Number: 43300 Avg. Training loss: 4.9463 Epoch Number 10/10 Iteration Number: 43400 Avg. Training loss: 4.9728 Epoch Number 10/10 Iteration Number: 43500 Avg. Training loss: 4.9872 Epoch Number 10/10 Iteration Number: 43600 Avg. Training loss: 5.0534
  
 
-Epoch Number 10/10 Iteration Number: 43700 Avg. Training loss: 4.826l Epoch Number lO/lO Iteration Number: 43800 Avg. Training loss: 4.8752 Epoch Number 10/10Iteration Number: 43900 Avg. Training loss: 4.98l8 Epoch Number lO/lO Iteration Number: 44000 Avg. Training loss: 4.925l The nearest to nine: one, seven, zero, two, three, four, eight, five, The nearest to such: is, as, or, some, have, be, that, physical,
+Epoch Number 10/10 Iteration Number: 43700 Avg. Training loss: 4.826l Epoch Number 10/10 Iteration Number: 43800 Avg. Training loss: 4.8752 Epoch Number 10/10 Iteration Number: 43900 Avg. Training loss: 4.98l8 Epoch Number 10/10 Iteration Number: 44000 Avg. Training loss: 4.925l The nearest to nine: one, seven, zero, two, three, four, eight, five, The nearest to such: is, as, or, some, have, be, that, physical,
 The nearest to who: his, him, he, did, to, had, was, whom,
 The nearest to two: zero, one, three, seven, four, five, six, nine, The nearest to which: as, a, the, in, to, also, for, is,
 The nearest to seven: eight, one, three, five, four, six, zero, two,
@@ -341,7 +341,7 @@ The nearest to orthodox: churches, orthodoxy, church, catholic, catholics, orien
 The nearest to scale: scales, parts, important, note, between, its, see, measured,
 The nearest to mean: is, exactly, defined, denote, hence, are, meaning, example,
 
-Epoch Number l0/l0 Iteration Number: 45l00 Avg. Training loss: 4.8466 Epoch Number l0/l0 Iteration Number: 45200 Avg. Training loss: 4.8836 Epoch Number l0/l0 Iteration Number: 45300 Avg. Training loss: 4.9Ol6 Epoch Number l0/l0 Iteration Number: 45400 Avg. Training loss: 5.O2l8 Epoch Number l0/l0 Iteration Number: 455OO Avg. Training loss: 5.l4O9 Epoch Number l0/l0 Iteration Number: 45600 Avg. Training loss: 4.7864 Epoch Number l0/l0 Iteration Number: 45700 Avg. Training loss: 4.93l2 Epoch Number l0/l0 Iteration Number: 45800 Avg. Training loss: 4.9O97 Epoch Number l0/l0 Iteration Number: 45900 Avg. Training loss: 4.6924 Epoch Number l0/l0 Iteration Number: 46OOO Avg. Training loss: 4.8999 The nearest to nine: one, eight, seven, six, four, five, american, two, The nearest to such: can, example, examples, some, be, which, this, or, The nearest to who: him, his, himself, he, was, whom, men, said,
+Epoch Number 10/10 Iteration Number: 45l00 Avg. Training loss: 4.8466 Epoch Number 10/10 Iteration Number: 45200 Avg. Training loss: 4.8836 Epoch Number 10/10 Iteration Number: 45300 Avg. Training loss: 4.90l6 Epoch Number 10/10 Iteration Number: 45400 Avg. Training loss: 5.02l8 Epoch Number 10/10 Iteration Number: 45500 Avg. Training loss: 5.l409 Epoch Number 10/10 Iteration Number: 45600 Avg. Training loss: 4.7864 Epoch Number 10/10 Iteration Number: 45700 Avg. Training loss: 4.93l2 Epoch Number 10/10 Iteration Number: 45800 Avg. Training loss: 4.9097 Epoch Number 10/10 Iteration Number: 45900 Avg. Training loss: 4.6924 Epoch Number 10/10 Iteration Number: 46000 Avg. Training loss: 4.8999 The nearest to nine: one, eight, seven, six, four, five, american, two, The nearest to such: can, example, examples, some, be, which, this, or, The nearest to who: him, his, himself, he, was, whom, men, said,
 The nearest to two: zero, five, three, four, six, one, seven, nine The nearest to which: to, is, a, the, that, it, and, with,
 The nearest to seven: one, six, eight, five, nine, four, three, two, The nearest to american: musician, actor, actress, nine, singer, politician, d, one,
  
@@ -355,15 +355,15 @@ The nearest to arts: art, school, martial, schools, students, styles, education,
 The nearest to orthodox: orthodoxy, churches, church, christianity, christians, catholics, christian, oriental,
 The nearest to scale: scales, can, amounts, depends, tend, are, structural, for,
 The nearest to mean: we, defined, is, exactly, equivalent, denote, number, above,
-Epoch Number l0/l0 Iteration Number: 46lOO Avg. Training loss: 4.8583 Epoch Number l0/l0 Iteration Number: 462OO Avg. Training loss: 4.8887
+Epoch Number 10/10 Iteration Number: 46l00 Avg. Training loss: 4.8583 Epoch Number 10/10 Iteration Number: 46200 Avg. Training loss: 4.8887
 ```
 &emsp;&emsp;从输出中可以看到，网络在某种程度上学到了输入词的语义上的一些有用的表示。为了帮助我们更清楚地了解嵌入矩阵，我们将使用维数约简技术，如t-SNE，将实值向量降为二维，然后我们将把它们形象化，并用相应的词来标记每个点:<br>
-```Epoch Number l0/l0 Iteration Number: 43l00 Avg. Training loss: 5.0380 
-Epoch Number l0/l0 Iteration Number: 43200 Avg. Training loss: 4.96l9 
-Epoch Number l0/l0 Iteration Number: 43300 Avg. Training loss: 4.9463
-Epoch Number l0/l0 Iteration Number: 43400 Avg. Training loss: 4.9728
-Epoch Number l0/l0 Iteration Number: 43500 Avg. Training loss: 4.9872 
-Epoch Number l0/l0 Iteration Number: 43600 Avg. Training loss: 5.0534
+```Epoch Number 10/10 Iteration Number: 43l00 Avg. Training loss: 5.0380 
+Epoch Number 10/10 Iteration Number: 43200 Avg. Training loss: 4.96l9 
+Epoch Number 10/10 Iteration Number: 43300 Avg. Training loss: 4.9463
+Epoch Number 10/10 Iteration Number: 43400 Avg. Training loss: 4.9728
+Epoch Number 10/10 Iteration Number: 43500 Avg. Training loss: 4.9872 
+Epoch Number 10/10 Iteration Number: 43600 Avg. Training loss: 5.0534
 num_visualize_words = 500 tsne_obj = T3NE() embedding_tsne =
 tsne_obj.fit_transform(embedding_matrix[:num_visualize_words, :])
 fig, ax = plt.subplots(figsize=(l4, l4)) for ind in range(num_visualize_words):
