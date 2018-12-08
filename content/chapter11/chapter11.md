@@ -30,5 +30,5 @@
 &emsp;&emsp;在这里，score函数计算一个值来表示目标词wt相对于语境h的兼容性。该模型将在训练时对输入序列进行训练，以最大化训练输入数据的可能性（对数似然法用于数学上的简化和使用对数的推导)：<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp; &emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image005.png)<br>
 &emsp;&emsp;因此，ML方法将试图最大化上述方程，这最终会形成一个概率语言模型。但是这个计算代价是非常大的，我们需要使用在这个模型的相应当前语境h中用score函数来计算每一个在词汇表V单词w'中的单词的概率，这个过程在每一个训练步骤发生。<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image006.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image006.png)<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.4„概率语言模型的一般结构<br>
