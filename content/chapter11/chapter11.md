@@ -93,7 +93,7 @@
 &emsp;&emsp;在本节中，我们将定义一些辅助函数，使我们能够构建一个良好的Word2Vec模型。为了实现这个模型，我们将使用一个绿色版本的维基百科
  (http://mattmahoney.net/dc/textdata.html)。<br>
 &emsp;&emsp;因此，让我们从导入所需的包开始:<br>
-'''#importing the required packages for this implementation import numpy as np
+```#importing the required packages for this implementation import numpy as np
 import tensorflow as tf
 #Packages for downloading the dataset
 from urllib.request import urlretrieve
@@ -103,5 +103,4 @@ import zipfile
 #packages for data preprocessing 
 import re
 from collections import Counter 
-import random
-'''
+import random```
