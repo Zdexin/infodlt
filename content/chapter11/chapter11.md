@@ -239,10 +239,11 @@ name='labels_values')
 ```
 &emsp;&emsp;我们试图构建的权矩阵或嵌入矩阵将具有以下形式:<br>
 `num_words X num_hidden_neurons
-`
+`<br>
 &emsp;&emsp;另外，我们不需要自己实现查找函数，因为它已经在Tensorflow: tf.nn.embed dding_l00kup()中可用。因此，它将使用单词的整数编码并在权矩阵中来定位它们对应的行。<br>
 &emsp;&emsp;权矩阵将从均匀分布中随机初始化:<br>
-```num_vocab = len(integer_to_vocab)
+```
+num_vocab = len(integer_to_vocab)
 num_embedding =	300
 with train_graph.as_default():
 embedding_layer = tf.Variable(tf.random_uniform((num_vocab, num_embedding), –1, 1))
