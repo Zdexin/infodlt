@@ -238,12 +238,11 @@ inputs_values = tf.placeholder(tf.int32, [None], name='inputs_values') labels_va
 name='labels_values')
 ```
 &emsp;&emsp;我们试图构建的权矩阵或嵌入矩阵将具有以下形式:<br>
-```num_words X num_hidden_neurons
-```
+`num_words X num_hidden_neurons
+`
 &emsp;&emsp;另外，我们不需要自己实现查找函数，因为它已经在Tensorflow: tf.nn.embed dding_l00kup()中可用。因此，它将使用单词的整数编码并在权矩阵中来定位它们对应的行。<br>
 &emsp;&emsp;权矩阵将从均匀分布中随机初始化:<br>
 ```num_vocab = len(integer_to_vocab)
-
 num_embedding =	300
 with train_graph.as_default():
 embedding_layer = tf.Variable(tf.random_uniform((num_vocab, num_embedding), –1, 1))
@@ -305,11 +304,8 @@ print("Epoch Number (}/(}".format(e, num_epochs), "Iteration Number: (}".format(
 (:.4f}".format(average_loss/100))
 average_loss = 0
 if iteration_num % 1000 == 0:
-##Using cosine similarity to get the nearest words to a
-
-word
+##Using cosine similarity to get the nearest words to a word
  
-
 similarity = cosine_similarity.eval() for i in range(valid_num_words):
 valid_word = integer_to_vocab[valid_samples[i]]
 #number of nearest neighbors top_k = 8
