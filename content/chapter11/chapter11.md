@@ -164,4 +164,26 @@ Output:
 
 Total number of words in the text: l668O599 Total number of unique words in the text: 6364l
 ```
+&emsp;&emsp;在这里，我创建了字典来将单词转换成整数，之后也是如此，也就是说，将整数转换成单词。整数按降序分配，所以最常用的单词(The)是整数0，其次常用的是1，依此类推。这些单词被转换为整数并存储在列表int_words中。<br>
+&emsp;&emsp;正如本节前面提到的，我们需要使用单词的整数索引在权矩阵中查找它们的值，因此我们将建立他们之间的对应关系。这将帮助我们查找单词，并获得特定索引的实际单词。例如，输入文本中重复次数最多的单词将在位置0处建立索引，其次是重复次数第二多的单词，依此类推。<br>
+&emsp;&emsp;那么，让我们定义一个函数来创建这个查找表:<br>
+```def create_lookuptables(input_words): """
+Creating lookup tables for vocan
+
+Function arguments:
+param words: Input list of words """
+input_word_counts = Counter(input_words)
+sorted_vocab = sorted(input_word_counts, key=input_word_counts.get, reverse=True)
+integer_to_vocab = (ii: word for ii, word in enumerate(sorted_vocab)} vocab_to_integer = (word: ii for ii, word in integer_to_vocab.items()}
+
+# returning A tuple of dicts
+return vocab_to_integer, integer_to_vocab
+```
+&emsp;&emsp;现在，让我们调用已定义的函数来创建查找表:
+```vocab_to_integer, integer_to_vocab = create_lookuptables(preprocessed_words)
+integer_words = [vocab_to_integer[word] for word in preprocessed_words]
+```
+&emsp;&emsp;为了构建一个更精确的模型，我们可以删除不太改变上下文的单词，比如of、for、the等等。实践证明，我们可以在舍弃这类词语的同时建立更准确的模型。从上下文中删除与上下文无关的单词的过程称为二次抽样。为了定义"丢弃"的一种通用机制，米卡洛夫引入了一个函数来计算某个单词的丢弃概率，如下所示:<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image019.png)<br>
+
 
