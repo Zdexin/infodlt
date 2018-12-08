@@ -24,3 +24,6 @@
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图图15.3„Word2Vec管道模型的例子<br>
 &emsp;&emsp;Word2Vec建模使用窗口查看句子，然后根据上下文信息预测窗口中间词的向量;Word2Vec模型每次只扫描一个句子。与任何机器学习技术类似，我们需要为Word2Vec模型定义一个代价函数及其相应的优化准则，使模型能够为每个唯一的对象生成实值向量，并根据其上下文信息将向量相互关联。<br>
 ## 构建Word2Vec模型<br>
+在本节中，我们将详细介绍如何构建Word2Vec模型。正如我们前面提到的，我们的最终目标是拥有一个经过训练的模型，该模型能够为输入文本数据生成实值向量表示，这也称为单词嵌入。<br>
+在模型的训练过程中，我们将使用极大似然法(https:// en.wikipedia.org/wiki/Maximum_likelihood)，该方法可以在给予模型看到的前一个单词的情况下最大化输入句子中下一个单词wt的概率，我们称之为h。这种最大似然方法将用归一化指数函数表示为:<br>
+
