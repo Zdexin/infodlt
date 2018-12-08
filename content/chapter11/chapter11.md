@@ -15,5 +15,6 @@
 &emsp;&emsp;之后我们会看到，这个向量空间实际上非常有趣，因为你会发现你可以把一个单词的向量从其他与它相似的单词中提取出来，或者在这个空间中做一些布局上的处理。<br>
 ## Word2Vec<br>
 &emsp;&emsp;Word2Vec是自然语言处理领域应用最广泛的嵌入式技术之一。该模型通过观察输入词出现的上下文信息，从输入文本中创建实值向量。相似的词会在非常相似的语境中被提及，模型因此会知道这两个词应该放在相近的特定嵌入空间中。<br>
-&emsp;&emsp;从下图的描述中，模型将习得爱（love）和爱慕（adore）这两个词有着非常相似的上下文，它们应该放在非常接近的向量空间中。而“喜欢（like）”这个词的语境可能和“爱（love）”这个词有点相似，但不会像单词爱慕（adore）那样接近“爱（love）”:<br>
-
+&emsp;&emsp;从下图的描述中，模型将习得love和adore这两个词有着非常相似的上下文，它们应该放在非常接近的向量空间中。而like这个词的语境可能和love这个词有点相似，但不会像单词adore那样接近love:<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image002.png)<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图图15.2„表感情程度句子的样本
