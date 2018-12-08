@@ -229,5 +229,149 @@ yield input_vals, target
  &emsp;&emsp;&emsp;&emsp;  &emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image020.png)<br>
  &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;  &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; 
 图15.11„计算图的模型架构<br>
+&emsp;&emsp;如前所述，我们将使用一个嵌入层来习得这些单词的一个特殊的实值表示。因此，这些词将作为独热向量输入。这种思想是用来训练这种网络以此来建立权矩阵。<br>
+&emsp;&emsp;那么，让我们从创建模型的输入开始:<br>
+```train_graph = tf.Graph()
+
+#defining the inputs placeholders of the model with train_graph.as_default():
+inputs_values = tf.placeholder(tf.int32, [None], name='inputs_values') labels_values = tf.placeholder(tf.int32, [None, None],
+name='labels_values')
+```
+&emsp;&emsp;我们试图构建的权矩阵或嵌入矩阵将具有以下形式:<br>
+```num_words X num_hidden_neurons
+```
+&emsp;&emsp;另外，我们不需要自己实现查找函数，因为它已经在Tensorflow: tf.nn.embed dding_l00kup()中可用。因此，它将使用单词的整数编码并在权矩阵中来定位它们对应的行。<br>
+&emsp;&emsp;权矩阵将从均匀分布中随机初始化:<br>
+```num_vocab = len(integer_to_vocab)
+
+num_embedding =	3OO
+with train_graph.as_default():
+embedding_layer = tf.Variable(tf.random_uniform((num_vocab, num_embedding), –l, l))
+# Next, we are going to use tf.nn.embedding_lookup function to get the output of the hidden layer
+embed_tensors = tf.nn.embedding_lookup(embedding_layer, inputs_values)
+```
+&emsp;&emsp;一次性更新嵌入层中的所有嵌入权重是非常低效的。相反，我们将使用负采样技术，它只会用不正确单词中的一小部分来更新正确单词的权重。<br>
+&emsp;&emsp;同样，我们不需要自己实现这个函数因为它已经在TensorFlow中了<br>
+```tf.nn.sampled_softmax_loss:
+# Number of negative labels to sample num_sampled = lOO
+
+with train_graph.as_default():
+# create softmax weights and biases
+softmax_weights = tf.Variable(tf.truncated_normal((num_vocab, num_embedding)))
+softmax_biases = tf.Variable(tf.zeros(num_vocab), name="softmax_bias")
+# Calculating the model loss using negative sampling model_loss = tf.nn.sampled_softmax_loss(
+weights=softmax_weights, biases=softmax_biases, labels=labels_values, inputs=embed_tensors, num_sampled=num_sampled, num_classes=num_vocab)
+model_cost = tf.reduce_mean(model_loss)
+model_optimizer = tf.train.AdamOptimizer().minimize(model_cost)
+```
+&emsp;&emsp;为了验证我们训练过的模型，我们将对一些常见或普遍的单词和一些不常见的单词进行采样，并尝试根据学习到的skip-gram体系结构的表示来输出我们最接近的一组单词:<br>
+```with train_graph.as_default():
+# set of random words for evaluating similarity on valid_num_words = l6
+valid_window = lOO
+# pick 8 samples from (O,lOO) and (lOOO,llOO) each ranges. lower id implies more frequent
+valid_samples = np.array(random.sample(range(valid_window), valid_num_words//2))
+valid_samples = np.append(valid_samples,
+random.sample(range(lOOO,lOOO+valid_window),
+valid_num_words//2))
+valid_dataset_samples = tf.constant(valid_samples, dtype=tf.int32)
+# Calculating the cosine distance
+norm = tf.sqrt(tf.reduce_sum(tf.square(embedding_layer), l, keep_dims=True))
+normalized_embed = embedding_layer / norm
+valid_embedding = tf.nn.embedding_lookup(normalized_embed, valid_dataset_samples)
+cosine_similarity = tf.matmul(valid_embedding, tf.transpose(normalized_embed))
+```
+&emsp;&emsp;现在，我们已经为我们的模型做好了准备过程，现在我们准备开始训练过程。<br>
+## 训练
+&emsp;&emsp;让我们开始训练过程:<br>
+···num_epochs = lO train_batch_size = lOOO contextual_window_size = lO
+
+with train_graph.as_default(): saver = tf.train.3aver()
+
+with tf.3ession(graph=train_graph) as sess: iteration_num = l
+average_loss = O
+#Initializing all the vairables sess.run(tf.global_variables_initializer())
+ 
+
+for e in range(l, num_epochs+l):
+#Generating random batch for training
+batches = generate_random_batches(training_words, train_batch_size, contextual_window_size)
+#Iterating through the batch samples for input_vals, target in batches:
+#Creating the feed dict
+feed_dict = (inputs_values: input_vals, labels_values: np.array(target)[:, None]}
+train_loss, _ = sess.run([model_cost, model_optimizer], feed_dict=feed_dict)
+#commulating the loss average_loss += train_loss
+#Printing out the results after lOO iteration if iteration_num % lOO == O:
+print("Epoch Number (}/(}".format(e, num_epochs), "Iteration Number: (}".format(iteration_num), "Avg. Training loss:
+(:.4f}".format(average_loss/lOO))
+average_loss = O
+if iteration_num % lOOO == O:
+##Using cosine similarity to get the nearest words to a
+
+word
+ 
+
+similarity = cosine_similarity.eval() for i in range(valid_num_words):
+valid_word = integer_to_vocab[valid_samples[i]]
+#number of nearest neighbors top_k = 8
+nearest_words = (–similarity[i,
+ 
+:]).argsort()[l:top_k+l]
+msg = 'The nearest to %s:' % valid_word for k in range(top_k):
+similar_word = integer_to_vocab[nearest_words[k]] msg = '%s %s,' % (msg, similar_word)
+print(msg) iteration_num += l
+save_path = saver.save(sess, "checkpoints/cleaned_wikipedia_version.ckpt")
+embed_mat = sess.run(normalized_embed)
+···
+&emsp;&emsp;运行上述代码段训练10次后，您将得到以下输出:<br>
+```Epoch Number lO/lO Iteration Number: 43lOO Avg. Training loss: 5.O38O Epoch Number lO/lO Iteration Number: 432OO Avg. Training loss: 4.96l9 Epoch Number lO/lO Iteration Number: 433OO Avg. Training loss: 4.9463 Epoch Number lO/lO Iteration Number: 434OO Avg. Training loss: 4.9728 Epoch Number lO/lO Iteration Number: 435OO Avg. Training loss: 4.9872 Epoch Number lO/lO Iteration Number: 436OO Avg. Training loss: 5.O534
+ 
+
+Epoch Number lO/lO Iteration Number: 437OO Avg. Training loss: 4.826l Epoch Number lO/lO Iteration Number: 438OO Avg. Training loss: 4.8752 Epoch Number lO/lO Iteration Number: 439OO Avg. Training loss: 4.98l8 Epoch Number lO/lO Iteration Number: 44OOO Avg. Training loss: 4.925l The nearest to nine: one, seven, zero, two, three, four, eight, five, The nearest to such: is, as, or, some, have, be, that, physical,
+The nearest to who: his, him, he, did, to, had, was, whom,
+The nearest to two: zero, one, three, seven, four, five, six, nine, The nearest to which: as, a, the, in, to, also, for, is,
+The nearest to seven: eight, one, three, five, four, six, zero, two,
+The nearest to american: actor, nine, singer, actress, musician, comedian, athlete, songwriter,
+The nearest to many: as, other, some, have, also, these, are, or,
+The nearest to powers: constitution, constitutional, formally, assembly, state, legislative, general, government,
+The nearest to question: questions, existence, whether, answer, truth, reality, notion, does,
+The nearest to channel: tv, television, broadcasts, broadcasting, radio, channels, broadcast, stations,
+The nearest to recorded: band, rock, studio, songs, album, song, recording, pop,
+The nearest to arts: art, school, alumni, schools, students, university, renowned, education,
+The nearest to orthodox: churches, orthodoxy, church, catholic, catholics, oriental, christianity, christians,
+The nearest to scale: scales, parts, important, note, between, its, see, measured,
+The nearest to mean: is, exactly, defined, denote, hence, are, meaning, example,
+
+Epoch Number lO/lO Iteration Number: 45lOO Avg. Training loss: 4.8466 Epoch Number lO/lO Iteration Number: 452OO Avg. Training loss: 4.8836 Epoch Number lO/lO Iteration Number: 453OO Avg. Training loss: 4.9Ol6 Epoch Number lO/lO Iteration Number: 454OO Avg. Training loss: 5.O2l8 Epoch Number lO/lO Iteration Number: 455OO Avg. Training loss: 5.l4O9 Epoch Number lO/lO Iteration Number: 456OO Avg. Training loss: 4.7864 Epoch Number lO/lO Iteration Number: 457OO Avg. Training loss: 4.93l2 Epoch Number lO/lO Iteration Number: 458OO Avg. Training loss: 4.9O97 Epoch Number lO/lO Iteration Number: 459OO Avg. Training loss: 4.6924 Epoch Number lO/lO Iteration Number: 46OOO Avg. Training loss: 4.8999 The nearest to nine: one, eight, seven, six, four, five, american, two, The nearest to such: can, example, examples, some, be, which, this, or, The nearest to who: him, his, himself, he, was, whom, men, said,
+The nearest to two: zero, five, three, four, six, one, seven, nine The nearest to which: to, is, a, the, that, it, and, with,
+The nearest to seven: one, six, eight, five, nine, four, three, two, The nearest to american: musician, actor, actress, nine, singer, politician, d, one,
+ 
+
+The nearest to many: often, as, most, modern, such, and, widely, traditional,
+The nearest to powers: constitutional, formally, power, rule, exercised, parliamentary, constitution, control,
+The nearest to question: questions, what, answer, existence, prove, merely, true, statements,
+The nearest to channel: network, channels, broadcasts, stations, cable, broadcast, broadcasting, radio,
+The nearest to recorded: songs, band, song, rock, album, bands, music, studio,
+The nearest to arts: art, school, martial, schools, students, styles, education, student,
+The nearest to orthodox: orthodoxy, churches, church, christianity, christians, catholics, christian, oriental,
+The nearest to scale: scales, can, amounts, depends, tend, are, structural, for,
+The nearest to mean: we, defined, is, exactly, equivalent, denote, number, above,
+Epoch Number lO/lO Iteration Number: 46lOO Avg. Training loss: 4.8583 Epoch Number lO/lO Iteration Number: 462OO Avg. Training loss: 4.8887
+```
+&emsp;&emsp;从输出中可以看到，网络在某种程度上学到了输入词的语义上的一些有用的表示。为了帮助我们更清楚地了解嵌入矩阵，我们将使用维数约简技术，如t-SNE，将实值向量降为二维，然后我们将把它们形象化，并用相应的词来标记每个点:<br>
+Epoch Number lO/lO Iteration Number: 43lOO Avg. Training loss: 5.O38O 
+Epoch Number lO/lO Iteration Number: 432OO Avg. Training loss: 4.96l9 
+Epoch Number lO/lO Iteration Number: 433OO Avg. Training loss: 4.9463
+Epoch Number lO/lO Iteration Number: 434OO Avg. Training loss: 4.9728
+Epoch Number lO/lO Iteration Number: 435OO Avg. Training loss: 4.9872 
+Epoch Number lO/lO Iteration Number: 436OO Avg. Training loss: 5.O534
+num_visualize_words = 5OO tsne_obj = T3NE() embedding_tsne =
+tsne_obj.fit_transform(embedding_matrix[:num_visualize_words, :])
+fig, ax = plt.subplots(figsize=(l4, l4)) for ind in range(num_visualize_words):
+plt.scatter(*embedding_tsne[ind, :], color='steelblue') plt.annotate(integer_to_vocab[ind], (embedding_tsne[ind, O],
+embedding_tsne[ind, l]), alpha=O.7)
+```
+&emsp;&emsp;输出:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image020.png)<br>
+ &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp; 图15.12„单词向量的可视化图<br>
 
 
