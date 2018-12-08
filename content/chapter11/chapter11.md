@@ -32,5 +32,10 @@
 &emsp;&emsp;因此，ML方法将试图最大化上述方程，这最终会形成一个概率语言模型。但是这个计算代价是非常大的，我们需要使用在这个模型的相应当前语境h中用score函数来计算每一个在词汇表V单词w'中的单词的概率，这个过程在每一个训练步骤发生。<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image006.png)<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.4„概率语言模型的一般结构<br>
+ &emsp;&emsp;由于构建概率语言模型的计算成本很高，人们倾向于使用不同的计算成本较低的技术，比如连续词袋模型 (CBOW) 和skip-gram模型。<br>
+&emsp;&emsp;通过训练这些模型，建立了一种逻辑回归的二分类法，将相同语境下的真实目标词wt和h干扰词或虚词分离开来。下面的图表使用CBOW技术简化了这个想法:<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image007.png)<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.5„skip-gram模型的总体架构<br>
+ &emsp;&emsp;下一个图显示了构建Word2Vec模型时可以使用的两种架构:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image008.png)<br>
+ &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.6„不同的Word2Vec模型架构<br>
