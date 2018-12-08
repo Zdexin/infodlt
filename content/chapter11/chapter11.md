@@ -215,7 +215,7 @@ return list(target_words)
 #Defining a function for generating word batches as a tuple (inputs, targets)
 def generate_random_batches(input_words, train_batch_size, context_window_size=5):
 num_batches = len(input_words)//train_batch_size
-# working on only only full batches
+#working on only only full batches
 ```input_words = input_words[:num_batches*train_batch_size] for ind in range(O, len(input_words), train_batch_size):
 input_vals, target = [], []
 input_batch = input_words[ind:ind+train_batch_size]
@@ -226,7 +226,7 @@ yield input_vals, target
 ```
 ## 构建模型
 &emsp;&emsp;接下来，我们将使用以下结构来构建计算图:<br>
- &emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image020.png)<br>
+ &emsp;&emsp;&emsp;&emsp;  &emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image020.png)<br>
  &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;  &emsp;&emsp; &emsp;&emsp;&emsp;&emsp; 
 图15.11„计算图的模型架构<br>
 
