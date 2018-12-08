@@ -283,7 +283,7 @@ cosine_similarity = tf.matmul(valid_embedding, tf.transpose(normalized_embed))
 &emsp;&emsp;现在，我们已经为我们的模型做好了准备过程，现在我们准备开始训练过程。<br>
 ## 训练
 &emsp;&emsp;让我们开始训练过程:<br>
-···num_epochs = lO train_batch_size = lOOO contextual_window_size = lO
+```num_epochs = lO train_batch_size = lOOO contextual_window_size = lO
 
 with train_graph.as_default(): saver = tf.train.3aver()
 
@@ -321,7 +321,7 @@ similar_word = integer_to_vocab[nearest_words[k]] msg = '%s %s,' % (msg, similar
 print(msg) iteration_num += l
 save_path = saver.save(sess, "checkpoints/cleaned_wikipedia_version.ckpt")
 embed_mat = sess.run(normalized_embed)
-···
+```
 &emsp;&emsp;运行上述代码段训练10次后，您将得到以下输出:<br>
 ```Epoch Number lO/lO Iteration Number: 43lOO Avg. Training loss: 5.O38O Epoch Number lO/lO Iteration Number: 432OO Avg. Training loss: 4.96l9 Epoch Number lO/lO Iteration Number: 433OO Avg. Training loss: 4.9463 Epoch Number lO/lO Iteration Number: 434OO Avg. Training loss: 4.9728 Epoch Number lO/lO Iteration Number: 435OO Avg. Training loss: 4.9872 Epoch Number lO/lO Iteration Number: 436OO Avg. Training loss: 5.O534
  
@@ -358,7 +358,7 @@ The nearest to mean: we, defined, is, exactly, equivalent, denote, number, above
 Epoch Number lO/lO Iteration Number: 46lOO Avg. Training loss: 4.8583 Epoch Number lO/lO Iteration Number: 462OO Avg. Training loss: 4.8887
 ```
 &emsp;&emsp;从输出中可以看到，网络在某种程度上学到了输入词的语义上的一些有用的表示。为了帮助我们更清楚地了解嵌入矩阵，我们将使用维数约简技术，如t-SNE，将实值向量降为二维，然后我们将把它们形象化，并用相应的词来标记每个点:<br>
-Epoch Number lO/lO Iteration Number: 43lOO Avg. Training loss: 5.O38O 
+```Epoch Number lO/lO Iteration Number: 43lOO Avg. Training loss: 5.O38O 
 Epoch Number lO/lO Iteration Number: 432OO Avg. Training loss: 4.96l9 
 Epoch Number lO/lO Iteration Number: 433OO Avg. Training loss: 4.9463
 Epoch Number lO/lO Iteration Number: 434OO Avg. Training loss: 4.9728
