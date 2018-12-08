@@ -128,3 +128,40 @@ Output:
 
 Text8 Dataset: 3l.4MB [OO:39, 794kB/s]
 ```
+&emsp;&emsp;我们可以看看这个数据集的前100个字符:
+```cleaned_wikipedia_text[O:lOO]
+
+' anarchism originated as a term of abuse first used against early working class radicals including t'
+```
+&emsp;&emsp;接下来，我们将对文本进行预处理，因此我们将定义一个辅助函数，它将帮助我们将特殊字符(如标点符号)替换为已知标记。另外，为了减少输入文本中的干扰，您可能需要删除文本中不经常出现的单词:
+```def preprocess_text(input_text):
+
+# Replace punctuation with some special tokens so we can use them in our model
+input_text = input_text.lower()
+input_text = input_text.replace('.', ' <PERIOD> ') input_text = input_text.replace(',', ' <COMMA> ') input_text = input_text.replace('"', ' <QUOTATION_MARK> ') input_text = input_text.replace(';', ' <3EMICOLON> ')
+input_text = input_text.replace('!', ' <EXCLAMATION_MARK> ') input_text = input_text.replace('?', ' <QUE3TION_MARK> ') input_text = input_text.replace('(', ' <LEFT_PAREN> ') input_text = input_text.replace(')', ' <RIGHT_PAREN> ') input_text = input_text.replace('––', ' <HYPHEN3> ') input_text = input_text.replace('?', ' <QUE3TION_MARK> ') input_text = input_text.replace(':', ' <COLON> ')
+text_words = input_text.split()
+# neglecting all the words that have five occurrences of fewer text_word_counts = Counter(text_words)
+trimmed_words = [word for word in text_words if text_word_counts[word]
+> 5]
+
+return trimmed_words
+```
+&emsp;&emsp;现在，让我们在输入文本时调用这个函数并查看输出:
+```preprocessed_words = preprocess_text(cleaned_wikipedia_text) print(preprocessed_words[:3O])
+
+Output:
+['anarchism', 'originated', 'as', 'a', 'term', 'of', 'abuse', 'first',
+'used', 'against', 'early', 'working', 'class', 'radicals', 'including',
+'the', 'diggers', 'of', 'the', 'english', 'revolution', 'and', 'the',
+'sans', 'culottes', 'of', 'the', 'french', 'revolution', 'whilst']
+```
+&emsp;&emsp;让我们看看对于文本预处理版本，我们有多少单词和不同的单词:
+```print("Total number of words in the text: (}".format(len(preprocessed_words))) print("Total number of unique words in the text: (}".format(len(set(preprocessed_words))))
+ 
+
+Output:
+
+Total number of words in the text: l668O599 Total number of unique words in the text: 6364l
+```
+
