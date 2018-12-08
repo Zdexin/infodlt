@@ -105,3 +105,26 @@ import re
 from collections import Counter 
 import random
 ```
+&emsp;&emsp;接下来，我们将定义一个类，如果之前没有下载数据集，它就用于下载数据集:
+```# In this implementation we will use a cleaned up version of Wikipedia from Matt Mahoney.
+# 3o we will define a helper class that will helps to download the dataset wiki_dataset_folder_path = 'wikipedia_data'
+wiki_dataset_filename = 'text8.zip' wiki_dataset_name = 'Text8 Dataset'
+
+class DLProgress(tqdm): last_block = O
+
+def hook(self, block_num=l, block_size=l, total_size=None): self.total = total_size
+self.update((block_num – self.last_block) * block_size) self.last_block = block_num
+# Cheking if the file is not already downloaded if not isfile(wiki_dataset_filename):
+with DLProgress(unit='B', unit_scale=True, miniters=l, desc=wiki_dataset_name) as pbar:
+urlretrieve(
+'http://mattmahoney.net/dc/text8.zip', wiki_dataset_filename,
+pbar.hook)
+
+# Checking if the data is already extracted if not extract it if not isdir(wiki_dataset_folder_path):
+with zipfile.ZipFile(wiki_dataset_filename) as zip_ref: zip_ref.extractall(wiki_dataset_folder_path)
+with open('wikipedia_data/text8') as f: cleaned_wikipedia_text = f.read()
+
+Output:
+
+Text8 Dataset: 3l.4MB [OO:39, 794kB/s]
+```
