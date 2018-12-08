@@ -24,7 +24,7 @@
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图15.3„Word2Vec管道模型的例子<br>
 &emsp;&emsp;Word2Vec建模使用窗口查看句子，然后根据上下文信息预测窗口中间词的向量;Word2Vec模型每次只扫描一个句子。与任何机器学习技术类似，我们需要为Word2Vec模型定义一个代价函数及其相应的优化准则，使模型能够为每个唯一的对象生成实值向量，并根据其上下文信息将向量相互关联。<br>
 ## 构建Word2Vec模型<br>
-在本节中，我们将详细介绍如何构建Word2Vec模型。正如我们前面提到的，我们的最终目标是拥有一个经过训练的模型，该模型能够为输入文本数据生成实值向量表示，这也称为单词嵌入。<br>
+&emsp;&emsp;在本节中，我们将详细介绍如何构建Word2Vec模型。正如我们前面提到的，我们的最终目标是拥有一个经过训练的模型，该模型能够为输入文本数据生成实值向量表示，这也称为单词嵌入。<br>
 在模型的训练过程中，我们将使用极大似然法(https:// en.wikipedia.org/wiki/Maximum_likelihood)，该方法可以在给予模型看到的前一个单词的情况下最大化输入句子中下一个单词wt的概率，我们称之为h。这种最大似然方法将用归一化指数函数表示为:<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &emsp; &emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image004.png)<br>
 &emsp;&emsp;在这里，score函数计算一个值来表示目标词wt相对于语境h的兼容性。该模型将在训练时对输入序列进行训练，以最大化训练输入数据的可能性（对数似然法用于数学上的简化和使用对数的推导)：<br>
@@ -47,4 +47,5 @@
 &emsp;&emsp; 综上所述，这些模型的目标是区分真实有用和无用的输入，因此，对于虚词和干扰词，模型为实词赋较高的概率值，为干扰词或虚词赋较少的概率值。
 当模型将高概率值赋给实词，低概率值赋给干扰词时，此时目标函数最大化。<br>
  ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image012.jpg)
- 从技术层面上讲，给实词赋高概率值的过程称为负采样(https://papers.nips)。(https://papers.nips.cc/paper/5O2l– distributed–representations–of–words–and–phrases–and–their– compositionality.pdf)，使用这种损失函数有很好的数学动力:它提出的校正在极限下近似softmax函数的校正。但在计算上，它是很好的方法，因为计算损失函数现在只与我们选择的干扰词的数量(k)成比例，而不是词汇表中的所有单词(V)成比例。实际上，我们将使用非常类似的噪声对比估计(NCE) (https://papers.nips.cc/paper/5l65–learning–word–embeddings–efficiently–with–noise–contrastive–estimation.pdf)损失，对于这种损失，TensorFlow有一个方便的辅助函数，tf.nn.nce_loss().
+ 从技术层面上讲，给实词赋高概率值的过程称为负采样(https://papers.nips)。(https://papers.nips.cc/paper/5O2l–distributed–representations–of–words–and–phrases–and–their– compositionality.pdf)，使用这种损失函数有很好的数学动力:它提出的校正在极限下近似softmax函数的校正。但在计算上，它是很好的方法，因为计算损失函数现在只与我们选择的干扰词的数量(k)成比例，而不是词汇表中的所有单词(V)成比例。实际上，我们将使用非常类似的噪声对比估计(NCE) (https://papers.nips.cc/paper/5l65–learning–word–embeddings–efficiently–with–noise–contrastive–estimation.pdf)&emsp;损失，对于这种损失，TensorFlow有一个方便的辅助函数，tf.nn.nce_loss().
+ 
