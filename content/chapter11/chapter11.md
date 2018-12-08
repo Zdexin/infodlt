@@ -47,5 +47,11 @@
 &emsp;&emsp; 综上所述，这些模型的目标是区分真实有用和无用的输入，因此，对于虚词和干扰词，模型为实词赋较高的概率值，为干扰词或虚词赋较少的概率值。
 当模型将高概率值赋给实词，低概率值赋给干扰词时，此时目标函数最大化。<br>
  ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image012.png)
- 从技术层面上讲，给实词赋高概率值的过程称为负采样(https://papers.nips)。(https://papers.nips.cc/paper/5O2l–distributed–representations–of–words–and–phrases–and–their– compositionality.pdf)，使用这种损失函数有很好的数学动力:它提出的校正在极限下近似softmax函数的校正。但在计算上，它是很好的方法，因为计算损失函数现在只与我们选择的干扰词的数量(k)成比例，而不是词汇表中的所有单词(V)成比例。实际上，我们将使用非常类似的噪声对比估计(NCE) (https://papers.nips.cc/paper/5l65–learning–word–embeddings–efficiently–with–noise–contrastive–estimation.pdf) <br> 损失，对于这种损失，TensorFlow有一个方便的辅助函数，tf.nn.nce_loss().
- 
+ 从技术层面上讲，给实词赋高概率值的过程称为负采样(https://papers.nips)。(https://papers.nips.cc/paper/5O2l–distributed–representations–of–words–and–phrases–and–their–compositionality.pdf)，使用这种损失函数有很好的数学动力:它提出的校正在极限下近似softmax函数的校正。但在计算上，它是很好的方法，因为计算损失函数现在只与我们选择的干扰词的数量(k)成比例，而不是词汇表中的所有单词(V)成比例。实际上，我们将使用非常类似的噪声对比估计(NCE) (https://papers.nips.cc/paper/5l65–learning–word–embeddings–efficiently–with–noise–contrastive–estimation.pdf) <br> 损失，对于这种损失，TensorFlow有一个方便的辅助函数，tf.nn.nce_loss().
+## skip-gram体系结构的一个实例
+ &emsp;&emsp;让我们通过一个实际的例子，看看skip-gram模型将如何在这种情况下工作:<br>
+ &emsp;&emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;the quick brown fox jumped over the lazy dog<br>
+ &emsp;&emsp;首先，我们需要建立一个词及其上下文的数据集。上下文的定义取决于我们，但上下文必须有意义。因此，我们将在目标单词周围设置一个窗口，从右边取一个单词，从左边取一个单词。
+通过使用这种对于上下文操作的技术，我们最终会得到以下一组词及其对应的语境:<br>
+ &emsp;&emsp; &emsp;&emsp;([the, brown], quick), ([quick, fox], brown), ([brown, jumped], fox), ...<br>
+
