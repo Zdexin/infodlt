@@ -22,3 +22,5 @@
 &emsp;&emsp;在实践中，人们向Word2Vec模型输入大量的文本。该模型将学习如何为相似的单词生成相似的向量，并且它将为输入文本中的每个唯一的单词执行此操作。所有这些单词的向量将被组合在一起，最终的输出将是一个嵌入矩阵，其中每一行表示一个特定单词的实值向量表示。因此，模型的最终输出将是训练语料库中所有唯一单词的嵌入矩阵。通常，好的嵌入矩阵可以包含数百万个实值向量。<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp; ![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter11/chapter11_image/image003.png)<br>
  &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图图15.3„Word2Vec管道模型的例子<br>
+&emsp;&emsp;Word2Vec建模使用窗口查看句子，然后根据上下文信息预测窗口中间词的向量;Word2Vec模型每次只扫描一个句子。与任何机器学习技术类似，我们需要为Word2Vec模型定义一个代价函数及其相应的优化准则，使模型能够为每个唯一的对象生成实值向量，并根据其上下文信息将向量相互关联。<br>
+## 构建Word2Vec模型<br>
