@@ -23,5 +23,6 @@
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter12/chapter12_image/image023.png)<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2„递归神经网络的一个抽象概念<br>
 &emsp;&emsp;这个图是对循环单元内发生的事情的抽象表示。这里输入一个单词，比如“好”。当然，它必须转换成嵌入向量。然而，我们现在将忽略这一点。另外，这个单元有一种内存状态，根据这个内容的状态和输入，我们将更新这个状态并将新数据写入状态例如，假设我们以前在输入中见过“不”这个词;我们将其写入状态是为了当我们在下面的输入中看到“好”这个词的时候，能知道我们刚刚从状态那里看到了“不”这个词。现在，我们看到了“好”这个词。因此, 当我们看到“不好”这两个词的组合时，我们就必须写入状态,即这可能表明,整个输入的文本可能具有负面情绪。从旧状态到新状态的内容的映射是通过所谓的门来完成的，这些实现的方式在不同版本的循环单元中是不同的。它基本上是一个带激活函数的矩阵运算，但是我们马上就会看到，其中含有一个反向传播梯度的问题。因此，递归神经网络必须以一种特殊的方式来设计，这样梯度才不会扭曲太多。<br>
-&emsp;&emsp;在一个循环单元中，我们有一个类似的生成输出的门，再一次，循环单元的输出取决于状态的当前内容和我们看到的输入。所以我们可以尝试做的是展开一个循环单元的处理过程<br>
-
+&emsp;&emsp;在一个循环单元中，我们有一个类似的生成输出的门，再一次，循环单元的输出取决于状态的当前内容和我们看到的输入。所以我们可以尝试做的是展开一个循环单元的处理过程:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter12/chapter12_image/image024.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图3„展开版的递归神经网络<br>
