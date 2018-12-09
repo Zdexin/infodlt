@@ -102,7 +102,7 @@ target_train[1] Output:
 tokenizer_obj = Tokenizer(num_words=num_top_words)
 ```
 &emsp;&emsp;现在，我们从数据集中提取所有的文本，我们调用这个函数以便让他适应文本:<br>
-`tokenizer_obj.fit_on_texts(text_data)`
+`tokenizer_obj.fit_on_texts(text_data)`<br>
 &emsp;&emsp;标记索引表大约需要10秒，然后它就建立了词汇表。它看起来是这样的:<br>
 
 
