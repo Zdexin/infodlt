@@ -6,4 +6,4 @@
 ## 通用的情感分析架构
 &emsp;&emsp;在本节中，我们将重点讨论可用于情感分析的通用深度学习体系结构。下图显示了构建情感分析模型所需的处理步骤。<br>
 &emsp;&emsp;首先，我们要讲的是自然语言:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter12/chapter12_image/image022.png)
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter12/chapter12_image/image022.png)
