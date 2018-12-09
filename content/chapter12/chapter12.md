@@ -375,20 +375,130 @@ rnn_type_model.add(Dense(1, activation='sigmoid'))
 ```
 rnn_type_model.summary()
 
-
+-----------------------------------------------------------------
 Layer (type) Output 3hape Param #
 =================================================================
 embedding_layer (Embedding) (None, 544, 8) 80000
 -----------------------------------------------------------------
 gru_1 (GRU) (None, None, 16) 1200
-*****************************************************************
+-----------------------------------------------------------------
 gru_2 (GRU) (None, None, 8) 600
-
+-----------------------------------------------------------------
 gru_3 (GRU) (None, 4) 156
-
+-----------------------------------------------------------------
 dense_1 (Dense) (None, 1) 5
 =================================================================
-Total params: 81,961 Trainable params: 81,961 Non–trainable params: 0
-
+Total params: 81,961 
+Trainable params: 81,961 
+Non–trainable params: 0
+--------------------------
 
 ```
+&emsp;&emsp;如你所见，我们有嵌入层，第一个循环单元，第二个循环单元，第三个循环单元和稠密层。值得注意的是，这里面没有很多参数。<br>
+## 模型训练及结果分析
+&emsp;&emsp;现在，是时候开始训练过程了，这很简单:<br>
+```
+Output:
+rnn_type_model.fit(input_train_pad, target_train, validation_split=0.05, epochs=3, batch_size=64)
+
+Output:
+Train on 23750 samples, validate on 1250 samples Epoch 1/3
+23750/23750 [==============================]23750/23750 [==============================] – 176s 7ms/step – loss: 0.6698 – acc:
+0.5758 – val_loss: 0.5039 – val_acc: 0.7784
+
+Epoch 2/3
+23750/23750 [==============================]23750/23750 [==============================] – 175s 7ms/step – loss: 0.4631 – acc:
+0.7834 – val_loss: 0.2571 – val_acc: 0.8960
+
+Epoch 3/3
+23750/23750 [==============================]23750/23750 [==============================] – 174s 7ms/step – loss: 0.3256 – acc:
+0.8673 – val_loss: 0.3266 – val_acc: 0.8600
+```
+&emsp;&emsp;让我们根据测试集测试经过训练的模型:<br>
+```
+model_result = rnn_type_model.evaluate(input_test_pad, target_test)
+
+Output:
+25000/25000 [==============================]25000/25000 [==============================] – 60s 2ms/step
+
+
+print("Accuracy: (0:.2%}".format(model_result[1])) Output:
+Accuracy: 85.26%
+```
+&emsp;&emsp;现在，让我们来看一个误分类文本的例子。<br>
+&emsp;&emsp;首先，我们计算测试集中前1000个序列的预测类，然后取实际的类值。我们对它们进行比较，得到存在这种不匹配的指数列表:<br>
+```
+target_predicted = rnn_type_model.predict(x=input_test_pad[0:1000]) 
+target_predicted = target_predicted.T[0]
+```
+&emsp;&emsp;使用截止阀值表示所有大于0.5的值将被认为是正数，其他值将被认为是负数:<br>
+```
+class_predicted = np.array([1.0 if prob>0.5 else 0.0 for prob in target_predicted])
+```
+&emsp;&emsp;现在，让我们得到这1000个序列的实际类:<br>
+```
+class_actual = np.array(target_test[0:1000])
+```
+&emsp;&emsp;让我们从输出中得到不正确的示例:<br>
+```
+incorrect_samples = np.where(class_predicted != class_actual) 
+incorrect_samples = incorrect_samples[0] len(incorrect_samples)
+
+Output: 122
+```
+&emsp;&emsp;所以，我们看到有122个文本被错误地分类;这占我们计算的1000个文本的12.1%，让我们看看第一个错误分类的文本:<br>
+```
+index = incorrect_samples[0] index
+
+Output:
+9
+
+incorrectly_predicted_text = input_text_test[index] incorrectly_predicted_text
+
+Output:
+
+'I am not a big music video fan. I think music videos take away personal feelings about a particular song.. Any song. In other words, creative thinking goes out the window. Likewise, Personal feelings aside about MJ, toss aside. This was the best music video of alltime. 3imply wonderful. It was a movie. Yes folks it was. Brilliant! You had awesome acting, awesome choreography, and awesome singing. This was spectacular. 3imply a plot line of a beautiful young lady dating a man, but was he a man or something sinister. Vincent Price did his thing adding to the song and video. MJ was MJ, enough said about that. This song was to video, what Jaguars are for cars. Top of the line, PERFECTO. What was even better about this was, that we got the real MJ without the thousand facelifts. Though ironically enough, there was more than enough makeup and costumes to go around. Folks go to Youtube. Take 14 mins. out of your life and see for yourself what a wonderful work of art this particular video really is.'
+```
+&emsp;&emsp;让我们看看这个示例的模型输出以及实际的类:<br>
+```
+target_predicted[index] Output:
+0.1529513
+
+class_actual[index] Output:
+1.0
+```
+&emsp;&emsp;现在，让我们针对一组新的数据样本测试我们的训练模型，看看它的结果:<br>
+```
+test_sample_1 = "This movie is fantastic! I really like it because it is so good!"
+test_sample_2 = "Good movie!" test_sample_3 = "Maybe I like this movie." test_sample_4 = "Meh ..."
+test_sample_5 = "If I were a drunk teenager then this movie might be good." test_sample_6 = "Bad movie!"
+test_sample_7 = "Not a good movie!"
+test_sample_8 = "This movie really sucks! Can I get my money back please?" test_samples = [test_sample_1, test_sample_2, test_sample_3, test_sample_4, test_sample_5, test_sample_6, test_sample_7, test_sample_8]
+```
+&emsp;&emsp;现在，让我们将它们转换为整数标记:<br>
+test_samples_tokens = tokenizer_obj.texts_to_sequences(test_samples)
+&emsp;&emsp;然后填充它们:<br>
+```
+test_samples_tokens_pad = pad_sequences(test_samples_tokens, maxlen=max_num_tokens,
+padding=seq_pad, truncating=seq_pad) test_samples_tokens_pad.shape
+
+Output: (8, 544)
+```
+&emsp;&emsp;最后，让我们针对它们运行模型:<br>
+```
+rnn_type_model.predict(test_samples_tokens_pad)
+
+Output: array([[0.9496784 ],
+[0.9552593 ],
+[0.9115685 ],
+[0.9464672 ],
+[0.87672734],
+[0.81883633],
+[0.33248223],
+[0.15345531], dtype=float32)
+```
+&emsp;&emsp;所以能看到，接近0的值表示消极情绪接近1的值表示积极情绪;最后，每次训练模型时，这些数字都会变化。<br>
+## 总结
+&emsp;&emsp;在这一章中，我们介绍了一个有趣的应用程序，即情感分析。情感分析被不同的公司用来跟踪客户对他们的产品的满意度。甚至政府也使用情感分析解决方案来跟踪公民对他们未来想做的事情的满意度。<br>
+&emsp;&emsp;接下来，我们将关注一些高级的深度学习体系结构，它们可以用于半监督和非监督应用程序。<br>
+
