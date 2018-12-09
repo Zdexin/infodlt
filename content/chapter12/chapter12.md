@@ -51,7 +51,8 @@
 &emsp;&emsp;vKeras是一种高级神经网络API，用Python编写，能够在TensorFlow、CNTK或Theano上运行。它的开发重点是支持快速实验。能够以最小的时间间隔从一个想法落成到一个结果，是做好研究的关键。——Keras网站<br>
 &emsp;&emsp;因此，Keras只是TensorFlow和其他深度学习框架的封装。它对于原型设计和快速构建非常有用，但另一方面，它使您对代码的控制减少。我们将有机会在Keras中实现这种情感分析模型，这样您就可以在TensorFlow和Keras中得到实际的实现。您可以使用Keras进行快速原型设计，并为生产准备系统使用TensorFlow。<br>
 &emsp;&emsp;对你来说，更有趣的消息是你不必转换到一个完全不同的环境。现在，您可以在TensorFlow中访问Keras作为模块，并导入包，如下所示:<br>
-```from tensorflow.python.keras.models import 3equential
+```
+from tensorflow.python.keras.models import 3equential
 from tensorflow.python.keras.layers import Dense, GRU, Embedding
 from tensorflow.python.keras.optimizers import Adam
 from tensorflow.python.keras.preprocessing.text import Tokenizer
@@ -62,7 +63,8 @@ from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 &emsp;&emsp;现在，让我们转向实际的实现，在那里我们需要加载数据。Keras实际上有一个功能，可以用于从IMDb加载这个情感数据集，但问题是它已经将所有单词映射到整数标记。这是使用自然人类语言洞察力神经网络的一个重要部分，我想向你们展示如何做到这一点。
 另外，如果您想要使用这段代码来分析您在其他语言中可能拥有的任何数据，那么您需要自己完成这项工作，因此我们已经快速实现了一些用于下载此数据集的函数。
 让我们从导入一系列必需的包开始:<br>
-```%matplotlib inline
+```
+%matplotlib inline
 import matplotlib.pyplot as plt import tensorflow as tf
 import numpy as np
 from scipy.spatial.distance import cdist
@@ -72,7 +74,8 @@ from tensorflow.python.keras.preprocessing.text import Tokenizer
 from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 ```
 &emsp;&emsp;然后我们加载数据集:<br>
-```import imdb imdb.maybe_download_and_extract()
+```
+import imdb imdb.maybe_download_and_extract()
 
 Output:
 –	Download progress: l00.0%
@@ -88,7 +91,8 @@ Output:
 ```
 &emsp;&emsp;正如你所看到的，它在训练集和测试集中有25000条文本。<br>
 &emsp;&emsp;让我们看一个来自训练集的例子，看看它是什么样子的: <br>
-```#combine dataset
+```
+#combine dataset
 text_data = input_text_train + input_text_test input_text_train[l]
 
 Output:
@@ -98,13 +102,15 @@ target_train[1] Output:
 ```
 &emsp;&emsp;这是一个相当短的文本，情感值是1.0，说明这是一个积极的情感，所以这是对这部电影的积极评价。<br>
 &emsp;&emsp;现在，我们来看索引表，这是处理原始数据的第一步，因为神经网络不能处理文本数据。Keras已经实现了所谓的索引表，用于构建词汇表并将单词转换为整数。并且，我们说我们想要最多10000个单词，所以它只使用数据集中使用最广泛的10000个单词:<br>
-``num_top_words = l0000 
+```
+num_top_words = l0000 
 tokenizer_obj = Tokenizer(num_words=num_top_words)
-``
+```
 &emsp;&emsp;现在，我们从数据集中提取所有的文本，我们调用这个函数以便让他适应文本:<br>
 `tokenizer_obj.fit_on_texts(text_data)`<br>
 &emsp;&emsp;标记索引表大约需要10秒，然后它就建立了词汇表。它看起来是这样的:<br>
-```tokenizer_obj.word_index
+```
+tokenizer_obj.word_index
 
 Output: ('britains': 33206,
 'labcoats': l2l364, 'steeled': l02939, 'geddon': 6755l, "rossilini's": 9l757, 'recreational': 27654, 'suffices': 43205, 'hallelujah': 30337, 'mallika': 30343, 'kilogram': l22493, 'elphic': l04809, 'feebly': 328l8, 'unskillful': 9l728, "'mistress'": l222l8, "yesterday's": 25908, 'busco': 85664, 'goobacks': 85670, 'mcfeast': 7ll75, 'tamsin': 77763,
