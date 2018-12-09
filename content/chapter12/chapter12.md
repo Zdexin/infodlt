@@ -20,5 +20,5 @@
 &emsp;&emsp;从输入的原始文本中，我们得到一个二维矩阵，或者张量，现在可以输入到递归神经网络(递归神经网络)。这样就可以处理任意长度的序列，然后将该网络的输出值输入到一个具有sigmoid激活函数的全连接层或致密层。因此，输出值介于0和1之间，其中0的值表示负面情绪。但如果sigmoid函数的值既不是0也不是1呢?然后我们需要在中间引入一个临界值或阈值，这样如果这个值低于0.5，那么相应的输入就会被认为是负面情绪，超过这个临界值的值就会被认为是正面情绪。<br>
 ## 递归神经网络--情感分析语境
 &emsp;&emsp;现在，让我们回顾一下递归神经网络的基本概念并在情感分析应用的背景下讨论它们。正如我们在递归神经网络章节中提到的，递归神经网络的基本构件是一个循环单元，如图所示:<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter12/chapter12_image/image022.png)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1„情绪分析解决方案的通用管道模型甚至说是自然语言的解决方案<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter12/chapter12_image/image023.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图2„递归神经网络的一个抽象概念<br>
