@@ -315,3 +315,34 @@ array([ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 17, 2, 52, 278, 147], dtype=int32)
 ```
 &emsp;&emsp;此外，我们还需要一个向后表示的功能，以便将整数标记表示回文本单词;我们只需要这个函数。这是一个非常简单的辅助函数，让我们继续实现它:<br>
+```
+index = tokenizer_obj.word_index
+index_inverse_map = dict(zip(index.values(), index.keys())) def convert_tokens_to_string(input_tokens):
+# Convert the tokens back to words
+input_words = [index_inverse_map[token] for token in input_tokens if token
+!= 0]
+
+# join them all words.
+combined_text = " ".join(input_words) return combined_text
+```
+&emsp;&emsp;例如，数据集中的原始文本如下:<br>
+```
+input_text_train[l] Output:
+
+input_text_train[l]
+
+'This is a really heart–warming family movie. It has absolutely brilliant animal training and "acting" (if you can call it like that) as well (just think about the dog in "How the Grinch stole Christmas"... it was plain bad training). The Paulie story is extremely well done, well reproduced and in general the characters are really elaborated too. Not more to say except that this is a GREAT MOVIE!<br /><br />My ratings: story 8.5/10, acting 7.5/10, animals+fx 8.5/10, cinematography 8/10.<br /><br />My overall rating: 8/10 – BIG FAMILY MOVIE AND VERY WORTH WATCHING!'
+```
+&emsp;&emsp;如果我们使用一个辅助函数将标记转换回文本单词，我们会得到这样的文本:<br>
+```
+convert_tokens_to_string(input_train_tokens[l])
+
+'this is a really heart warming family movie it has absolutely brilliant animal training and acting if you can call it like that as well just think about the dog in how the grinch stole christmas it was plain bad training the paulie story is extremely well done well and in general the characters are really too not more to say except that this is a great movie br br my ratings story 8 5 10 acting 7 5 10 animals fx 8 5 10 cinematography 8 10 br br my overall rating 8 10 big family movie and very worth watching'
+```
+&emsp;&emsp;除了标点符号和其他符号外，基本上是一样的。<br>
+## 构建模型
+&emsp;&emsp;现在，我们需要创建递归神经网络，我们将在Keras中实现，因为它非常简单。我们用所谓的顺序模型来做。<br>
+&emsp;&emsp;这个体系结构的第一层是所谓的嵌入。如果我们回头看图1中的流程图，我们刚才做的是将原始输入文本转换为整数标记。但是我们仍然不能把它输入到递归神经网络，所以我们必须把它转换成嵌入向量，这些值在-1到1之间。它们在某种时候上可以超过这个范围，但通常在-1和1之间，这是我们可以在神经网络中处理的数据。<br>
+&emsp;&emsp;这个过程有点神奇，因为嵌入层与递归神经网络同时训练，它看不到原始单词。它可以看到整数标记，学会了认识到单词在一起使用时存在某种模式。因此，它可以推断出一些单词或整数标记有类似的含义，然后它在嵌入向量的过程中对其进行编码，这些向量看起来是相同的。<br>
+&emsp;&emsp;因此，我们需要确定每个向量的长度，例如，标记“11”被转换为实值向量。在本例中，我们将使用长度为8的元素，实际上这个长度非常短(通常在100到300之间)。尝试改变嵌入向量中的元素数量，然后重新运行这段代码，看看结果如何。<br>
+&emsp;&emsp;因此，我们将嵌入向量长度大小设置为8，然后使用Keras将这个嵌入层添加到递归神经网络。这必须是网络的第一层:<br>
