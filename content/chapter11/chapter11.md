@@ -93,7 +93,8 @@
 &emsp;&emsp;在本节中，我们将定义一些辅助函数，使我们能够构建一个良好的Word2Vec模型。为了实现这个模型，我们将使用一个绿色版本的维基百科
  (http://mattmahoney.net/dc/textdata.html)。<br>
 &emsp;&emsp;因此，让我们从导入所需的包开始:<br>
-```#importing the required packages for this implementation import numpy as np
+```
+#importing the required packages for this implementation import numpy as np
 import tensorflow as tf
 #Packages for downloading the dataset
 from urllib.request import urlretrieve
@@ -106,7 +107,8 @@ from collections import Counter
 import random
 ```
 &emsp;&emsp;接下来，我们将定义一个类，如果之前没有下载数据集，它就用于下载数据集:
-```# In this implementation we will use a cleaned up version of Wikipedia from Matt Mahoney.
+```
+# In this implementation we will use a cleaned up version of Wikipedia from Matt Mahoney.
 # 30 we will define a helper class that will helps to download the dataset wiki_dataset_folder_path = 'wikipedia_data'
 wiki_dataset_filename = 'text8.zip' wiki_dataset_name = 'Text8 Dataset'
 
@@ -129,12 +131,14 @@ Output:
 Text8 Dataset: 31.4MB [00:39, 794kB/s]
 ```
 &emsp;&emsp;我们可以看看这个数据集的前100个字符:
-```cleaned_wikipedia_text[0:100]
+```
+cleaned_wikipedia_text[0:100]
 
 ' anarchism originated as a term of abuse first used against early working class radicals including t'
 ```
 &emsp;&emsp;接下来，我们将对文本进行预处理，因此我们将定义一个辅助函数，它将帮助我们将特殊字符(如标点符号)替换为已知标记。另外，为了减少输入文本中的干扰，您可能需要删除文本中不经常出现的单词:
-```def preprocess_text(input_text):
+```
+def preprocess_text(input_text):
 
 # Replace punctuation with some special tokens so we can use them in our model
 input_text = input_text.lower()
@@ -148,7 +152,8 @@ trimmed_words = [word for word in text_words if text_word_counts[word]
 return trimmed_words
 ```
 &emsp;&emsp;现在，让我们在输入文本时调用这个函数并查看输出:
-```preprocessed_words = preprocess_text(cleaned_wikipedia_text) print(preprocessed_words[:30])
+```
+preprocessed_words = preprocess_text(cleaned_wikipedia_text) print(preprocessed_words[:30])
 
 Output:
 ['anarchism', 'originated', 'as', 'a', 'term', 'of', 'abuse', 'first',
@@ -157,7 +162,8 @@ Output:
 'sans', 'culottes', 'of', 'the', 'french', 'revolution', 'whilst']
 ```
 &emsp;&emsp;让我们看看对于文本预处理版本，我们有多少单词和不同的单词:
-```print("Total number of words in the text: (}".format(len(preprocessed_words))) print("Total number of unique words in the text: (}".format(len(set(preprocessed_words))))
+```
+print("Total number of words in the text: (}".format(len(preprocessed_words))) print("Total number of unique words in the text: (}".format(len(set(preprocessed_words))))
  
 
 Output:
@@ -167,7 +173,8 @@ Total number of words in the text: 16680599 Total number of unique words in the 
 &emsp;&emsp;在这里，我创建了字典来将单词转换成整数，之后也是如此，也就是说，将整数转换成单词。整数按降序分配，所以最常用的单词(The)是整数0，其次常用的是1，依此类推。这些单词被转换为整数并存储在列表int_words中。<br>
 &emsp;&emsp;正如本节前面提到的，我们需要使用单词的整数索引在权矩阵中查找它们的值，因此我们将建立他们之间的对应关系。这将帮助我们查找单词，并获得特定索引的实际单词。例如，输入文本中重复次数最多的单词将在位置0处建立索引，其次是重复次数第二多的单词，依此类推。<br>
 &emsp;&emsp;那么，让我们定义一个函数来创建这个查找表:<br>
-```def create_lookuptables(input_words): """
+```
+def create_lookuptables(input_words): """
 Creating lookup tables for vocan
 
 Function arguments:
@@ -180,7 +187,8 @@ integer_to_vocab = (ii: word for ii, word in enumerate(sorted_vocab)} vocab_to_i
 return vocab_to_integer, integer_to_vocab
 ```
 &emsp;&emsp;现在，让我们调用已定义的函数来创建查找表:
-```vocab_to_integer, integer_to_vocab = create_lookuptables(preprocessed_words)
+```
+vocab_to_integer, integer_to_vocab = create_lookuptables(preprocessed_words)
 integer_words = [vocab_to_integer[word] for word in preprocessed_words]
 ```
 &emsp;&emsp;为了构建一个更精确的模型，我们可以删除不太改变上下文的单词，比如of、for、the等等。实践证明，我们可以在舍弃这类词语的同时建立更准确的模型。从上下文中删除与上下文无关的单词的过程称为二次抽样。为了定义"丢弃"的一种通用机制，米卡洛夫引入了一个函数来计算某个单词的丢弃概率，如下所示:<br>
@@ -189,7 +197,8 @@ integer_words = [vocab_to_integer[word] for word in preprocessed_words]
 &emsp;&emsp;t是一个词被舍弃时的阈值参数<br>
 &emsp;&emsp;f(wi)是输入数据集中特定目标字wi出现的频率<br>
 &emsp;&emsp;因此，我们将构造一个辅助函数，它将计算数据集中每个单词被舍弃的概率:<br>
-```# removing context–irrelevant words threshold word_threshold = 1e–5
+```
+# removing context–irrelevant words threshold word_threshold = 1e–5
 
 word_counts = Counter(integer_words) total_number_words = len(integer_words)
 
@@ -204,7 +213,8 @@ Now, we have a more refined an
 &emsp;&emsp;现在，我们有了一个更加精炼和清晰的输入文本的版本。<br>
 &emsp;&emsp;我们注意到，skip-gram体系结构在生成实值表示时考虑了目标字的上下文，因此它在目标字周围定义了一个大小为C的窗口。与其平等处理所有上下文相关的单词，我们不如将为那些离目标单词有点远的单词分配更少的权重。例如，如果我们选择窗口的大小为C = 4，那么我们将从1到C的范围中选择一个随机数L，然后从当前单词的前后文本中抽取L个单词作为样本。。有关这方面的详细信息，请参阅Mikolov等人的论文：https://arxiv.org/pdf/l301.3781.pdf.<br>
 &emsp;&emsp;接着我们来定义这个函数：<br>
-```# Defining a function that returns the words around specific index in a specific window
+```
+# Defining a function that returns the words around specific index in a specific window
 def get_target(input_words, ind, context_window_size=5):
 #selecting random number to be used for genearting words form history and feature of the current word
 rnd_num = np.random.randint(1, context_window_size+l) start_ind = ind – rnd_num if (ind – rnd_num) > 0 else 0 stop_ind = ind + rnd_num
@@ -212,7 +222,8 @@ target_words = set(input_words[start_ind:ind] + input_words[ind+l:stop_ind+1])
 return list(target_words)
 ```
 &emsp;&emsp;另外，让我们定义一个生成器函数，从训练样本中生成一个随机的批处理，并得到该批处理中每个单词的上下文单词:<br>
-```#Defining a function for generating word batches as a tuple (inputs, targets)
+```
+#Defining a function for generating word batches as a tuple (inputs, targets)
 def generate_random_batches(input_words, train_batch_size, context_window_size=5):
 num_batches = len(input_words)//train_batch_size
 #working on only only full batches
@@ -231,7 +242,8 @@ yield input_vals, target
 图15.11„计算图的模型架构<br>
 &emsp;&emsp;如前所述，我们将使用一个嵌入层来习得这些单词的一个特殊的实值表示。因此，这些词将作为独热向量输入。这种思想是用来训练这种网络以此来建立权矩阵。<br>
 &emsp;&emsp;那么，让我们从创建模型的输入开始:<br>
-```train_graph = tf.Graph()
+```
+train_graph = tf.Graph()
 
 #defining the inputs placeholders of the model with train_graph.as_default():
 inputs_values = tf.placeholder(tf.int32, [None], name='inputs_values') labels_values = tf.placeholder(tf.int32, [None, None],
@@ -252,7 +264,8 @@ embed_tensors = tf.nn.embedding_lookup(embedding_layer, inputs_values)
 ```
 &emsp;&emsp;一次性更新嵌入层中的所有嵌入权重是非常低效的。相反，我们将使用负采样技术，它只会用不正确单词中的一小部分来更新正确单词的权重。<br>
 &emsp;&emsp;同样，我们不需要自己实现这个函数因为它已经在TensorFlow中了<br>
-```tf.nn.sampled_softmax_loss:
+```
+tf.nn.sampled_softmax_loss:
 # Number of negative labels to sample num_sampled = 100
 
 with train_graph.as_default():
@@ -265,7 +278,8 @@ model_cost = tf.reduce_mean(model_loss)
 model_optimizer = tf.train.AdamOptimizer().minimize(model_cost)
 ```
 &emsp;&emsp;为了验证我们训练过的模型，我们将对一些常见或普遍的单词和一些不常见的单词进行采样，并尝试根据学习到的skip-gram体系结构的表示来输出我们最接近的一组单词:<br>
-```with train_graph.as_default():
+```
+with train_graph.as_default():
 # set of random words for evaluating similarity on valid_num_words = 16
 valid_window = 100
 # pick 8 samples from (0,100) and (1000,1100) each ranges. lower id implies more frequent
@@ -283,7 +297,8 @@ cosine_similarity = tf.matmul(valid_embedding, tf.transpose(normalized_embed))
 &emsp;&emsp;现在，我们已经为我们的模型做好了准备过程，现在我们准备开始训练过程。<br>
 ## 训练
 &emsp;&emsp;让我们开始训练过程:<br>
-```num_epochs = 10 train_batch_size = 1000 contextual_window_size = 10
+```
+num_epochs = 10 train_batch_size = 1000 contextual_window_size = 10
 
 with train_graph.as_default(): saver = tf.train.3aver()
 
@@ -320,7 +335,8 @@ save_path = saver.save(sess, "checkpoints/cleaned_wikipedia_version.ckpt")
 embed_mat = sess.run(normalized_embed)
 ```
 &emsp;&emsp;运行上述代码段训练10次后，您将得到以下输出:<br>
-```Epoch Number 10/10 Iteration Number: 43l00 Avg. Training loss: 5.0380 Epoch Number 10/10 Iteration Number: 43200 Avg. Training loss: 4.96l9 Epoch Number 10/10 Iteration Number: 43300 Avg. Training loss: 4.9463 Epoch Number 10/10 Iteration Number: 43400 Avg. Training loss: 4.9728 Epoch Number 10/10 Iteration Number: 43500 Avg. Training loss: 4.9872 Epoch Number 10/10 Iteration Number: 43600 Avg. Training loss: 5.0534
+```
+Epoch Number 10/10 Iteration Number: 43l00 Avg. Training loss: 5.0380 Epoch Number 10/10 Iteration Number: 43200 Avg. Training loss: 4.96l9 Epoch Number 10/10 Iteration Number: 43300 Avg. Training loss: 4.9463 Epoch Number 10/10 Iteration Number: 43400 Avg. Training loss: 4.9728 Epoch Number 10/10 Iteration Number: 43500 Avg. Training loss: 4.9872 Epoch Number 10/10 Iteration Number: 43600 Avg. Training loss: 5.0534
  
 
 Epoch Number 10/10 Iteration Number: 43700 Avg. Training loss: 4.826l Epoch Number 10/10 Iteration Number: 43800 Avg. Training loss: 4.8752 Epoch Number 10/10 Iteration Number: 43900 Avg. Training loss: 4.98l8 Epoch Number 10/10 Iteration Number: 44000 Avg. Training loss: 4.925l The nearest to nine: one, seven, zero, two, three, four, eight, five, The nearest to such: is, as, or, some, have, be, that, physical,
@@ -355,7 +371,8 @@ The nearest to mean: we, defined, is, exactly, equivalent, denote, number, above
 Epoch Number 10/10 Iteration Number: 46l00 Avg. Training loss: 4.8583 Epoch Number 10/10 Iteration Number: 46200 Avg. Training loss: 4.8887
 ```
 &emsp;&emsp;从输出中可以看到，网络在某种程度上学到了输入词的语义上的一些有用的表示。为了帮助我们更清楚地了解嵌入矩阵，我们将使用维数约简技术，如t-SNE，将实值向量降为二维，然后我们将把它们形象化，并用相应的词来标记每个点:<br>
-```Epoch Number 10/10 Iteration Number: 43l00 Avg. Training loss: 5.0380 
+```
+Epoch Number 10/10 Iteration Number: 43l00 Avg. Training loss: 5.0380 
 Epoch Number 10/10 Iteration Number: 43200 Avg. Training loss: 4.96l9 
 Epoch Number 10/10 Iteration Number: 43300 Avg. Training loss: 4.9463
 Epoch Number 10/10 Iteration Number: 43400 Avg. Training loss: 4.9728
