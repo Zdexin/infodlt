@@ -98,13 +98,50 @@ target_train[1] Output:
 ```
 &emsp;&emsp;这是一个相当短的文本，情感值是1.0，说明这是一个积极的情感，所以这是对这部电影的积极评价。<br>
 &emsp;&emsp;现在，我们来看索引表，这是处理原始数据的第一步，因为神经网络不能处理文本数据。Keras已经实现了所谓的索引表，用于构建词汇表并将单词转换为整数。并且，我们说我们想要最多10000个单词，所以它只使用数据集中使用最广泛的10000个单词:<br>
-```num_top_words = l0000 
+``num_top_words = l0000 
 tokenizer_obj = Tokenizer(num_words=num_top_words)
-
-```
+``
 &emsp;&emsp;现在，我们从数据集中提取所有的文本，我们调用这个函数以便让他适应文本:<br>
 `tokenizer_obj.fit_on_texts(text_data)`<br>
 &emsp;&emsp;标记索引表大约需要10秒，然后它就建立了词汇表。它看起来是这样的:<br>
+```tokenizer_obj.word_index
 
+Output: ('britains': 33206,
+'labcoats': l2l364, 'steeled': l02939, 'geddon': 6755l, "rossilini's": 9l757, 'recreational': 27654, 'suffices': 43205, 'hallelujah': 30337, 'mallika': 30343, 'kilogram': l22493, 'elphic': l04809, 'feebly': 328l8, 'unskillful': 9l728, "'mistress'": l222l8, "yesterday's": 25908, 'busco': 85664, 'goobacks': 85670, 'mcfeast': 7ll75, 'tamsin': 77763,
+"petron's": 72628,
+"'lion": 87485,
+'sams': 5834l, 'unbidden': 60042, "principal's": 44902, 'minutiae': 3l453, 'smelled': 35009, 'history\x97but': 75538,
+ 
 
+'vehemently': 28626, 'leering': l4905, 'kýnay': l07654, 'intendend': l0l260, 'chomping': 2l885, 'nietsze': 76308, 'browned': 83646, 'grosse': l7645, "''gaslight''": 747l3, 'forseeing': l03637, 'asteroids': 30997, 'peevish': 49633, "attic'": l20936, 'genres': 4026, 'breckinridge': l7499, 'wrist': l3996, "sopranos'": 50345, 'embarasing': 92679, "wednesday's": ll84l3, 'cervi': 39092, 'felicity': 2l570, "''horror''": 56254, 'alarms': l7764, "'01": 294l0,
+'leper': 27793, 'once\x85': l0064l, 'iverson': 66834, 'triply': ll7589, 'industries': l9l76, 'brite': l6733, 'amateur': 2459,
+"libby's": 46942, 'eeeeevil': l204l3, 'jbc33': 5llll, 'wyoming': l2030, 'waned': 30059, 'uchida': 63203, 'uttter': 93299, 'irector': l23847, 'outriders': 95l56, 'perd': ll8465,
+.
+.
+.}
+```
+&emsp;&emsp;因此，每个单词现在都与一个整数相关联;因此，单词“the”等于数字1:<br>
+```tokenizer_obj.word_index['the']
+Output:
+l
+```
+&emsp;&emsp;这里，and约等于数字2：<br>
+```tokenizer_obj.word_index['and']
+Output:
+2
+```
+&emsp;&emsp;单词a约等于3：<br>
+```tokenizer_obj.word_index['a']
+Output:
+3
+```
+&emsp;&emsp;接下来，单词movie等于数字17：<br>
+```tokenizer_obj.word_index['movie']
+Output: l7
+```
+&emsp;&emsp;单词film代表数字19：<br>
+```tokenizer_obj.word_index['film']
+Output: 
+19
+```
 
