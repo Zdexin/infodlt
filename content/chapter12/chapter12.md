@@ -35,3 +35,5 @@
 &emsp;&emsp;在接下来的时间里，我们看到了单词good，所以现在递归神经网络知道了not very good三个词，它想，哦，这可能是一个负面情绪!因此，它将该值存储在内部状态中。然后，在最后的步骤中，我们看到了movie这个单词，这和情绪没有实际联系，所以它可能会被忽略了。<br>
 &emsp;&emsp;接下来，我们使用循环单元内的另一个门输出内存状态的内容，然后用sigmoid函数处理它(我们在这里不展示)。输出值在0到1之间。<br>
 &emsp;&emsp;我们的想法是，我们想要从互联网电影数据库中成千上万的电影评论例子中训练这个神经网络，在那里，对于每个输入文本，我们给它的真正情感价值是积极或消极的。然后，我们希望TensorFlow找出循环单元内部的门存储的应该是什么，这样他们就能准确地从输入文本反映出正确的情感:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![image](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter12/chapter12_image/image024.png)<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图4„用于实现本章的架构<br>
