@@ -156,4 +156,64 @@ tokenizer_obj.word_index['film']
 Output: 
 19
 ```
+&emsp;&emsp;所有这一切意味着，the是在数据集中使用最多的单词，and是在数据集中使用第二多的单词。因此，每当我们想将单词映射到整数标记时，我们都会得到这些数字。<br>
+&emsp;&emsp;让我们试着以数字743为例，这是romantic的数字表示：<br>
+```
+tokenizer_obj.word_index['romantic']
+Output:
+743
+```
+&emsp;&emsp;因此，每当我们在输入文本中看到单词romantic时，我们就把它映射到标记整数743。我们再次使用索引表将训练集中文本中的所有单词转换为整数标记:<br>
+```
+input_text_train[l] Output:
+'This is a really heart–warming family movie. It has absolutely brilliant animal training and "acting" (if you can call it like that) as well (just think about the dog in "How the Grinch stole Christmas"... it was plain bad training). The Paulie story is extremely well done, well reproduced and in general the characters are really elaborated too. Not more to say except that this is a GREAT MOVIE!<br /><br />My ratings: story 8.5/10, acting 7.5/10, animals+fx 8.5/10, cinematography 8/10.<br /><br />My overall rating: 8/10 – BIG FAMILY MOVIE AND VERY WORTH WATCHING!
+```
+&emsp;&emsp;当我们将文本转换为整数标记时，它就变成一个整数数组:<br>
+```
+np.array(input_train_tokens[1])
+
+Output:
+array([ 11, 6, 3, 62, 488, 4679, 236, 17, 9, 45, 419,
+513, 1717, 2425, 2, 113, 43, 22, 67, 654, 9, 37,
+12, 14, 69, 39, 101, 42, 1, 826, 8, 85, 1,
+6418, 3492, 1156, 9, 13, 1042, 74, 2425, 1, 6419, 64,
+6, 568, 69, 221, 69, 2, 8, 825, 1, 102, 23,
+62, 96, 21, 51, 5, 131, 556, 12, 11, 6, 3,
+78, 17, 7, 7, 56, 2818, 64, 723, 447, 156, 113,
+702, 447, 156, 1598, 3611, 723, 447, 156, 633, 723, 156,
+7, 7, 56, 437, 670, 723, 156, 191, 236, 17, 2,
+52, 278, 147])
+```
+&emsp;&emsp;单词this变成了数字11，单词is变成了数字59，等等。<br>
+&emsp;&emsp;我们还需要对剩下的文本进行转换:<br>
+```
+input_test_tokens = tokenizer_obj.texts_to_sequences(input_text_test)
+```
+&emsp;&emsp;现在，还有另一个问题，因为标记序列的长度根据原始文本的长度不同而不同，但递归单元可以处理任意长度的序列。TensorFlow的工作方式是，批处理中的所有数据都需要具有相同的长度。<br>
+&emsp;&emsp;因此，我们既需要可以确保整个数据集中的所有序列都具有相同的长度，也可以编写自定义数据生成器来确保单个批处理中的序列具有相同的长度。现在，确保数据集中的所有序列具有相同的长度要简单得多，但问题是存在一些异常值。我们有一些句子超过2200个单词。如果我们所有的短句都超过2200个单词，这将严重危害我们的内存。所以我们要折中一下;首先，我们需要计算所有的单词，或者每个输入序列中的标记数。我们能得到一个序列的平均字数大约是221:<br>
+```
+total_num_tokens = [len(tokens) for tokens in input_train_tokens + input_test_tokens]
+total_num_tokens = np.array(total_num_tokens)
+
+#Get the average number of tokens np.mean(total_num_tokens)
+
+Output:
+22l.277l6
+```
+&emsp;&emsp;我们发现最多字数会超过2,200个:<br>
+```
+np.max(total_num_tokens)
+Output:
+2208
+```
+&emsp;&emsp;现在，平均值和最大值之间有一个很大的区别，如果我们只是在数据集中给所有的句子最大值，那它们都有2208个标记，我们会浪费很多内存。如果您的数据集有数百万个文本序列，那么这将是一个棘手的问题。<br>
+&emsp;&emsp;所以我们要做的是做一个折中，我们将填补所有的序列，并截断那些太长的序列，使它们只有544个单词。544个单词我们是这样计算的，我们取数据集中所有序列的平均字数然后加上两个标准差:<br>
+```
+max_num_tokens = np.mean(total_num_tokens) + 2 * np.std(total_num_tokens)
+max_num_tokens = int(max_num_tokens)
+max_num_tokens
+
+Output:
+544
+```
 
