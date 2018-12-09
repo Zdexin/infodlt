@@ -71,4 +71,32 @@ kernel_size=[5, 5], padding="same", activation=tf.nn.relu)<br>
 经过卷积操作的形状如下：<br>
 [batch_size, 28, 28, 2O]<br>
 输出张量与输入图像具有相同的尺寸，但现在我们有20个通道表示将20个滤镜应用于输入图像。<br>
+### 非线性映射
+&emsp;&emsp;在卷积步骤中，我们讨论把卷积层输出结果通过ReLU函数做非线性映射：<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/14.jpg) <br>
+&emsp;&emsp;ReLU激活函数用零替换所有负像素值，整个卷积步骤过程和激活函数的目的是在输出图像中引出非线性结构，因为这对于训练过程是有用的，并且我们使用的数据通常是非线性的。要清楚地了解ReLU激活功能的好处，请查看下图，其中显示了卷积步骤的行输出及其处理之后的版本：<br>
+### 池化层
+&emsp;&emsp;我们学习过程中的重要步骤是池化，有时也会被称为缩减采样或子抽样。该步骤主要用于降低卷积步骤（特征图）的输出的维数。此池化步骤的优点是减少了要素图的大小，同时将重要信息保留在缩减版本中。<br>
+&emsp;&emsp;下图显示了此步骤，通过使用2 x 2过滤器扫描图像，并在应用Max计算时使用步幅2。这种操作称为最大池化：
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/15.jpg) <br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/16.jpg) <br>
+我们可以使用以下代码行将卷积步骤的输出连接到池化层：<br>
+`pool_layerl = tf.layers.max_pooling2d(inputs=conv_layerl, pool_size=[2, 2], strides=2)`<br>
+池化层接收来自卷积步骤的输入，其形状如下：<br>
+[batch_size, image_width, image_height, channels]<br>
+例如，在我们的数字分类任务中，池化层的输入将具有以下形状：<br>
+[batch_size, 28, 28, 2O]<br>
+池化操作的输出将具有以下形状：<br>
+[batch_size, l4, l4, 2O]<br>
+在这个例子中，我们将卷积步骤的输出大小减少了50％。 此步骤非常有用，因为它仅保留重要信息，并且还降低了模型的复杂性，从而避免了过度拟合。<br>
+### 全连接层
+在堆叠了一堆卷积和汇集步骤之后，我们接下来接入全连接层，我们将从输入图像获取的提取的高质量的特征提供给此全连接层，并凭这些高质量特征值进行数字分类<br>
+例如，在数字分类任务的情况下，我们可以按照卷积和汇集步骤与具有1024个神经元和RELU激活来执行实际的分类的完全连接层。 此完全连接的图层接受以下格式的输入：<br>
+[batch_size, features]<br>
+因此，我们需要从第二次池化层重新整形或展平输入要素图以匹配此格式。<br>
+`pooll_flat = tf.reshape(pool_layerl, [–l, l4 * l4 * 2O])`<br>
+在这个函数中，我们用-1来表示batch size 的大小并且每个从池化层中输出的事例都会是宽度为14 高度为14，并且有20个通道。<br>
+所以这个重塑操作的最终输出如下：<br>
+[batch_size, 3l36]<br>
+最后，我们可以使用TensorFlow的dense（）函数来定义具有所需数量的神经元（单位）和最终激活函数的全连接层：<br>
 
