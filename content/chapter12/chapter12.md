@@ -235,12 +235,13 @@ input_train_pad = pad_sequences(input_train_tokens, maxlen=max_num_tokens, paddi
 input_test_pad = pad_sequences(input_test_tokens, maxlen=max_num_tokens, padding=seq_pad, truncating=seq_pad)
 ```
 &emsp;&emsp;我们检查这个矩阵的形状:<br>
+```
 input_train_pad.shape
 
 Output: (25000, 544)
 input_test_pad.shape Output:
 (25000, 544)
-
+```
 &emsp;&emsp;那么，让我们来看看填充前后的标记示例:<br>
 ```
 np.array(input_train_tokens[1])
@@ -344,5 +345,50 @@ convert_tokens_to_string(input_train_tokens[l])
 &emsp;&emsp;现在，我们需要创建递归神经网络，我们将在Keras中实现，因为它非常简单。我们用所谓的顺序模型来做。<br>
 &emsp;&emsp;这个体系结构的第一层是所谓的嵌入。如果我们回头看图1中的流程图，我们刚才做的是将原始输入文本转换为整数标记。但是我们仍然不能把它输入到递归神经网络，所以我们必须把它转换成嵌入向量，这些值在-1到1之间。它们在某种时候上可以超过这个范围，但通常在-1和1之间，这是我们可以在神经网络中处理的数据。<br>
 &emsp;&emsp;这个过程有点神奇，因为嵌入层与递归神经网络同时训练，它看不到原始单词。它可以看到整数标记，学会了认识到单词在一起使用时存在某种模式。因此，它可以推断出一些单词或整数标记有类似的含义，然后它在嵌入向量的过程中对其进行编码，这些向量看起来是相同的。<br>
-&emsp;&emsp;因此，我们需要确定每个向量的长度，例如，标记“11”被转换为实值向量。在本例中，我们将使用长度为8的元素，实际上这个长度非常短(通常在100到300之间)。尝试改变嵌入向量中的元素数量，然后重新运行这段代码，看看结果如何。<br>
-&emsp;&emsp;因此，我们将嵌入向量长度大小设置为8，然后使用Keras将这个嵌入层添加到递归神经网络。这必须是网络的第一层:<br>
+&emsp;&emsp;因此，我们需要确定每个向量的长度，例如，标记“11”被转换为实值向量。在本例中，我们将使用长度为8的元素，实际上8这个长度非常短(通常在100到300之间)。尝试改变嵌入向量中的元素数量，然后重新运行这段代码，看看结果如何。<br>
+&emsp;&emsp;所以我们将嵌入向量长度大小设置为8，然后使用Keras将这个嵌入层添加到递归神经网络。嵌入层必须是网络的第一层:<br>
+```
+embedding_layer_size = 8
+
+rnn_type_model.add(Embedding(input_dim=num_top_words,
+output_dim=embedding_layer_size, input_length=max_num_tokens, name='embedding_layer'))
+```
+&emsp;&emsp;然后，我们可以添加第一个循环层，我们将使用所谓的门控循环单元(GRU)。通常，你会看到人们使用所谓的LSTM，但其他人似乎认为GRU更好，因为LSTM内部有冗余的门。实际上，更简单的代码使用更少的门也同样有效。你可以给LSTM增加1000个门，但这并不意味着它会变得更好。<br>
+&emsp;&emsp;那么，让我们来定义我们的GRU架构;我们说，我们想要一个维数为16的输出，这时需要返回序列中:<br>
+```
+rnn_type_model.add(GRU(units=l6, return_sequences=True))
+```
+&emsp;&emsp;如果我们查看图4中的流程图，此时我们希望添加第二个循环层:<br>
+```
+rnn_type_model.add(GRU(units=8, return_sequences=True))
+```
+&emsp;&emsp;之后，我们还有第三层，这也是最后一层，它不会输出一个序列，因为之后会有一个稠密层;它应该只给出GRU的最终输出，而不是一个完整的输出序列:<br>
+```
+rnn_type_model.add(GRU(units=4))
+```
+&emsp;&emsp;然后，这里的输出将被输入到一个全连接层或者稠密层中，该层应该为每个输入序列输出一个值。这是用sigmoid激活函数处理的，所以它的输出为0到1之间的值:<br>
+```
+rnn_type_model.add(Dense(1, activation='sigmoid'))
+```
+&emsp;&emsp;之后，我们在这里想使用Adam优化器及其学习率，损失函数应该是从递归神经网络的输出和训练集中实际的类值之间的二进制交叉熵，其值将是0或1:<br>
+&emsp;&emsp;现在，我们可以打印一个模型的摘要:<br>
+```
+rnn_type_model.summary()
+
+
+Layer (type) Output 3hape Param #
+=================================================================
+embedding_layer (Embedding) (None, 544, 8) 80000
+
+gru_1 (GRU) (None, None, 16) 1200
+
+gru_2 (GRU) (None, None, 8) 600
+
+gru_3 (GRU) (None, 4) 156
+
+dense_1 (Dense) (None, 1) 5
+=================================================================
+Total params: 81,961 Trainable params: 81,961 Non–trainable params: 0
+
+
+```
