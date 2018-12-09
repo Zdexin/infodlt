@@ -62,5 +62,48 @@ from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 &emsp;&emsp;现在，让我们转向实际的实现，在那里我们需要加载数据。Keras实际上有一个功能，可以用于从IMDb加载这个情感数据集，但问题是它已经将所有单词映射到整数标记。这是使用自然人类语言洞察力神经网络的一个重要部分，我想向你们展示如何做到这一点。
 另外，如果您想要使用这段代码来分析您在其他语言中可能拥有的任何数据，那么您需要自己完成这项工作，因此我们已经快速实现了一些用于下载此数据集的函数。
 让我们从导入一系列必需的包开始:<br>
+```%matplotlib inline
+import matplotlib.pyplot as plt import tensorflow as tf
+import numpy as np
+from scipy.spatial.distance import cdist
+from tensorflow.python.keras.models import 3equential
+from tensorflow.python.keras.layers import Dense, GRU, Embedding from tensorflow.python.keras.optimizers import Adam
+from tensorflow.python.keras.preprocessing.text import Tokenizer
+from tensorflow.python.keras.preprocessing.sequence import pad_sequences
+```
+&emsp;&emsp;然后我们加载数据集:<br>
+```import imdb imdb.maybe_download_and_extract()
+
+Output:
+–	Download progress: l00.0%
+Download finished. Extracting files. Done.
+
+input_text_train, target_train = imdb.load_data(train=True) input_text_test, target_test = imdb.load_data(train=False)
+
+print("3ize of the trainig set: ", len(input_text_train)) print("3ize of the testing set:	", len(input_text_test))
+
+Output:
+3ize of the trainig set: 25000
+3ize of the testing set: 25000
+```
+&emsp;&emsp;正如你所看到的，它在训练集和测试集中有25000条文本。<br>
+&emsp;&emsp;让我们看一个来自训练集的例子，看看它是什么样子的: <br>
+```#combine dataset
+text_data = input_text_train + input_text_test input_text_train[l]
+
+Output:
+'This is a really heart–warming family movie. It has absolutely brilliant animal training and "acting" (if you can call it like that) as well (just think about the dog in "How the Grinch stole Christmas"... it was plain bad training). The Paulie story is extremely well done, well reproduced and in general the characters are really elaborated too. Not more to say except that this is a GREAT MOVIE!<br /><br />My ratings: story 8.5/10, acting 7.5/10, animals+fx 8.5/10, cinematography 8/10.<br /><br />My overall rating: 8/10 – BIG FAMILY MOVIE AND VERY WORTH WATCHING!'
+target_train[1] Output:
+1.0
+```
+&emsp;&emsp;这是一个相当短的文本，情感值是1.0，说明这是一个积极的情感，所以这是对这部电影的积极评价。<br>
+&emsp;&emsp;现在，我们来看索引表，这是处理原始数据的第一步，因为神经网络不能处理文本数据。Keras已经实现了所谓的索引表，用于构建词汇表并将单词转换为整数。并且，我们说我们想要最多10000个单词，所以它只使用数据集中使用最广泛的10000个单词:<br>
+```num_top_words = lOOOO
+tokenizer_obj = Tokenizer(num_words=num_top_words)
+```
+&emsp;&emsp;现在，我们从数据集中提取所有的文本，我们调用这个函数以便让他适应文本:<br>
+`tokenizer_obj.fit_on_texts(text_data)`
+&emsp;&emsp;标记索引表大约需要10秒，然后它就建立了词汇表。它看起来是这样的:<br>
+
 
 
