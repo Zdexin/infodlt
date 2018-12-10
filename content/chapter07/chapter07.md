@@ -69,7 +69,7 @@ kernel_size=[5, 5], padding="same", activation=tf.nn.relu)<br>
 因此，在我们的MNIST示例中，输入张量将具有以下形状：<br>
 [batch_size, 28, 28, l]<br>
 经过卷积操作的形状如下：<br>
-[batch_size, 28, 28, 2O]<br>
+[batch_size, 28, 28, 20]<br>
 输出张量与输入图像具有相同的尺寸，但现在我们有20个通道表示将20个滤镜应用于输入图像。<br>
 ### 非线性映射
 &emsp;&emsp;在卷积步骤中，我们讨论把卷积层输出结果通过ReLU函数做非线性映射：<br>
@@ -85,9 +85,9 @@ kernel_size=[5, 5], padding="same", activation=tf.nn.relu)<br>
 池化层接收来自卷积步骤的输入，其形状如下：<br>
 [batch_size, image_width, image_height, channels]<br>
 例如，在我们的数字分类任务中，池化层的输入将具有以下形状：<br>
-[batch_size, 28, 28, 2O]<br>
+[batch_size, 28, 28, 20]<br>
 池化操作的输出将具有以下形状：<br>
-[batch_size, l4, l4, 2O]<br>
+[batch_size, l4, l4, 20]<br>
 在这个例子中，我们将卷积步骤的输出大小减少了50％。 此步骤非常有用，因为它仅保留重要信息，并且还降低了模型的复杂性，从而避免了过度拟合。<br>
 ### 全连接层
 在堆叠了一堆卷积和汇集步骤之后，我们接下来接入全连接层，我们将从输入图像获取的提取的高质量的特征提供给此全连接层，并凭这些高质量特征值进行数字分类<br>
@@ -99,4 +99,376 @@ kernel_size=[5, 5], padding="same", activation=tf.nn.relu)<br>
 所以这个重塑操作的最终输出如下：<br>
 [batch_size, 3l36]<br>
 最后，我们可以使用TensorFlow的dense（）函数来定义具有所需数量的神经元（单位）和最终激活函数的全连接层：<br>
+·dense_layer = tf.layers.dense(inputs=pooll_flat, units=lO24, activation=tf.nn.relu)·
+### Logits layer
+最后，我们需要logits层，来获取全连接层的输出，然后生成原始预测值。 例如，在数字识别的情况下，输出将是10个值的张量，其中每个值表示0-9的各个等级的分数。 所以，让我们以数字分类示例来定义这个logit层，我们只需要10个输出，并使用线性激活，这是TensorFlow的dense（）函数的默认值：<br>
+`logits_layer = tf.layers.dense(inputs=dense_layer, units=l0)`<br>
+logits图层的最终输出将是以下的张量：<br>
+[batch_size, l0]<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/17.jpg) <br>
+如前所述，logits层的模型将返回我们批处理的原始预测。 但我们需要将这些值转换为可解释的格式：
+输入样本0-9的预测类。每个可能类的分数或概率。 例如，样本为0的概率为1，依此类推。<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/18.jpg) <br>
+因此，我们预测的类将是10个概率中具有最高值的类。 我们可以使用argmax函数获取此值，如下所示：<br>
+`tf.argmax(input=logits_layer, axis=l)`
+## 卷积神经网络实例 - MNIST数字分类
+在本节中，我们将使用MNIST数据集做一个实现CNN数字分类的完整示例。 我们将构建一个包含两个卷积层和全连接层的简单模型。<br>
+让我们首先导入这个实现所需的库：<br>
+```
+%matplotlib inline
+import matplotlib.pyplot as plt 
+import tensorflow as tf
+import numpy as np
+from sklearn.metrics import confusion_matrix import math
 
+```
+接下来，我们将使用TensorFlow辅助函数来下载和预处理MNIST数据集，如下所示：<br>
+```
+from tensorflow.examples.tutorials.mnist import input_data mnist_data = input_data.read_data_sets('data/MNI3T/', one_hot=True)
+
+Output:
+3uccessfully downloaded train–images–idx3–ubyte.gz 99l2422 bytes. Extracting data/MNI3T/train–images–idx3–ubyte.gz
+3uccessfully downloaded train–labels–idxl–ubyte.gz 2888l bytes. Extracting data/MNI3T/train–labels–idxl–ubyte.gz
+3uccessfully downloaded tlOk–images–idx3–ubyte.gz l648877 bytes. Extracting data/MNI3T/tlOk–images–idx3–ubyte.gz
+3uccessfully downloaded tlOk–labels–idxl–ubyte.gz 4542 bytes. Extracting data/MNI3T/tlOk–labels–idxl–ubyte.gz
+```
+数据集分为三个不相交的集合：训练，验证和测试。 那么，让我们输出每组中的图像数量：
+```
+print("– Number of images in the training set:\t\t(}".format(len(mnist_data.train.labels))) 
+print("– Number of images in the test set:\t\t(}".format(len(mnist_data.test.labels))) 
+print("– Number of images in the validation set:\t(}".format(len(mnist_data.validation.labels)))
+
+–	Number of images in the training set: 55OOO
+–	Number of images in the test set: lOOOO
+–	Number of images in the validation set: 5OOO
+```
+图像的实际标签以one-hot编码格式存储，因此我们有一个包含10个零值的数组，除了该图像所代表的类的索引。 为了以后的使用，我们需要将数据集的类号作为整数：
+`mnist_data.test.cls_integer = np.argmax(mnist_data.test.labels, axis=l)`
+让我们定义一些已知的变量，以便稍后在我们的实现中使用：
+```
+# Default size for the input monocrome images of MNI3T image_size = 28
+
+# Each image is stored as vector of this size. image_size_flat = image_size * image_size
+
+# The shape of each image
+image_shape = (image_size, image_size)
+
+# All the images in the mnist dataset are stored as a monocrome with only l channel
+num_channels = l
+
+# Number of classes in the MNI3T dataset from O till 9 which is lO num_classes = lO
+```
+接下来，我们需要定义一个辅助函数来绘制数据集中的一些图像。 这个辅助函数将在九个子图的网格中绘制图像：
+```
+def plot_imgs(imgs, cls_actual, cls_predicted=None): 
+assert len(imgs) == len(cls_actual) == 9
+# create a figure with 9 subplots to plot the images. fig, axes = plt.subplots(3, 3) fig.subplots_adjust(hspace=O.3, wspace=O.3)
+for i, ax in enumerate(axes.flat): 
+    # plot the image at the ith index 
+    ax.imshow(imgs[i].reshape(image_shape), cmap='binary')
+    # labeling the images with the actual and predicted classes. 
+    if cls_predicted is None:
+        xlabel = "True: (O}".format(cls_actual[i]) 
+    else:
+        xlabel = "True: (O}, Pred: (l}".format(cls_actual[i], cls_predicted[i])
+    # Remove ticks from the plot. 
+    ax.set_xticks([]) 
+    ax.set_yticks([])
+    # 3how the classes as the label on the x–axis. 
+    ax.set_xlabel(xlabel)
+plt.show()
+
+```
+让我们从测试集中绘制一些图像并查看它的图像：
+```
+# Visualizing 9 images form the test set. imgs = mnist_data.test.images[0:9]
+
+# getting the actual classes of these 9 images 
+cls_actual = mnist_data.test.cls_integer[0:9]
+
+#plotting the images
+plot_imgs(imgs=imgs, cls_actual=cls_actual)
+```
+这是输出:<br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/19.jpg) <br>
+## 建立模型
+现在，是时候构建模型的核心了。 计算图包括我们在本章前面提到的所有层。 我们首先定义一些函数，这些函数将用于定义特定形状的变量并随机初始化它们：
+```
+def new_weights(shape):
+return tf.Variable(tf.truncated_normal(shape, stddev=0.05))
+
+def new_biases(length):
+return tf.Variable(tf.constant(0.05, shape=[length]))
+```
+现在，让我们根据一些输入层，输入通道，过滤器大小，过滤器数量以及是否使用池化参数来定义将负责创建新卷积层的函数：
+```
+def conv_layer(input, # the output of the previous layer.
+input_channels, filter_size, filters,
+use_pooling=True): # Use 2x2 max–pooling.
+
+# preparing the accepted shape of the input Tensor.
+shape = [filter_size, filter_size, input_channels, filters]
+
+# Create weights which means filters with the given shape. filters_weights = new_weights(shape=shape)
+
+# Create new biases, one for each filter. filters_biases = new_biases(length=filters)
+
+# Calling the conve2d function as we explained above, were the strides parameter
+# has four values the first one for the image number and the last l for the input image channel
+# the middle ones represents how many pixels the filter should move with in the x and y axis
+conv_layer = tf.nn.conv2d(input=input,
+filter=filters_weights, strides=[l, l, l, l], padding='3AME')
+
+# Adding the biase to the output of the conv_layer. conv_layer += filters_biases
+
+# Use pooling to down–sample the image resolution? if use_pooling:
+ 
+
+# reduce the output feature map by max_pool layer pool_layer = tf.nn.max_pool(value=conv_layer,
+ksize=[l, 2, 2, l],
+strides=[l, 2, 2, l], padding='3AME')
+
+# feeding the output to a ReLU activation function. relu_layer = tf.nn.relu(pool_layer)
+
+# return the final results after applying relu and the filter weights return relu_layer, filters_weights
+```
+如前所述，汇集层产生4D张量。 我们需要将这个4D张量展平为2D，以传送到完全连接层：
+```
+def flatten_layer(layer):
+# Get the shape of layer. shape = layer.get_shape()
+
+# We need to flatten the layer which has the shape of The shape
+[num_images, image_height, image_width, num_channels]
+# so that it has the shape of [batch_size, num_features] where 
+number_features is image_height * image_width * num_channels
+
+number_features = shape[l:4].num_elements()
+# Reshaping that to be fed to the fully connected layer flatten_layer = tf.reshape(layer, [–l, number_features])
+# Return both the flattened layer and the number of features. return flatten_layer, number_features
+```
+此函数创建一个完全连接的层，假设输入是2D张量：
+```
+def fc_layer(input, # the flatten output.
+num_inputs, # Number of inputs from previous layer num_outputs, # Number of outputs
+use_relu=True): # Use ReLU on the output to remove
+negative values
+
+# Creating the weights for the neurons of this fc_layer fc_weights = new_weights(shape=[num_inputs, num_outputs]) fc_biases = new_biases(length=num_outputs)
+
+# Calculate the layer values by doing matrix multiplication of
+# the input values and fc_weights, and then add the fc_bias–values. fc_layer = tf.matmul(input, fc_weights) + fc_biases
+ 
+
+# if use RelU parameter is true if use_relu:
+relu_layer = tf.nn.relu(fc_layer) return relu_layer
+
+return fc_layer
+```
+在构建网络之前，让我们为输入图像定义一个占位符，其中第一个维度为None，表示任意数量的图像：
+`input_values = tf.placeholder(tf.float32, shape=[None, image_size_flat], name='input_values')`
+如前所述，卷积步骤要求输入图像为4D张量的形状。因此，我们需要将输入图像重塑为以下形状：
+`[num_images，image_height，image_width，num_channels]`
+所以，让我们重新整形输入值以匹配这种格式：
+`input_image = tf.reshape（input_values，[ - l，image_size，image_size，num_channels]）`
+接下来，我们需要为实际的类值定义另一个占位符，它将采用one hot编码格式：
+`y_actual = tf.placeholder（tf.float32，shape = [None，num_classes]，name ='y_actual'）`
+此外，我们需要定义一个占位符来保存实际类的整数值：
+`y_actual_cls_integer = tf.argmax（y_actual，axis = l）`
+那么，让我们从建立第一个CNN开始：
+```
+conv_layer_l，convl_weights = \ conv_layer（input = input_image，
+input_channels = num_channels，filter_size = filter_size_l，filters = filters_l，use_pooling = True）
+```
+让我们检查将由第一个卷积层产生的输出张量的形状：
+```
+conv_layer_l
+output: 
+<tf.Tensor'Ruu：relu:o’ shape =（1，l4，l4，l6）dtype = float32>
+```
+接下来，我们将创建第二个卷积网络，并将第一个卷积网络的输出提供给它：
+`conv_layer_2，conv2_weights = \ conv_layer（input = conv_layer_l，input_channels = filters_l，filter_size = filter_size_2，filters = filters_2，use_pooling = True）`
+此外，我们需要仔细检查第二个卷积层的输出张量的形状。形状应该是（1，7,7,36），其中？标记表示任意数量的图像。<br>
+接下来，我们需要展平4D张量以匹配完全连接层的预期格式，这是一个2D张量：
+`flatten_layer，number_features = flatten_layer（conv_layer_2）`
+我们需要仔细检查展平层的输出张量的形状：
+```
+flatten_layer输出：
+<tf.Tensor'Reshape_l：0'形=（1，l764）dtype = float32>
+```
+接下来，我们将创建一个完全连接的图层，并将展平图层的输出提供给它。我们还将完全连接层的输出馈送到ReLU激活功能，然后将其馈送到第二个完全连接的层：
+```
+fc_layer_l = fc_layer（input = flatten_layer，
+num_inputs = number_features，num_outputs = fc_num_neurons，use_relu = True）
+```
+让我们仔细检查第一个完全连接层的输出张量的形状：
+```
+fc_layer_l输出：
+<tf.Tensor'Rueu_2：0'形状=（1，l28）dtype = float32>
+```
+接下来，我们需要添加另一个完全连接的层，它将获取第一个完全连接的层的输出，并为每个图像生成一个大小为10的数组，表示每个目标类的得分是正确的：
+```
+fc_layer_2 = fc_layer（input = fc_layer_l，
+num_inputs = fc_num_neurons，num_outputs = num_classes，use_relu = False）
+fc_layer_2输出：
+<tf.Tensor'add_3：0'shape =（1，l0）dtype = float32>
+```
+接下来，我们将从第二个完全连接的层中标准化这些分数并将其提供给
+softmax激活函数，将值压缩到0到1之间：
+`y_predicted = tf.nn.softmax（fc_layer_2）`
+然后，我们需要通过使用选择具有最高概率的目标类
+TensorFlow的argmax功能：
+`y_predicted_cls_integer = tf.argmax（y_predicted，axis = l）`
+### 代价函数
+接下来，我们需要定义我们的性能度量，即交叉熵。 如果预测的类是正确的，则交叉熵的值将为0：
+`cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=fc_layer_2,
+labels=y_actual)`
+接下来，我们需要将从上一步得到的所有交叉熵值求平均数，以便能够在测试集上获得单一的性能指标：
+`model_cost = tf.reduce_mean(cross_entropy)`
+现在，我们有一个需要优化/最小化的代价函数，因此我们将使用AdamOptimizer，这是一种优化方法，和梯度下降一样但更加优：
+`model_optimizer = tf.train.AdamOptimizer(learning_rate=le–4).minimize(model_cost)`
+### 绩效测评
+为了显示输出，让我们定义一个变量来检查预测的类是否等于真实的类：
+`model_correct_prediction = tf.equal(y_predicted_cls_integer, y_actual_cls_integer)`
+通过转换布尔值来计算模型精度，然后对它们求平均值,以此对正确分类的值求和：
+`model_accuracy = tf.reduce_mean(tf.cast(model_correct_prediction, tf.float32))`
+### 训练集
+让我们通过创建一个会话变量启动训练过程，该变量将负责执行我们之前定义的计算图：
+`session = tf.3ession()`
+此外，我们需要初始化到目前为止定义的变量：
+`session.run(tf.global_variables_initializer())`
+我们将分批提供图像以避免内存不足错误：
+`train_batch_size = 64`
+在开始训练过程之前，我们将定义一个辅助函数，通过迭代训练批来执行优化过程：
+```
+# number of optimization iterations performed so far total_iterations = O
+
+def optimize(num_iterations):
+# Update globally the total number of iterations performed so far.
+ 
+
+global total_iterations
+
+for i in range(total_iterations,
+total_iterations + num_iterations):
+
+ 
+
+
+and batch.
+ 
+# Generating a random batch for the training process
+# input_batch now contains a bunch of images from the training set
+# y_actual_batch are the actual labels for the images in the input input_batch, y_actual_batch =
+ 
+mnist_data.train.next_batch(train_batch_size)
+
+# Putting the previous values in a dict format for Tensorflow to automatically assign them to the input
+# placeholders that we defined above feed_dict = (input_values: input_batch,
+y_actual: y_actual_batch}
+
+# Next up, we run the model optimizer on this batch of images session.run(model_optimizer, feed_dict=feed_dict)
+
+# Print the training status every lOO iterations. if i % lOO == O:
+# measuring the accuracy over the training set. acc_training_set = session.run(model_accuracy,
+feed_dict=feed_dict)
+#Printing the accuracy over the training set print("Iteration: (O:>6}, Accuracy Over the training set:
+(l:>6.l%}".format(i + l, acc_training_set))
+
+# Update the number of iterations performed so far total_iterations += num_iterations
+```
+我们将定义一些辅助函数来帮助我们可视化模型的结果，并查看哪些图像被模型错误分类：
+```
+def plot_errors(cls_predicted, correct):
+# cls_predicted is an array of the predicted class number of each image in the test set.
+
+
+# Extracting the incorrect images. incorrect = (correct == False)
+# Get the images from the test–set that have been
+# incorrectly classified.
+images = mnist_data.test.images[incorrect]
+# Get the predicted classes for those incorrect images.
+ 
+
+cls_pred = cls_predicted[incorrect]
+
+# Get the actual classes for those incorrect images. cls_true = mnist_data.test.cls_integer[incorrect]
+# Plot 9 of these images plot_imgs(imgs=imgs[0:9],
+cls_actual=cls_actual[O:9], cls_predicted=cls_predicted[0:9])
+```
+我们还可以绘制预测结果与实际真实类别的混淆矩阵：
+```
+def plot_confusionMatrix(cls_predicted):
+
+# cls_predicted is an array of the predicted class number of each image in the test set.
+
+# Get the actual classes for the test–set. cls_actual = mnist_data.test.cls_integer
+
+# Generate the confusion matrix using sklearn. conf_matrix = confusion_matrix(y_true=cls_actual, y_pred=cls_predicted)
+
+# Print the matrix. print(conf_matrix)
+
+# visualizing the confusion matrix. plt.matshow(conf_matrix)
+
+plt.colorbar()
+tick_marks = np.arange(num_classes) plt.xticks(tick_marks, range(num_classes)) plt.yticks(tick_marks, range(num_classes)) plt.xlabel('Predicted class') plt.ylabel('True class')
+
+# 3howing the plot plt.show()
+```
+最后，我们将定义一个辅助函数来帮助我们测量训练模型在测试集上的准确性：
+```
+# measuring the accuracy of the trained model over the test set by splitting it into small batches
+test_batch_size = 256
+
+def test_accuracy(show_errors=False,
+ 
+
+show_confusionMatrix=False):
+
+#number of test images
+number_test = len(mnist_data.test.images)
+
+# define an array of zeros for the predicted classes of the test set which
+# will be measured in mini batches and stored it. cls_predicted = np.zeros(shape=number_test, dtype=np.int)
+
+# measuring the predicted classes for the testing batches.
+
+# 3tarting by the batch at index O. i = O
+
+while i < number_test:
+# The ending index for the next batch to be processed is j. j = min(i + test_batch_size, number_test)
+
+# Getting all the images form the test set between the start and end indices
+input_images = mnist_data.test.images[i:j, :]
+
+# Get the acutal labels for those images. actual_labels = mnist_data.test.labels[i:j, :]
+
+# Create a feed–dict with the corresponding values for the input placeholder values
+feed_dict = (input_values: input_images,
+y_actual: actual_labels}
+
+cls_predicted[i:j] = session.run(y_predicted_cls_integer, feed_dict=feed_dict)
+
+# 3etting the start of the next batch to be the end of the one that we just processed j
+i = j
+
+# Get the actual class numbers of the test images. cls_actual = mnist_data.test.cls_integer
+
+# Check if the model predictions are correct or not correct = (cls_actual == cls_predicted)
+
+# 3umming up the correct examples correct_number_images = correct.sum()
+
+# measuring the accuracy by dividing the correclty classified ones with
+ 
+
+total number of images in the test set.
+testset_accuracy = float(correct_number_images) / number_test
+
+# showing the accuracy.
+print("Accuracy on Test–3et: (O:.l%} ((l} / (2})".format(testset_accuracy, correct_number_images, number_test))
+
+# showing some examples form the incorrect ones. if show_errors:
+print("Example errors:") plot_errors(cls_predicted=cls_predicted, correct=correct)
+
+# 3howing the confusion matrix of the test set predictions if show_confusionMatrix:
+print("Confusion Matrix:") plot_confusionMatrix(cls_predicted=cls_predicted)
+```
