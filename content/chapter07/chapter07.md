@@ -351,9 +351,6 @@ global total_iterations
 for i in range(total_iterations,
 total_iterations + num_iterations):
 
- 
-
-
 and batch.
  
 # Generating a random batch for the training process
@@ -381,13 +378,11 @@ feed_dict=feed_dict)
 def plot_errors(cls_predicted, correct):
 # cls_predicted is an array of the predicted class number of each image in the test set.
 
-
 # Extracting the incorrect images. incorrect = (correct == False)
 # Get the images from the test–set that have been
 # incorrectly classified.
 images = mnist_data.test.images[incorrect]
 # Get the predicted classes for those incorrect images.
- 
 
 cls_pred = cls_predicted[incorrect]
 
@@ -421,7 +416,6 @@ test_batch_size = 256
 
 def test_accuracy(show_errors=False,
  
-
 show_confusionMatrix=False):
 
 #number of test images
