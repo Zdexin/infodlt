@@ -61,5 +61,139 @@ plt.imshow(image.reshape((28, 28)), cmap='Greys_r')
 
 Output:
 ```
+![image004](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter13/chapter13_image/image004.png)<br>
+图4：来自MNIST数据集的示例图像<br>
+```#  Plotting one image from the training set.
+image = mnist_dataset.train.images[2]
+plt.imshow(image.reshape((28, 28)), cmap='Greys_r')
+
+Output:
+```
+![image005](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter13/chapter13_image/image005.png)<br>
+图5：来自MNIST数据集的示例图像
+## 建立模型<br>
+&emsp;&emsp;为了建立编码器，我们需要计算出每个MNIST图像将有多少像素，以便我们能够计算出编码器的输入层的大小。来自MNIST数据集的每幅图像都是28乘28像素，因此我们将将这个矩阵重塑为28x 28=784像素值的向量。我们不必将MNIST的图像标准化，因为它们已经标准化了。<br>
+&emsp;&emsp;让我们开始构建模型的三个组成部分。在这个实现中，我们将使用单个隐藏层的非常简单的体系结构，然后是ReLU激活，如下图所示：<br>
+![image006](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter13/chapter13_image/image006.png)<br>
+图6：MNIST实现的编码器-解码器体系结构<br>
+&emsp;&emsp;让我们继续并根据前面的解释实现这个简单的编码器-解码器架构：<br>
+```
+# The size of the encoding layer or the hidden layer. encoding_layer_dim = 32
+
+img_size = mnist_dataset.train.images.shape[l]
+
+# defining placeholder variables of the input and target values inputs_values = tf.placeholder(tf.float32, (None, img_size), name="inputs_values")
+targets_values = tf.placeholder(tf.float32, (None, img_size), name="targets_values")
+
+# Defining an encoding layer which takes the input values and incode them. encoding_layer = tf.layers.dense(inputs_values, encoding_layer_dim, activation=tf.nn.relu)
+
+# Defining the logit layer, which is a fully–connected layer but without any activation applied to its output
+logits_layer = tf.layers.dense(encoding_layer, img_size, activation=None)
+
+# Adding a sigmoid layer after the logit layer
+decoding_layer = tf.sigmoid(logits_layer, name = "decoding_layer")
+
+# use the sigmoid cross entropy as a loss function
+model_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=logits_layer, labels=targets_values)
+
+# Averaging the loss values accross the input data model_cost = tf.reduce_mean(model_loss)
+
+# Now we have a cost functiont that we need to optimize using Adam Optimizer
+model_optimizier = tf.train.AdamOptimizer().minimize(model_cost)
+```
+现在我们已经定义了我们的模型，并且还使用了二进制交叉熵，因为图像、像素已经标准化了。<br>
+## 模型训练<br>
+&emsp;&emsp;在这一节中，我们将开始训练过程。我们将使用mnist_dataset对象的helper函数，以便从具有特定大小的数据集中获取随机批次；然后，我们将对这批图像运行优化器。让我们通过创建会话变量来开始本节，会话变量将负责执行前面定义的计算图：<br>
+`# creating the sessionsess = tf.3ession()`<br>
+下一步，让我们开始训练过程：<br>
+```num_epochs = 2O
+train_batch_size = 2OO
+
+sess.run(tf.global_variables_initializer())
+for e in range(num_epochs):
+for ii in range(mnist_dataset.train.num_examples//train_batch_size):
+input_batch = mnist_dataset.train.next_batch(train_batch_size)
+feed_dict = (inputs_values: input_batch[O], targets_values:
+input_batch[O]}
+ input_batch_cost, _ = sess.run([model_cost, model_optimizier],
+feed_dict=feed_dict)
+
+print("Epoch: (}/(}...".format(e+l, num_epochs),
+    "Training loss: (:.3f}".format(input_batch_cost))
+Output:
+Epoch: 2O/2O... Training loss: O.O9l
+Epoch: 2O/2O... Training loss: O.O9l
+Epoch: 2O/2O... Training loss: O.O93
+Epoch: 2O/2O... Training loss: O.O93
+Epoch: 2O/2O... Training loss: O.O95
+Epoch: 2O/2O... Training loss: O.O95
+Epoch: 2O/2O... Training loss: O.O89
+Epoch: 2O/2O... Training loss: O.O95
+Epoch: 2O/2O... Training loss: O.O95
+Epoch: 2O/2O... Training loss: O.O96
+Epoch: 2O/2O... Training loss: O.O94
+Epoch: 2O/2O... Training loss: O.O93
+Epoch: 2O/2O... Training loss: O.O94
+Epoch: 2O/2O... Training loss: O.O93
+Epoch: 2O/2O... Training loss: O.O95
+Epoch: 2O/2O... Training loss: O.O94
+Epoch: 2O/2O... Training loss: O.O96
+Epoch: 2O/2O... Training loss: O.O92
+Epoch: 2O/2O... Training loss: O.O93
+Epoch: 2O/2O... Training loss: O.O9l
+Epoch: 2O/2O... Training loss: O.O93
+Epoch: 2O/2O... Training loss: O.O9l
+Epoch: 2O/2O... Training loss: O.O95
+Epoch: 2O/2O... Training loss: O.O94
+Epoch: 2O/2O... Training loss: O.O9l
+```
+现在，我们已经训练该模型能够产生无噪声图像，这使得自动编码器适用于许多领域。<br>
+&emsp;&emsp;在下一段代码中，我们不会将MNIST测试集的行图像提供给模型，因为我们需要首先向这些图像添加噪声，以查看经过训练的模型将如何能够生成无噪声的图像。这里，我将向测试图像添加噪声，并将它们传递到自动编码器。尽管有时很难分辨原始数字是什么，但它在消除噪音方面做得非常出色：<br>
+```#Defining some figures
+fig, axes = plt.subplots(nrows=2, ncols=lO, sharex=True, sharey=True,
+figsize=(2O,4))
+
+#Visualizing some images
+input_images = mnist_dataset.test.images[:lO]
+noisy_imgs = input_images + mnist_noise_factor
+np.random.randn(*input_images.shape)
+
+#Clipping and reshaping the noisy images
+noisy_images = np.clip(noisy_images, O., l.).reshape((lO, 28, 28, l))
+#Getting the reconstructed images
+reconstructed_images = sess.run(decoding_layer, feed_dict=(inputs_values: noisy_images})
+
+#Visualizing the input images and the noisy ones
+for imgs, row in zip([noisy_images, reconstructed_images], axes):
+for img, ax in zip(imgs, row):
+ax.imshow(img.reshape((28, 28)), cmap='Greys_r')
+ax.get_xaxis().set_visible(False)
+ax.get_yaxis().set_visible(False)
+
+fig.tight_layout(pad=O.l)
+Output:
+```
+![image007](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter13/chapter13_image/image007.png)<br>
+图07_带有一些高斯噪声(顶行)的原始测试图像的示例及其基于训练好的去噪自动编码器的构造<br>
+## 自动编码器的应用<br>
+&emsp;&emsp;在前面的从低级表示构造图像的示例中，我们看到它与原始输入非常相似，并且我们还看到了CAN在去噪数据集时的好处。上述例子对于图像构造和数据集去噪非常有用。因此，可以将上述实现推广到您感兴趣的任何其他示例。<br>
+&emsp;&emsp;此外，在本章中，我们已经看到了自动编码器的灵活性。建筑是什么，我们如何能做出不同的改变。我们甚至测试了它来解决从输入图像中去除噪声的难题。这种灵活性为auoencoder非常适合的更多应用程序打开了大门。<br>
+## 图像彩色化<br>
+&emsp;&emsp;“自然界的人——具体说的是一个多方面的版本——可以用面值计算。在下面的示例中，我们向模型提供没有任何颜色的输入图像，并且该图像的重建版本将通过自动编码器模型着色：<br>
+![image008](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter13/chapter13_image/image008.png)<br>
+图08：训练CAE以使图像着色<br>
+![image009](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter13/chapter13_image/image009.png)<br>
+图009：colorization文件架构<br>
+现在我们的自动编码器已经训练好了，我们可以用它来给以前从未见过的图片上色！<br>
+这种应用可以用来对早期照相机拍摄的非常古老的图像进行着色。<br>
+## 更多应用<br>
+&emsp;&emsp;另一个有趣的应用可以是产生更高分辨率的图像，或神经图像增强，如下图所示。这些数字显示了张理查的图像着色更逼真的版本：<br>
+![image010](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter13/chapter13_image/image010.png)<br>
+图15_彩色图像着色<br>
+此图显示了自动编码器的另一个应用，用于进行图像增强：<br>
+![image011](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter13/chapter13_image/image011.png)<br>
+图11_神经增强bμAlexjc <br>
+## 总结<br>
+&emsp;&emsp;在本章中，我们介绍了一个全新的体系结构，可用于许多有趣的应用程序。自动编码器非常灵活，所以您可以在图像增强、着色或构造方面提出自己的问题。此外，自动编码器有更多的变化，称为变分自动编码器。它们也被用于非常有趣的应用，例如图像生成。
 
 
