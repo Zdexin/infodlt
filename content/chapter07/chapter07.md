@@ -111,7 +111,7 @@ logits图层的最终输出将是以下的张量：<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/18.jpg) <br>
 因此，我们预测的类将是10个概率中具有最高值的类。 我们可以使用argmax函数获取此值，如下所示：<br>
 `tf.argmax(input=logits_layer, axis=l)`
-## 卷积神经网络实例 - MNIST数字分类
+## 四.卷积神经网络实例 - MNIST数字分类
 在本节中，我们将使用MNIST数据集做一个实现CNN数字分类的完整示例。 我们将构建一个包含两个卷积层和全连接层的简单模型。<br>
 让我们首先导入这个实现所需的库：<br>
 ```
