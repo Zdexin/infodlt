@@ -535,9 +535,9 @@ Accuracy on Test–3et: 92.8% (928l / lOOOO) Example errors:
 [	l2	5	5	ll	38	l0	0	l8	3	907]
 ]
 ```
-接下来是输出：
+接下来是输出：<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/21.jpg) <br>
-有趣的是，在使用基本卷积网络时，我们实际上在测试中获得了近93％的准确度。 这个实现和结果向您展示了一个简单的卷积网络可以做什么。<br>
+&emsp;&emsp;有趣的是，在使用基本卷积网络时，我们实际上在测试中获得了近93％的准确度。 这个实现和结果向您展示了一个简单的卷积网络可以做什么。<br>
 ## 结论
 &emsp;&emsp;在本章中，我们已经介绍了CNN如何工作以及一些技术细节。 我们还看了一下如何在TensorFlow中实现CNN的基本架构。
 &emsp;&emsp;在下一章中，我们将演示更高级的体系结构，这些体系结构可用于检测数据科学家广泛使用的图像数据集中的对象。 我们还将看到CNN的美丽以及它们如何模仿人类对物体的理解，首先实现对象的基本特征，然后在它们上构建更高级的语义特征，为它们提供分类。 虽然这个过程在我们的脑海中很快发生，但它是我们识别物体时实际发生的事情。
