@@ -479,6 +479,7 @@ Iteration: l, Accuracy Over the training set: 4.7% test_accuracy()
 Output
 Accuracy on Test–3et: 4.4% (437 / lOOOO)
 ```
+
 现在，让我们开始运行10,000次迭代的优化过程：
 `optimize(num_iterations=9999) #We have already performed l iteration.`
 在输出结束时，你得到的结果应该和以下内容相似：
@@ -519,14 +520,24 @@ test_accuracy(show_errors=True,show_confusionMatrix=True)
 Output:
 Accuracy on Test–3et: 92.8% (928l / lOOOO) Example errors:
 ```
-[[	97l	O	2	2	O	4	O	l	O	O]
-[	O	lllO	4	2	l	2	3	O	l3	O]
-[	l2	2	949	l5	l6	3	4	l7	l4	O]
-[	5	3	l4	932	O	34	O	l3	6	3]
-[	l	2	3	O	93l	l	8	2	3	3l]
-[	l2	l	4	l3	3	852	2	l	3	l]
-[	2l	4	5	2	l8	34	87l	l	2	O]
-[	l	lO	26	5	5	O	O	943	2	36]
-[	l6	5	lO	27	l6	48	5	l3	8l5	l9]
-[	l2	5	5	ll	38	lO	O	l8	3	9O7]]
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/20.jpg) <br>
 ```
+[
+[	97l	0	2	2	0	4	0	l	0	0]
+[	0	lll0	4	2	l	2	3	0	l3	0]
+[	l2	2	949	l5	l6	3	4	l7	l4	0]
+[	5	3	l4	932	0	34	0	l3	6	3]
+[	l	2	3	0	93l	l	8	2	3	3l]
+[	l2	l	4	l3	3	852	2	l	3	l]
+[	2l	4	5	2	l8	34	87l	l	2	0]
+[	l	l0	26	5	5	0	0	943	2	36]
+[	l6	5	l0	27	l6	48	5	l3	8l5	l9]
+[	l2	5	5	ll	38	l0	0	l8	3	907]
+]
+```
+接下来是输出：
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter07/chapter07_image/21.jpg) <br>
+有趣的是，在使用基本卷积网络时，我们实际上在测试中获得了近93％的准确度。 这个实现和结果向您展示了一个简单的卷积网络可以做什么。<br>
+## 结论
+&emsp;&emsp;在本章中，我们已经介绍了CNN如何工作以及一些技术细节。 我们还看了一下如何在TensorFlow中实现CNN的基本架构。
+&emsp;&emsp;在下一章中，我们将演示更高级的体系结构，这些体系结构可用于检测数据科学家广泛使用的图像数据集中的对象。 我们还将看到CNN的美丽以及它们如何模仿人类对物体的理解，首先实现对象的基本特征，然后在它们上构建更高级的语义特征，为它们提供分类。 虽然这个过程在我们的脑海中很快发生，但它是我们识别物体时实际发生的事情。
