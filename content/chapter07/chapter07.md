@@ -466,3 +466,67 @@ print("Example errors:") plot_errors(cls_predicted=cls_predicted, correct=correc
 # 3howing the confusion matrix of the test set predictions if show_confusionMatrix:
 print("Confusion Matrix:") plot_confusionMatrix(cls_predicted=cls_predicted)
 ```
+让我们在测试集上输出准确的创建模型，但不进行任何优化：
+```
+test_accuracy() 
+Output:
+Accuracy on Test–3et: 4.l% (4lO / lOOOO)
+```
+通过运行一次迭代的优化过程，来了解优化过程 并以此增强模型识别度，以便将图像分类到正确的类：
+```
+optimize(num_iterations=l) Output:
+Iteration: l, Accuracy Over the training set: 4.7% test_accuracy()
+Output
+Accuracy on Test–3et: 4.4% (437 / lOOOO)
+```
+现在，让我们开始运行10,000次迭代的优化过程：
+`optimize(num_iterations=9999) #We have already performed l iteration.`
+在输出结束时，你得到的结果应该和以下内容相似：
+```
+Iteration: 73Ol, Accuracy Over the training set: 96.9% 
+Iteration: 74Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 75Ol, Accuracy Over the training set: 98.4% 
+Iteration: 76Ol, Accuracy Over the training set: 98.4% 
+Iteration: 77Ol, Accuracy Over the training set: 96.9% 
+Iteration: 78Ol, Accuracy Over the training set: 96.9% 
+Iteration: 79Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 8OOl, Accuracy Over the training set: 98.4% 
+Iteration: 8lOl, Accuracy Over the training set: 96.9% 
+Iteration: 82Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 83Ol, Accuracy Over the training set: 98.4% 
+Iteration: 84Ol, Accuracy Over the training set: 98.4% 
+Iteration: 85Ol, Accuracy Over the training set: 96.9% 
+Iteration: 86Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 87Ol, Accuracy Over the training set: 98.4% 
+Iteration: 88Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 89Ol, Accuracy Over the training set: 98.4% 
+Iteration: 9OOl, Accuracy Over the training set: lOO.O% 
+Iteration: 9lOl, Accuracy Over the training set: 96.9% 
+Iteration: 92Ol, Accuracy Over the training set: 98.4% 
+Iteration: 93Ol, Accuracy Over the training set: 98.4% 
+Iteration: 94Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 95Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 96Ol, Accuracy Over the training set: 98.4% 
+Iteration: 97Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 98Ol, Accuracy Over the training set: lOO.O% 
+Iteration: 99Ol, Accuracy Over the training set: lOO.O% 
+Iteration: lOOOl, Accuracy Over the training set: 98.4%
+```
+现在，让我们检查模型将如何推广测试：
+```
+test_accuracy(show_errors=True,show_confusionMatrix=True)
+
+Output:
+Accuracy on Test–3et: 92.8% (928l / lOOOO) Example errors:
+```
+[[	97l	O	2	2	O	4	O	l	O	O]
+[	O	lllO	4	2	l	2	3	O	l3	O]
+[	l2	2	949	l5	l6	3	4	l7	l4	O]
+[	5	3	l4	932	O	34	O	l3	6	3]
+[	l	2	3	O	93l	l	8	2	3	3l]
+[	l2	l	4	l3	3	852	2	l	3	l]
+[	2l	4	5	2	l8	34	87l	l	2	O]
+[	l	lO	26	5	5	O	O	943	2	36]
+[	l6	5	lO	27	l6	48	5	l3	8l5	l9]
+[	l2	5	5	ll	38	lO	O	l8	3	9O7]]
+```
