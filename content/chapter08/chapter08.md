@@ -9,4 +9,4 @@
 
 &emsp;&emsp;对象检测——计算机视觉领域的技术，用于在图像或视频序列中寻找和识别物体。尽管物体的图像在不同的视角有许多不同的大小和尺度，甚至当它们被平移或旋转时，可能有些不同，甚至当对象被部分遮挡时，人类仍然可以很容易识别图像中的大量物体。这一任务对计算机视觉系统仍然是一个挑战。这项任务的许多方法已经实施了几十年。
 &emsp;&emsp;图像分析是深学习中最为突出的领域之一。图像易于生成和处理，并且它们正是用于机器学习的正确类型的数据：对于人类来说容易理解，但是对于计算机来说难。令人惊讶的是，图像分析在深神经网络的历史中起着关键的作用。
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter08/chapter08_image/1.jpg) <br>
+![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter08/chapter08_image/1.jpg) <br>
