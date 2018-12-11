@@ -539,9 +539,9 @@ Output:
 INFO:tensorflow:Restoring parameters from ./cifar–lO_classification Test set accuracy: O.754OOO796l783439
 ```
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter08/chapter08_image/3.jpg) <br>
-让我们想象另一个例子来看到一些错误：
+让我们想象另一个例子来看到一些错误：<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter08/chapter08_image/4.jpg) <br>
-现在，我们的测试精度大约为75％，对于像我们使用CNN的来说,这样简单的也还不错。
+现在，我们的测试精度大约为75％，对与我们所使用的简单CNN来说已经好了
 ## 总结
 本章向我们展示了如何制作CNN来对CIFAR-10数据集中的图像进行分类。 测试集的分类准确度约为79％-80％。 还绘制了卷积层的输出，但是很难看到神经网络如何识别和分类输入图像。需要更好的可视化技术。<br>
 下一章，我们将使用一个现代和令人兴奋的深学习实践，即转移学习。传输学习允许您使用数据密集型架构的深入学习与小数据集。<br>
