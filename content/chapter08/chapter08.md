@@ -53,16 +53,16 @@ tar.close()
 
 ```
 下载并提取CIFIR-10数据集后，您会发现它已经分成五批。CIFIR-10包含10个类别/类的图像：<br>
-1.airplane <br>
-2.automobile <br>
-3.bird<br>
-4.cat <br>
-5.deer <br>
-6.dog <br>
-7.frog <br>
-8.horse <br>
-9.ship <br>
-10.truck<br>
+&emsp;&emsp;1.airplane <br>
+&emsp;&emsp;2.automobile <br>
+&emsp;&emsp;3.bird<br>
+&emsp;&emsp;4.cat <br>
+&emsp;&emsp;5.deer <br>
+&emsp;&emsp;6.dog <br>
+&emsp;&emsp;7.frog <br>
+&emsp;&emsp;8.horse <br>
+&emsp;&emsp;9.ship <br>
+&emsp;&emsp;10.truck<br>
 在深入研究网络核心之前，先对部分数据进行分析和预处理。
 ### 数据分析和准备
 我们需要对数据集进行分析，并进行一些基本的预处理。因此，让我们首先定义一些辅助函数，这些函数将使我们能够从五个数据集加载特定的数据集，并输出关于这个批次及其示例的一些分析：
@@ -543,8 +543,8 @@ INFO:tensorflow:Restoring parameters from ./cifar–lO_classification Test set a
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter08/chapter08_image/4.jpg) <br>
 现在，我们的测试精度大约为75％，对与我们所使用的简单CNN来说已经好了
 ## 总结
-本章向我们展示了如何制作CNN来对CIFAR-10数据集中的图像进行分类。 测试集的分类准确度约为79％-80％。 还绘制了卷积层的输出，但是很难看到神经网络如何识别和分类输入图像。需要更好的可视化技术。<br>
-下一章，我们将使用一个现代和令人兴奋的深学习实践，即转移学习。传输学习允许您使用数据密集型架构的深入学习与小数据集。<br>
+&emsp;&emsp;本章向我们展示了如何制作CNN来对CIFAR-10数据集中的图像进行分类。 测试集的分类准确度约为79％-80％。 还绘制了卷积层的输出，但是很难看到神经网络如何识别和分类输入图像。需要更好的可视化技术。<br>
+&emsp;&emsp;下一章，我们将使用一个现代和令人兴奋的深学习实践，即转移学习。传输学习允许您使用数据密集型架构的深入学习与小数据集。<br>
 
 
 学号|姓名|专业
