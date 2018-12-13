@@ -31,7 +31,7 @@
 from tensorflow.examples.tutorials.mnist import input_data 
 mnist_dataset = input_data.read_data_sets("MNI3T_data/", one_hot=True)
 ```
-&emsp;&emsp;MNIST 数据分为三部分: 培训数据的5.5万个训练数据 (minist.train)、1万个测试数据 (minist.test) 和5000点验证数据 (minist.validation)。在机器学习过程中，这种分流非常重要;我们必须有独立数据，我们不从中学习，才能确保我们所学到的东西实际上是一般化的!<br>
+&emsp;&emsp;MNIST 数据分为三部分: 5.5万个训练数据 (minist.train)、1万个测试数据 (minist.test) 和5000验证数据 (minist.validation)。在机器学习过程中，这种分流非常重要;我们必须有独立数据，我们不从中学习，才能确保我们所学到的东西实际上是一般化的!<br>
 &emsp;&emsp;如前所述, 每个 MNIST 示例都有两个部分: 手写数字的图像及其对应的标签。训练集和测试集都包含图像及其相应的标签。例如, 训练图像是 mnist.train.images , 训练标签是 mnist.train.labels 。<br>
 &emsp;&emsp;每个图像是28像素 x 28 像素。我们可以把它看做一个大的数字数组:<br>
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![](https://github.com/computeryanjiusheng2018/infodlt/blob/master/content/chapter06/chapter06_image/4.png)<br>
